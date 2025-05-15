@@ -15,3 +15,139 @@ h1, h2, h3, h4, h5, h6 {
   color: #003366; /* azul para títulos */
   font-weight: 600;
 }
+
+/* Enlaces */
+a {
+  color: #cc0000; /* rojo UTA */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #b61b28; /* rojo UTA */
+  border-color: #b61b28;
+}
+
+.btn-primary:hover {
+  background-color: #8e151d; /* rojo más oscuro */
+  border-color: #8e151d;
+}
+
+/* Botones outline con color rojo UTA en lugar de azul */
+.btn-outline-primary {
+  color: #b61b28;
+  border-color: #b61b28;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary.active {
+  color: #ffffff;
+  background-color: #b61b28;
+  border-color: #b61b28;
+  box-shadow: none;
+}
+
+/* Botones outline secundarios con rojo UTA */
+.btn-outline-secondary {
+  color: #b61b28;
+  border-color: #b61b28;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active,
+.btn-outline-secondary.active {
+  color: #ffffff;
+  background-color: #b61b28;
+  border-color: #b61b28;
+  box-shadow: none;
+}
+
+/* Eliminar cualquier sombra o foco azul */
+.btn:focus {
+  box-shadow: none !important;
+}
+
+/* Tarjetas o contenedores */
+.card-custom {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Tabla personalizada */
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-custom th, .table-custom td {
+  border: 1px solid #dddddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.table-custom th {
+  background-color: #b61b28; /* rojo UTA */
+  color: #ffffff;
+}
+
+/* Header con fondo rojo y texto blanco */
+header {
+  background-color: #b61b28; /* rojo UTA */
+  color: #ffffff;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Títulos en header */
+header h1, header p {
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Footer con fondo rojo y texto blanco */
+footer {
+  background-color: #b61b28; /* rojo UTA */
+  color: #ffffff;
+  text-align: center;
+  padding: 1rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 3rem;
+}
+
+/* Formularios */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+/* Reportes */
+.reporte-container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin: 2rem auto;
+  max-width: 900px;
+}
