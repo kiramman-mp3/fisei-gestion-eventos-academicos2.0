@@ -1,0 +1,61 @@
+-- Tabla de estudiantes
+CREATE TABLE estudiantes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  apellido VARCHAR(100) NOT NULL,
+  cedula VARCHAR(20) NOT NULL UNIQUE,
+  correo VARCHAR(100) UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  genero VARCHAR(20) NOT NULL,
+  fecha_nacimiento DATE NOT NULL,
+  tipo ENUM('institucional', 'publico') NOT NULL DEFAULT 'publico',
+  carrera VARCHAR(100) DEFAULT NULL,
+  cedula_path TEXT DEFAULT NULL,
+  papeleta_path TEXT DEFAULT NULL,
+  matricula_path TEXT DEFAULT NULL,
+  fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de eventos
+CREATE TABLE eventos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre_evento VARCHAR(255) NOT NULL,
+  tipo_evento ENUM('curso', 'evento') NOT NULL,
+  evento_carrera VARCHAR(100) NOT NULL, -- carrera específica o 'publico'
+  fecha_inicio DATE NOT NULL,
+  fecha_fin DATE NOT NULL,
+  horas INT NOT NULL,
+  cupos INT NOT NULL,
+  estado ENUM('abierto', 'cerrado') NOT NULL DEFAULT 'abierto'
+);
+
+-- Tabla de inscripciones
+CREATE TABLE inscripciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NOT NULL,
+  evento_id INT NOT NULL,
+  estado ENUM('En espera de orden de pago', 'Esperando aprobación del admin', 'Pagado', 'Error') DEFAULT 'En espera de orden de pago',
+  nota DECIMAL(4,2) DEFAULT NULL,
+  asistencia DECIMAL(5,2) DEFAULT NULL,
+  comprobante_pago TEXT DEFAULT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES estudiantes(id),
+  FOREIGN KEY (evento_id) REFERENCES eventos(id)
+);
+
+-- Tabla de requisitos por evento
+CREATE TABLE requisitos_evento (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  evento_id INT NOT NULL,
+  descripcion TEXT NOT NULL,
+  FOREIGN KEY (evento_id) REFERENCES eventos(id)
+);
+
+-- Tabla de archivos subidos como requisitos por inscripción
+CREATE TABLE requisitos_inscripcion (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  inscripcion_id INT NOT NULL,
+  requisito_id INT NOT NULL,
+  archivo TEXT NOT NULL,
+  FOREIGN KEY (inscripcion_id) REFERENCES inscripciones(id),
+  FOREIGN KEY (requisito_id) REFERENCES requisitos_evento(id)
+);
