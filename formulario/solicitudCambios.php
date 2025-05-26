@@ -294,115 +294,352 @@
 </head>
 
 <body>
+    <!DOCTYPE html>
+    <html lang="es">
 
-    <!-- ::::::::::::::::::::: HEADER ::::::::::::::::::::: -->
-    <header class="top-header">
-        <img src="logo_uta.png" alt="Logo UTA">
-        <div class="site-name">Universidad<br>Técnica de Ambato</div>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Solicitud de Cambios</title>
+        <style>
+            /* ======== RESET & BASE ======== */
+            * {
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+            }
 
-    <nav class="nav-bar">
-        <a href="#">Inicio</a>
-        <a href="#">Cursos</a>
-    </nav>
+            html,
+            body {
+                margin: 0;
+                background: #f8f8f8;
+            }
 
-    <!-- ::::::::::::::::::::: CARD PRINCIPAL ::::::::::::::::::::: -->
-    <main class="card">
-        <h1>Solicitud de cambios:</h1>
+            :root {
+                --rojo: #7c0a0a;
+                --gray-600: #6b7280;
+                --card-bg: #ffffff;
+            }
 
-        <!-- 🔄 INICIO NUEVO LAYOUT -->
-        <div class="main-grid">
+            /* ======== LAYOUT ======== */
+            .top-header {
+                background: var(--rojo);
+                color: #fff;
+                padding: 12px 20px;
+                font-weight: bold;
+                line-height: 1.1;
+            }
 
-            <!-- ===== COL 1: FORMULARIO ===== -->
-            <div>
+            .site-name {
+                font-size: 20px;
+            }
 
-                <!--  Título + Fecha  -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-                    <label>
-                        <span class="rojo">Título:</span><br>
-                        <input type="text" value="Logo con movimiento">
-                    </label>
+            .card {
+                background: var(--card-bg);
+                max-width: 900px;
+                margin: 32px auto;
+                padding: 32px 40px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
 
-                    <label>
-                        <span class="rojo">Fecha:</span><br>
-                        <input type="text" id="fecha" readonly>
-                    </label>
-                </div>
+            .card h1 {
+                margin-top: 0;
+                color: var(--rojo);
+                font-size: 24px;
+            }
 
-                <!--  Tipo (radios)  -->
-                <fieldset style="margin-top:32px;">
-                    <legend><span class="rojo">Tipo:</span></legend>
-                    <label><input type="radio" name="tipo" checked> Corrección de Error</label><br>
-                    <label><input type="radio" name="tipo"> Interfaz</label><br>
-                    <label><input type="radio" name="tipo"> Funcional</label><br>
-                    <label><input type="radio" name="tipo"> Otro</label>
-                </fieldset>
+            .main-grid {
+                display: grid;
+                grid-template-columns: 1fr 280px;
+                gap: 40px;
+            }
 
-                <!--  Descripción  -->
-                <label style="display:block;margin-top:4px;">
-                    <span class="rojo">Descripción:</span><br>
-                    <textarea rows="5">He notado que se mueve el logo cuando se le hace click, no me gusta.</textarea>
-                </label>
+            /* Responsive */
+            @media (max-width: 768px) {
+                .main-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
 
-                <!--  Captura  -->
-                <label style="display:block;margin-top:30px;">
-                    <span class="rojo">Captura de pantalla:</span>
-                    <span style="color:var(--gray-600);font-style:italic;">(Opcional)</span>
-                    <div class="capture-bar">
-                        <span class="file-name">"Captura de pantalla logo #1.jpg"</span>
-                        <button type="button" class="btn-capture tomar">Tomar otra</button>
-                        <button type="button" class="btn-capture eliminar">Eliminar</button>
+            input[type="text"],
+            input[type="email"],
+            textarea {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                resize: vertical;
+            }
+
+            input[readonly] {
+                background: #f1f5f9;
+                cursor: default;
+            }
+
+            textarea {
+                min-height: 90px;
+            }
+
+            fieldset {
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                padding: 14px 18px;
+            }
+
+            legend {
+                padding: 0 6px;
+                color: var(--rojo);
+                font-weight: bold;
+            }
+
+            .rojo {
+                color: var(--rojo);
+                font-weight: bold;
+            }
+
+            .capture-bar {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-top: 6px;
+                padding: 8px 12px;
+                background: #f1f5f9;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+            }
+
+            .file-name {
+                flex: 1 1 auto;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .btn-capture,
+            .btn {
+                cursor: pointer;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 6px;
+                transition: 0.2s ease all;
+            }
+
+            .btn-capture {
+                background: #e5e7eb;
+            }
+
+            .btn-capture:hover {
+                background: #d1d5db;
+            }
+
+            .btn {
+                background: var(--rojo);
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                opacity: 0.9;
+            }
+
+            .btn.cancelar {
+                background: #6b7280;
+            }
+
+            .actions {
+                display: flex;
+                gap: 12px;
+                margin-top: 28px;
+            }
+
+            /* ======== USER INFO ======== */
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                border-color: #d1d5db;
+                border-radius: 12px;
+            }
+
+            .guardar-user,
+            .mini-btn {
+                align-self: flex-start;
+                font-size: 12px;
+                padding: 6px 10px;
+                background: #0ea5e9;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+            }
+
+            .mini-btn {
+                background: #ef4444;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- ::::::::::::::::::::: HEADER ::::::::::::::::::::: -->
+        <header class="top-header">
+            <div class="site-name">Universidad<br />Técnica de Ambato</div>
+        </header>
+
+        <!-- ::::::::::::::::::::: CARD PRINCIPAL ::::::::::::::::::::: -->
+        <main class="card">
+            <h1>Solicitud de cambios:</h1>
+
+            <form id="changeForm" class="main-grid" autocomplete="off">
+                <!-- ===== COL 1: FORMULARIO ===== -->
+                <div>
+                    <!--  Título + Fecha  -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <label>
+                            <span class="rojo">Título:</span><br />
+                            <input type="text" id="titulo" name="titulo" placeholder="Título del cambio" />
+                        </label>
+
+                        <label>
+                            <span class="rojo">Fecha:</span><br />
+                            <input type="text" id="fecha" name="fecha" readonly />
+                        </label>
                     </div>
-                </label>
 
-                <!--  Justificación  -->
-                <label style="display:block;margin-top:34px;">
-                    <span class="rojo">¿Por qué debería solucionarse este problema?</span><br>
-                    <textarea
-                        rows="4">Siento que hay personas las cuales son muy sensibles al movimiento y se pueden llegar a marear al momento de hacer click en el botón del logo.</textarea>
-                </label>
+                    <!--  Tipo (radios)  -->
+                    <fieldset style="margin-top: 32px;">
+                        <legend><span class="rojo">Tipo:</span></legend>
+                        <label><input type="radio" name="tipo" value="error" /> Corrección de Error</label><br />
+                        <label><input type="radio" name="tipo" value="interfaz" /> Interfaz</label><br />
+                        <label><input type="radio" name="tipo" value="funcional" /> Funcional</label><br />
+                        <label><input type="radio" name="tipo" value="otro" /> Otro</label>
+                    </fieldset>
 
-                <!--  Contexto  -->
-                <label style="display:block;margin-top:28px;">
-                    <span class="rojo">¿Qué estaba haciendo cuando el problema surgió?</span><br>
-                    <textarea
-                        rows="4">Estaba matriculándome a un curso y quería volver atrás aplastando en el logo y empezó a girar muy feo.</textarea>
-                </label>
+                    <!--  Descripción  -->
+                    <label style="display: block; margin-top: 4px;">
+                        <span class="rojo">Descripción:</span><br />
+                        <textarea id="descripcion" name="descripcion" rows="5"
+                            placeholder="Describe el problema..."></textarea>
+                    </label>
 
-                <!--  BOTONES  -->
-                <div class="actions">
-                    <button type="reset" class="btn cancelar">Cancelar</button>
-                    <button type="submit" class="btn enviar">Enviar</button>
+                    <!--  Captura  -->
+                    <label style="display: block; margin-top: 30px;">
+                        <span class="rojo">Captura de pantalla:</span>
+                        <span style="color: var(--gray-600); font-style: italic;">(Opcional)</span>
+                        <div class="capture-bar" id="captureBar">
+                            <span class="file-name" id="fileName">Ningún archivo seleccionado</span>
+                            <button type="button" class="btn-capture tomar" id="takeShotBtn">Tomar</button>
+                            <button type="button" class="btn-capture eliminar" id="deleteShotBtn"
+                                style="display: none;">Eliminar</button>
+                        </div>
+                    </label>
+
+                    <!--  Justificación  -->
+                    <label style="display: block; margin-top: 34px;">
+                        <span class="rojo">¿Por qué debería solucionarse este problema?</span><br />
+                        <textarea id="justificacion" name="justificacion" rows="4"
+                            placeholder="Explica la importancia..."></textarea>
+                    </label>
+
+                    <!--  Contexto  -->
+                    <label style="display: block; margin-top: 28px;">
+                        <span class="rojo">¿Qué estaba haciendo cuando el problema surgió?</span><br />
+                        <textarea id="contexto" name="contexto" rows="4"
+                            placeholder="Describe el contexto..."></textarea>
+                    </label>
+
+                    <!--  BOTONES  -->
+                    <div class="actions">
+                        <button type="reset" class="btn cancelar">Cancelar</button>
+                        <button type="submit" class="btn enviar">Enviar</button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- ===== COL 2: INFO USUARIO ===== -->
-            <fieldset class="user-info">
-                <legend>Información del usuario:</legend>
-                <input type="text" value="ID de usuario: 1850410612" readonly>
-                <input type="text" value="Nombre: Johan Rodríguez" readonly>
-                <input type="text" value="Correo: 907johan@gmail.com" readonly>
-                <input type="text" value="Rol: Estudiante" readonly>
-            </fieldset>
+                <!-- ===== COL 2: INFO USUARIO ===== -->
+                <fieldset class="user-info" id="userFieldset">
+                    <legend>Información del usuario:</legend>
+                    <input id="uid" name="uid" type="text" placeholder="ID de usuario" />
+                    <input id="uname" name="uname" type="text" placeholder="Nombre completo" />
+                    <input id="uemail" name="uemail" type="email" placeholder="Correo" />
+                    <input id="urol" name="urol" type="text" placeholder="Rol" />
+                    <!--  Botón mostrará/ocultará según exista o no sesión  -->
+                    <button type="button" class="guardar-user" id="saveUserBtn" style="display: none;">Guardar mis
+                        datos</button>
+                    <button type="button" class="mini-btn" id="changeUserBtn" style="display: none;">Cambiar
+                        usuario</button>
+                </fieldset>
+            </form>
+        </main>
 
-        </div>
-        <!-- 🔄 FIN NUEVO LAYOUT -->
+        <!-- ::::::::::::::::::::: JS ::::::::::::::::::::: -->
+        <script>
+            // Set today date on load
+            document.addEventListener("DOMContentLoaded", () => {
+                const fechaInput = document.getElementById("fecha");
+                const today = new Date();
+                fechaInput.value = today.toLocaleDateString("es-EC");
 
-    </main>
+                // ======== USER SESSION HANDLING ========
+                const userFieldset = document.getElementById("userFieldset");
+                const saveBtn = document.getElementById("saveUserBtn");
+                const changeBtn = document.getElementById("changeUserBtn");
 
-    <!-- ::::::::::::::::::::: FOOTER ::::::::::::::::::::: -->
-    <footer>
-        UNIVERSIDAD TÉCNICA DE AMBATO 2025 · Centro de cursos FISEI
-    </footer>
+                // Try to read user session from localStorage
+                const userSession = JSON.parse(localStorage.getItem("userInfo"));
 
-    <script>
-        // fecha automática
-        document.getElementById("fecha").value = new Date().toLocaleDateString("es-EC", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
-    </script>
-</body>
+                if (userSession) {
+                    // Populate & lock fields
+                    ["uid", "uname", "uemail", "urol"].forEach((id) => {
+                        const el = document.getElementById(id);
+                        el.value = userSession[id] || "";
+                        el.readOnly = true;
+                    });
+                    saveBtn.style.display = "none";
+                    changeBtn.style.display = "inline-block";
+                } else {
+                    saveBtn.style.display = "inline-block";
+                    changeBtn.style.display = "none";
+                }
 
-</html>
+                // Save user data
+                saveBtn.addEventListener("click", () => {
+                    const data = {
+                        uid: document.getElementById("uid").value.trim(),
+                        uname: document.getElementById("uname").value.trim(),
+                        uemail: document.getElementById("uemail").value.trim(),
+                        urol: document.getElementById("urol").value.trim(),
+                    };
+                    if (!data.uid || !data.uname || !data.uemail) {
+                        alert("Por favor complete todos los datos de usuario antes de guardar.");
+                        return;
+                    }
+                    localStorage.setItem("userInfo", JSON.stringify(data));
+                    location.reload();
+                });
+
+                // Change user (clear session)
+                changeBtn.addEventListener("click", () => {
+                    localStorage.removeItem("userInfo");
+                    location.reload();
+                });
+
+                // ======== CAPTURE BUTTONS (dummy implementation) ========
+                const takeShotBtn = document.getElementById("takeShotBtn");
+                const deleteShotBtn = document.getElementById("deleteShotBtn");
+                const fileNameSpan = document.getElementById("fileName");
+
+                takeShotBtn.addEventListener("click", () => {
+                    // Aquí integraría lógica real de captura 📸
+                    fileNameSpan.textContent = "captura.png";
+                    deleteShotBtn.style.display = "inline-block";
+                });
+
+                deleteShotBtn.addEventListener("click", () => {
+                    fileNameSpan.textContent = "Ningún archivo seleccionado";
+                    deleteShotBtn.style.display = "none";
+                });
+            });
+        </script>
+
+    </body>
+
+    </html>
