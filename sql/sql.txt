@@ -59,3 +59,20 @@ CREATE TABLE requisitos_inscripcion (
   FOREIGN KEY (inscripcion_id) REFERENCES inscripciones(id),
   FOREIGN KEY (requisito_id) REFERENCES requisitos_evento(id)
 );
+
+-- Tabla de solicitudes de cambios
+CREATE TABLE solicitudes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    justificacion TEXT,
+    contexto TEXT,
+    captura VARCHAR(500), -- Ruta al archivo de imagen
+    uid VARCHAR(50) NOT NULL,
+    uname VARCHAR(255) NOT NULL,
+    uemail VARCHAR(255) NOT NULL,
+    urol VARCHAR(100) NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
