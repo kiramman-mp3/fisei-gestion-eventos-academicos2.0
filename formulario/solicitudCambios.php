@@ -5,12 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solicitud de Cambios</title>
-
-    <!-- =================  ESTILOS PRINCIPALES  ================= -->
     <style>
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       PALETA Y VARIABLES
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         :root {
             --maroon: #7c0a0a;
             --maroon-dark: #5b0101;
@@ -23,9 +18,6 @@
             --btn-gray-hover: #6b7280;
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       RESET BÁSICO
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         * {
             box-sizing: border-box;
             font-family: "Segoe UI", Arial, sans-serif;
@@ -42,9 +34,6 @@
             color: var(--gray-900);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       HEADER & NAV
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .top-header {
             display: flex;
             align-items: center;
@@ -82,9 +71,6 @@
             opacity: 0.75;
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       CARD PRINCIPAL
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .card {
             max-width: 1000px;
             margin: 30px auto 44px;
@@ -100,18 +86,12 @@
             color: var(--maroon);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       NUEVO LAYOUT  (form   |   usuario)
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 310px;
             gap: 36px;
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       INPUTS, SELECTS & TEXTAREAS
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         input[type="text"],
         input[type="email"],
         textarea,
@@ -141,9 +121,6 @@
             font-weight: 600;
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       FIELDSETS & RADIO
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         fieldset {
             border: 1px solid var(--gray-200);
             border-radius: 16px;
@@ -160,9 +137,6 @@
             accent-color: var(--maroon);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       INFO USUARIO
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .user-info {
             align-self: flex-start;
         }
@@ -172,9 +146,6 @@
             background: var(--gray-100);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       CAPTURA
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .capture-bar {
             display: flex;
             align-items: center;
@@ -220,9 +191,6 @@
             background: var(--maroon-dark);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       BOTONES FINALES
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         .actions {
             display: flex;
             justify-content: flex-end;
@@ -262,9 +230,47 @@
             transform: translateY(1px);
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       FOOTER
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+        .guardar-user {
+            background-color: var(--maroon);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 10px 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .guardar-user:hover {
+            background-color: var(--maroon-dark);
+        }
+
+        .guardar-user:active {
+            transform: translateY(1px);
+        }
+
+        .mini-btn {
+            background-color: var(--btn-gray);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 8px 24px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .mini-btn:hover {
+            background-color: var(--btn-gray-hover);
+        }
+
+        .mini-btn:active {
+            transform: translateY(1px);
+        }
+
+
         footer {
             background: var(--maroon);
             color: #fff;
@@ -273,9 +279,6 @@
             padding: 14px 8px;
         }
 
-        /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-       RESPONSIVE
-    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
         @media (max-width: 860px) {
             .main-grid {
                 grid-template-columns: 1fr;
@@ -301,11 +304,9 @@
     <main class="card">
         <h1>Solicitud de cambios:</h1>
 
-        <form id="solicitudForm" novalidate>
+        <form id="solicitudForm" action="guardar_solicitud.php" method="POST" enctype="multipart/form-data" novalidate>
             <div class="main-grid">
-
                 <div>
-                    <!-- Título + Fecha -->
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
                         <label>
                             <span class="rojo">Título:</span><br />
@@ -318,7 +319,6 @@
                         </label>
                     </div>
 
-                    <!-- Tipo -->
                     <label style="display:block;margin-top:28px;">
                         <span class="rojo">Tipo:</span><br />
                         <select id="tipo" name="tipo" required>
@@ -330,139 +330,71 @@
                         </select>
                     </label>
 
-                    <!-- Descripción -->
                     <label style="display:block;margin-top:24px;">
                         <span class="rojo">Descripción:</span><br />
-                        <textarea placeholder="Describe el problema..." id="descripcion" name="descripcion" rows="5" required></textarea>
+                        <textarea id="descripcion" name="descripcion" rows="5" required
+                            placeholder="Describe el problema..."></textarea>
                     </label>
 
-                    <!-- Captura -->
                     <label style="display:block;margin-top:30px;">
                         <span class="rojo">Captura de pantalla:</span>
                         <span style="color:var(--gray-600);font-style:italic;">(Opcional)</span>
-                        <!-- input file oculto -->
-                        <input type="file" id="captureInput" accept="image/*" style="display:none;" />
-                        <!-- barra cuando hay archivo -->
+
+                        <!-- Campo oculto real -->
+                        <input type="file" id="captureInput" name="captura" accept="image/*" style="display:none;" />
+
+                        <!-- Barra que aparece cuando hay archivo cargado -->
                         <div class="capture-bar" id="captureBar" style="display:none;">
                             <span class="file-name" id="fileName"></span>
                             <button type="button" class="btn-capture tomar" id="takeAnotherBtn">Tomar otra</button>
                             <button type="button" class="btn-capture eliminar" id="deleteCaptureBtn">Eliminar</button>
                         </div>
 
-                        <!-- botón inicial -->
+                        <!-- Botón inicial para subir imagen -->
                         <button type="button" class="btn-capture tomar" id="addCaptureBtn">Subir imagen</button>
                     </label>
 
-                    <!-- Justificación -->
+
                     <label style="display:block;margin-top:34px;">
                         <span class="rojo">¿Por qué debería solucionarse este problema?</span><br />
-                        <textarea placeholder="Explica la importancia..." id="justificacion" name="justificacion" rows="4"></textarea>
+                        <textarea id="justificacion" name="justificacion" rows="4"
+                            placeholder="Explica la importancia..."></textarea>
                     </label>
 
-                    <!-- Contexto -->
                     <label style="display:block;margin-top:28px;">
                         <span class="rojo">¿Qué estaba haciendo cuando el problema surgió?</span><br />
-                        <textarea placeholder="Describe el contexto..." id="contexto" name="contexto" rows="4"></textarea>
+                        <textarea id="contexto" name="contexto" rows="4"
+                            placeholder="Describe el contexto..."></textarea>
                     </label>
 
-                    <!-- BOTONES -->
                     <div class="actions">
                         <button type="reset" class="btn cancelar">Cancelar</button>
                         <button type="submit" class="btn enviar">Enviar</button>
                     </div>
                 </div>
 
-                <!-- ========== COL 2 : INFO USUARIO ========== -->
                 <fieldset class="user-info" id="userFieldset">
                     <legend>Información del usuario:</legend>
-
                     <input id="uid" name="uid" type="text" placeholder="ID de usuario" required />
                     <input id="uname" name="uname" type="text" placeholder="Nombre completo" required />
                     <input id="uemail" name="uemail" type="email" placeholder="Correo" required />
                     <input id="urol" name="urol" type="text" placeholder="Rol" required />
-
-                    <button type="button" class="guardar-user" id="saveUserBtn"
-                        style="display:none;margin-top:12px;">Guardar mis datos</button>
-                    <button type="button" class="mini-btn" id="changeUserBtn"
-                        style="display:none;margin-top:12px;">Cambiar usuario</button>
                 </fieldset>
-
-            </div><!-- /.main-grid -->
+            </div>
         </form>
     </main>
 
     <footer>© 2025 Universidad Técnica de Ambato</footer>
 
-    <!-- =================  SCRIPTS  ================= -->
     <script>
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        //  FECHA (solo lectura)
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        const fechaEl = document.getElementById("fecha");
-        fechaEl.value = new Date().toLocaleDateString("es-EC", {
+        // Mostrar fecha actual en campo readonly
+        document.getElementById("fecha").value = new Date().toLocaleDateString("es-EC", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
         });
 
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        //  GESTIÓN DE USUARIO con localStorage
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        const userFieldset = document.getElementById("userFieldset");
-        const saveBtn = document.getElementById("saveUserBtn");
-        const changeBtn = document.getElementById("changeUserBtn");
-
-        const uid = document.getElementById("uid");
-        const uname = document.getElementById("uname");
-        const uemail = document.getElementById("uemail");
-        const urol = document.getElementById("urol");
-
-        function loadUser() {
-            const stored = JSON.parse(localStorage.getItem("userInfo") || "null");
-
-            if (stored) {
-                uid.value = stored.uid;
-                uname.value = stored.uname;
-                uemail.value = stored.uemail;
-                urol.value = stored.urol;
-
-                [...userFieldset.querySelectorAll("input")].forEach((i) => (i.readOnly = true));
-                saveBtn.style.display = "none";
-                changeBtn.style.display = "inline-block";
-            } else {
-                [...userFieldset.querySelectorAll("input")].forEach((i) => (i.readOnly = false));
-                saveBtn.style.display = "inline-block";
-                changeBtn.style.display = "none";
-            }
-        }
-
-        saveBtn.addEventListener("click", () => {
-            const info = {
-                uid: uid.value.trim(),
-                uname: uname.value.trim(),
-                uemail: uemail.value.trim(),
-                urol: urol.value.trim(),
-            };
-
-            if (Object.values(info).some((v) => !v)) {
-                alert("Por favor, completa todos los datos de usuario.");
-                return;
-            }
-
-            localStorage.setItem("userInfo", JSON.stringify(info));
-            loadUser();
-        });
-
-        changeBtn.addEventListener("click", () => {
-            localStorage.removeItem("userInfo");
-            loadUser();
-        });
-
-        loadUser();
-
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        //  UPLOAD CAPTURA
-        // :::::::::::::::::::::::::::::::::::::::::::::::
+        // Lógica de subida de imagen personalizada
         const captureInput = document.getElementById("captureInput");
         const captureBar = document.getElementById("captureBar");
         const fileNameSpan = document.getElementById("fileName");
@@ -486,19 +418,6 @@
                 addCaptureBtn.style.display = "none";
             }
         });
-
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        //  ENVÍO DEL FORMULARIO (solo demo)
-        // :::::::::::::::::::::::::::::::::::::::::::::::
-        document.getElementById("solicitudForm").addEventListener("submit", (e) => {
-            e.preventDefault();
-            alert("✔️ Solicitud enviada (demo)\nAquí iría tu lógica de envío al servidor.");
-            e.target.reset();
-            captureBar.style.display = "none";
-            addCaptureBtn.style.display = "inline-block";
-            loadUser(); // Mantén datos de user
-        });
     </script>
-</body>
 
-</html>
+</body>
