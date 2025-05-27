@@ -1,5 +1,5 @@
 <?php
-require_once("../conexion.php");
+require_once("../sql/conexion.php");
 require_once("../libs/fpdf/fpdf.php");
 
 session_start();

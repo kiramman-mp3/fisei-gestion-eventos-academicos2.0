@@ -1,9 +1,9 @@
 <?php
 session_start();
-require '../config/conexion.php';
+require '../sql/conexion.php';
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../auth/login.php");
+    header("Location: ../login.php");
     exit;
 }
 

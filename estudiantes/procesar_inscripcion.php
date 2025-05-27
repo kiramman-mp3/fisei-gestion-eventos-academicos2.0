@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../conexion.php';
+require '../sql/conexion.php';
 
 // Validación de login
 if (!isset($_SESSION['usuario_id'])) {
