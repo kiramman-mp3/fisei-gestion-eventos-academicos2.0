@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .login-card {
       max-width: 600px;
     }
-    
   </style>
 </head>
 
@@ -65,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <main class="card-custom login-card">
     <div class="text-center mb-4">
-      <h2>Iniciar Sesión</h2>
-      <p class="text-muted">Accede con tu correo institucional</p>
+      <h1>Iniciar Sesión</h1>
+      <p class="text-muted">Accede con tu correo registrado</p>
     </div>
 
     <?php if (isset($error)): ?>
@@ -89,8 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="text-center mt-3">
-        <a href="registro.php" class="btn-outline-primary">¿No tienes cuenta? Regístrate aquí</a>
+        <a href="registro.php" class="btn btn-outline-primary text-decoration-none">¿No tienes cuenta? Regístrate
+          aquí</a>
       </div>
+
     </form>
   </main>
 

@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </header>
 
   <main class="card-custom registro-card">
-    <h3 class="text-center">Crea una cuenta</h3>
+    <h1 class="text-center">Crea una cuenta</h1>
     <p class="text-center text-muted mb-4">Es rápido y fácil.</p>
 
     <?php if (isset($error)): ?>
