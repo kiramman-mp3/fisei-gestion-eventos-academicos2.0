@@ -80,61 +80,63 @@ header,
 .btn-outline-secondary,
 .guardar-user,
 .mini-btn {
-    border: none;
-    border-radius: 9999px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    font-weight: 600;
+    border: none !important;
+    border-radius: 9999px !important;
+    cursor: pointer !important;
+    transition: background 0.2s, transform 0.1s !important;
+    font-weight: 600 !important;
 }
 
 /* BOTÓN PRINCIPAL: color sólido */
 .btn-primary,
 .btn.enviar,
 .guardar-user {
-    background-color: var(--maroon);
-    color: white;
+    background-color: var(--maroon) !important;
+    color: white !important;
 }
 
 .btn-primary:hover,
 .btn.enviar:hover,
 .guardar-user:hover {
-    background-color: var(--maroon-dark);
+    background-color: var(--maroon-dark) !important;
+    color: white !important;
 }
 
 /* BOTÓN CONTORNEADO */
 .btn-outline-primary,
 .btn-outline-secondary,
 .mini-btn {
-    background-color: transparent;
-    border: 2px solid var(--maroon);
-    color: var(--maroon);
-    padding: 8px 24px;
-    font-size: 0.95rem;
+    background-color: transparent !important;
+    border: 2px solid var(--maroon) !important;
+    color: var(--maroon) !important;
+    padding: 8px 24px !important;
+    font-size: 0.95rem !important;
 }
 
 .btn-outline-primary:hover,
 .btn-outline-secondary:hover,
 .mini-btn:hover {
-    background-color: var(--maroon);
-    color: white;
+    background-color: var(--maroon) !important;
+    color: white !important;
 }
 
 /* EFECTO DE CLICK */
 .btn:active,
 .guardar-user:active,
 .mini-btn:active {
-    transform: translateY(1px);
+    transform: translateY(1px) !important;
 }
 
 /* BOTÓN GRIS PARA CANCELAR */
 .btn.cancelar {
-    background: var(--btn-gray);
-    color: white;
+    background: var(--btn-gray) !important;
+    color: white !important;
 }
 
 .btn.cancelar:hover {
-    background: var(--btn-gray-hover);
+    background: var(--btn-gray-hover) !important;
 }
+
 
 /* CARDS Y CONTENEDORES */
 .card,
