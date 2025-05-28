@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="css/styles.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     html,
     body {
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <header class="top-header">
-    <img src="img/logo_uta.png" alt="Logo UTA">
+    <img src="resource/logo-uta.png" alt="Logo UTA">
     <div class="site-name">Eventos Académicos FISEI</div>
   </header>
 
@@ -95,9 +96,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
   </main>
 
-  <footer>
-    © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato
+  <footer class="footer-expandido">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Sobre el sistema</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+          <li><a href="#"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+          <li><a href="#"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+          <li><a href="#"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Soporte</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+          <li><a href="formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+          <li><a href="#"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+          <li><a href="#"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+          <li><a href="#"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>FISEI - UTA</h5>
+        <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+    </div>
   </footer>
+
+
 
 </body>
 
