@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <li><a href="#"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
           <li><a href="#"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
           <li><a href="#"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-          <li><a href="#"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+          <li><a href="informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
         </ul>
       </div>
 
