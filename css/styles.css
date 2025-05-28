@@ -424,6 +424,58 @@ footer {
   font-weight: 700 !important;
 }
 
+.reporte-container .row {
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 30px !important;
+}
+
+.card {
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border: none;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-bottom: 4px solid var(--maroon);
+}
+
+.card-body {
+  padding: 1.2rem 1.4rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.card-text {
+  color: var(--gray-900);
+  font-size: 0.95rem;
+  text-align: justify;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0.5rem;
+}
 
 
 /* RESPONSIVE */
@@ -439,5 +491,17 @@ footer {
 
   .btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
   }
 }
