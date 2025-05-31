@@ -76,3 +76,14 @@ CREATE TABLE solicitudes (
     urol VARCHAR(100) NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Tala de resoluciones
+CREATE TABLE resoluciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud INT NOT NULL,
+    prioridad VARCHAR(50),
+    comentario TEXT,
+    estado VARCHAR(50),
+    fecha_resolucion DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_solicitud) REFERENCES solicitudes(id) ON DELETE CASCADE
+);
