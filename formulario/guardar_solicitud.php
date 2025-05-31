@@ -1,11 +1,9 @@
 <?php
-
 include_once '../sql/conexion.php';
 
 $cris = new Conexion();
 $conn = $cris->conectar();
 
-// Recibe datos del formulario
 $titulo = $_POST['titulo'] ?? '';
 $fecha = $_POST['fecha'] ?? '';
 $tipo = $_POST['tipo'] ?? '';
@@ -18,15 +16,15 @@ $uemail = $_POST['uemail'] ?? '';
 $urol = $_POST['urol'] ?? '';
 
 $imagenRuta = "";
-if (isset($_FILES['captureInput']) && $_FILES['captureInput']['error'] === UPLOAD_ERR_OK) {
-    $nombreArchivo = basename($_FILES["captureInput"]["name"]);
+if (isset($_FILES['captura']) && $_FILES['captura']['error'] === UPLOAD_ERR_OK) {
+    $nombreArchivo = basename($_FILES["captura"]["name"]);
     $directorioDestino = "../uploads/";
     if (!is_dir($directorioDestino)) {
         mkdir($directorioDestino, 0755, true);
     }
     $rutaFinal = $directorioDestino . time() . "_" . $nombreArchivo;
 
-    if (move_uploaded_file($_FILES["captureInput"]["tmp_name"], $rutaFinal)) {
+    if (move_uploaded_file($_FILES["captura"]["tmp_name"], $rutaFinal)) {
         $imagenRuta = $rutaFinal;
     }
 }
@@ -49,6 +47,10 @@ try {
         ':uemail' => $uemail,
         ':urol' => $urol
     ]);
+
+    // Redirigir con éxito
+    header("Location: solicitud_cambios.php?success=1");
+    exit;
 } catch (PDOException $e) {
     echo "❌ Error al guardar la solicitud: " . $e->getMessage();
 }

@@ -24,25 +24,22 @@
   font-size: 14px;
 }
 
-/* Forzar que el contenido principal empuje al footer al fondo */
 html,
 body {
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
-  display: flex !important;
-  flex-direction: column !important;
-  background-color: var(--gray-050) !important;
-  /* asegura el color de fondo definido */
+  background-color: var(--gray-050);
 }
 
 main {
-  flex: 1 !important;
+  flex: 1;
+  padding: 32px;
 }
-
 
 h1 {
   color: var(--maroon-dark) !important;
@@ -194,6 +191,21 @@ header,
 .table-custom th {
   background-color: var(--maroon);
   color: #ffffff;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* ← exacto 3 por fila */
+  gap: 24px;
+  margin-top: 32px;
+}
+/* Cada solicitud individual */
+.card-item {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--gray-200);
 }
 
 /* FORMULARIOS */
@@ -431,11 +443,13 @@ footer {
 }
 
 .card {
-  border-radius: 18px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-  border: none;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: visible;
+  /* <- IMPORTANTE si estaba ocultando */
 }
 
 .card:hover {
@@ -477,31 +491,14 @@ footer {
   padding: 0.5rem;
 }
 
-
-/* RESPONSIVE */
-@media (max-width: 860px) {
-  .main-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 992px) {
-  .cards-grid {
+@media (max-width: 900px) {
+  .card-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 600px) {
-  .cards-grid {
+  .card-grid {
     grid-template-columns: 1fr;
   }
 }

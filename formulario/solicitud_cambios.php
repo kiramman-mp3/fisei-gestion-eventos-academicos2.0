@@ -1,3 +1,19 @@
+<?php
+session_start();
+$uid = $_SESSION['uid'] ?? '';
+$uname = $_SESSION['uname'] ?? '';
+$uemail = $_SESSION['uemail'] ?? '';
+$urol = $_SESSION['urol'] ?? '';
+
+// $uid = $_SESSION['uid'] ?? '1';
+// $uname = $_SESSION['uname'] ?? 'Johan Rodríguez';
+// $uemail = $_SESSION['uemail'] ?? '907johan@gmail.com';
+// $urol = $_SESSION['urol'] ?? 'Administrador';
+
+$sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($urol);
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,9 +23,45 @@
     <title>Solicitud de Cambios</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .alert-success {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px 16px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            z-index: 9999;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success .close-btn {
+            background: none;
+            border: none;
+            color: #155724;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+    </style>
+
 </head>
 
 <body>
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+        <div id="alertSuccess" class="alert-success">
+            ✅ ¡La solicitud se ha enviado correctamente!
+            <button class="close-btn" onclick="document.getElementById('alertSuccess').style.display='none'">×</button>
+        </div>
+    <?php endif; ?>
+
     <header class="top-header">
         <div class="site-name">Universidad<br>Técnica de Ambato</div>
     </header>
@@ -28,7 +80,7 @@
 
                         <label>
                             <span class="rojo">Fecha:</span><br />
-                            <input type="text" id="fecha" name="fecha" readonly />
+                            <input type="text" id="fecha" name="fecha" readonly value="<?= date('Y-m-d') ?>" />
                         </label>
                     </div>
 
@@ -88,11 +140,16 @@
 
                 <fieldset class="user-info" id="userFieldset">
                     <legend>Información del usuario:</legend>
-                    <input id="uid" name="uid" type="text" placeholder="ID de usuario" required />
-                    <input id="uname" name="uname" type="text" placeholder="Nombre completo" required />
-                    <input id="uemail" name="uemail" type="email" placeholder="Correo" required />
-                    <input id="urol" name="urol" type="text" placeholder="Rol" required />
+                    <input id="uid" name="uid" type="text" placeholder="ID de usuario" required
+                        value="<?= htmlspecialchars($uid) ?>" <?= $sesion_activa ? 'readonly' : '' ?> />
+                    <input id="uname" name="uname" type="text" placeholder="Nombre completo" required
+                        value="<?= htmlspecialchars($uname) ?>" <?= $sesion_activa ? 'readonly' : '' ?> />
+                    <input id="uemail" name="uemail" type="email" placeholder="Correo" required
+                        value="<?= htmlspecialchars($uemail) ?>" <?= $sesion_activa ? 'readonly' : '' ?> />
+                    <input id="urol" name="urol" type="text" placeholder="Rol" required
+                        value="<?= htmlspecialchars($urol) ?>" <?= $sesion_activa ? 'readonly' : '' ?> />
                 </fieldset>
+
             </div>
         </form>
     </main>
@@ -145,12 +202,7 @@
     </footer>
 
     <script>
-        // Mostrar fecha actual en campo readonly
-        document.getElementById("fecha").value = new Date().toLocaleDateString("es-EC", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
+
 
         // Lógica de subida de imagen personalizada
         const captureInput = document.getElementById("captureInput");
