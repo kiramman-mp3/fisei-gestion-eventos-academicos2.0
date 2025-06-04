@@ -1,28 +1,33 @@
 <?php
 session_start();
 include('sql/conexion.php');
+$cris = new Conexion();
+$conexion = $cris->conectar();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $correo = $_POST['correo'];
   $password = $_POST['password'];
 
-  $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = ?");
-  $query->bind_param("s", $correo);
-  $query->execute();
-  $result = $query->get_result();
+  try {
+    $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = :correo");
 
-  if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-    if (password_verify($password, $user['password'])) {
+    $query->execute([':correo' => $correo]);
+    
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password'])) {
       $_SESSION['user'] = $user;
       header("Location: perfil.php");
       exit;
+    } else {
+      $error = "Correo o contraseña incorrectos";
     }
+  } catch (PDOException $e) {
+    $error = "Error al conectar a la base de datos: " . $e->getMessage();
   }
-
-  $error = "Correo o contraseña incorrectos";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
