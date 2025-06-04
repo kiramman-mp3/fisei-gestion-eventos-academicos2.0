@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Validar tipo de correo
   if (str_ends_with($correo, '@uta.edu.ec')) {
     $tipo = 'institucional';
-  } elseif (preg_match('/@.+\..+/', $correo)) {
+  } elseif (preg_match('/@.+\\..+/', $correo)) {
     $tipo = 'publico';
   } else {
     $error = "Correo inválido.";
@@ -24,8 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ssssssss", $nombre, $apellido, $correo, $password, $cedula, $genero, $fecha_nacimiento, $tipo);
 
     if ($stmt->execute()) {
-      echo "<div class='alert alert-success text-center'>Registro exitoso. <a href='login.php'>Iniciar sesión</a></div>";
-      exit;
+      // Login automático
+      $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = ?");
+      $query->bind_param("s", $correo);
+      $query->execute();
+      $result = $query->get_result();
+      if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        require_once 'session.php';
+        $_SESSION['usuario_id'] = $user['id'];
+        $_SESSION['nombre']     = $user['nombre'];
+        $_SESSION['apellido']   = $user['apellido'];
+        $_SESSION['email']      = $user['correo'];
+        $_SESSION['rol']        = $user['rol'];
+        header("Location: perfil.php");
+        exit;
+      }
     } else {
       $error = "Este correo ya está registrado.";
     }
@@ -35,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <title>Registro Estudiante</title>
@@ -44,30 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
   <style>
-    html,
-    body {
-      height: 100%;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .registro-card {
-      max-width: 640px;
-    }
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    main { flex: 1; }
+    .registro-card { max-width: 640px; }
   </style>
 </head>
-
 <body>
-
   <header class="top-header">
     <img src="img/logo_uta.png" alt="Logo UTA">
     <div class="site-name">Eventos Académicos FISEI</div>
@@ -92,8 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="mb-3">
-        <input type="text" name="cedula" placeholder="Número de cédula" pattern="\d{10}"
-          title="Debe contener 10 dígitos numéricos" required>
+        <input type="text" name="cedula" placeholder="Número de cédula" pattern="\d{10}" title="Debe contener 10 dígitos numéricos" required>
       </div>
 
       <div class="mb-3">
@@ -109,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="col">
             <select name="mes" required>
               <?php
-              $meses = ['01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+              $meses = ['01'=>'Enero','02'=>'Febrero','03'=>'Marzo','04'=>'Abril','05'=>'Mayo','06'=>'Junio','07'=>'Julio','08'=>'Agosto','09'=>'Septiembre','10'=>'Octubre','11'=>'Noviembre','12'=>'Diciembre'];
               foreach ($meses as $num => $mes): ?>
                 <option value="<?= $num ?>"><?= $mes ?></option>
               <?php endforeach; ?>
@@ -157,7 +153,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="text-center mt-3">
       <a href="login.php" class="btn btn-outline-primary">¿Ya tienes una cuenta?</a>
     </div>
-
   </main>
 
   <footer class="footer-expandido">
@@ -205,7 +200,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
     </div>
   </footer>
-
 </body>
-
 </html>
