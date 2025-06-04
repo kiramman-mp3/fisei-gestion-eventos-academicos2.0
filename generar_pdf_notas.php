@@ -29,5 +29,5 @@ foreach($notas as $n){
     $pdf->Ln();
 }
 
-$pdf->Output();
+$pdf->Output('D', 'reporte_notas.pdf');
 ?>
