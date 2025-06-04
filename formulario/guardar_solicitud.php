@@ -1,4 +1,9 @@
 <?php
+if (!isLoggedIn()) {
+    header('Location: ../login.php');
+    exit();
+}
+
 include_once '../sql/conexion.php';
 
 $cris = new Conexion();
@@ -54,4 +59,3 @@ try {
 } catch (PDOException $e) {
     echo "❌ Error al guardar la solicitud: " . $e->getMessage();
 }
-?>

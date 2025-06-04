@@ -1,8 +1,13 @@
 <?php
-session_start();
+if (!isLoggedIn()) {
+    header('Location: ../login.php');
+    exit();
+}
+
+require_once '../session.php';
 require '../sql/conexion.php';
 
-// Validación de login
+// Validación de login redundante (puede eliminarse si ya usas isLoggedIn)
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit;
