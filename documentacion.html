@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Documentación Técnica - UTA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="bg-uta-red text-white py-4 text-center shadow-sm">
+    <h1 class="mb-0">Documentación Técnica</h1>
+    <p class="mb-0">Sistema Administrativo - Universidad Técnica de Ambato</p>
+  </header>
+
+  <main class="container py-5">
+
+    <section class="mb-5">
+      <h2 class="text-uta-red">1. Introducción</h2>
+      <p>
+        Este documento describe el funcionamiento y propósito de cada módulo del dashboard administrativo
+        desarrollado para la Universidad Técnica de Ambato. Está dirigido a administradores y desarrolladores.
+      </p>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="text-uta-red">2. Módulos del Sistema</h2>
+
+      <h4 class="mt-4">2.1 Inscripciones</h4>
+      <p>
+        Este módulo permite validar los pagos realizados por los estudiantes y verificar que la documentación
+        esté completa antes de continuar con el proceso de inscripción.
+      </p>
+
+      <h4 class="mt-4">2.2 Cursos y Eventos</h4>
+      <p>
+        Desde aquí se pueden crear nuevos eventos o cursos de capacitación. También es posible definir fechas y subir
+        requisitos que los participantes deberán cumplir.
+      </p>
+
+      <h4 class="mt-4">2.3 Notas y Asistencia</h4>
+      <p>
+        Este módulo permite al personal encargado ingresar las calificaciones y registrar la asistencia de los estudiantes.
+        Los datos ingresados pueden usarse para análisis posteriores.
+      </p>
+
+      <h4 class="mt-4">2.4 Reportes</h4>
+      <p>
+        Muestra reportes organizados sobre la asistencia, las calificaciones y los pagos registrados.
+        Esta sección es útil para tener una visión general del desempeño del sistema y de los estudiantes.
+      </p>
+
+      <h4 class="mt-4">2.5 Documentación</h4>
+      <p>
+        Es el módulo actual. Proporciona una guía técnica y funcional sobre el uso de cada sección del panel administrativo.
+      </p>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="text-uta-red">3. Estructura de Archivos</h2>
+      <ul>
+        <li><code>index.html</code>: Página principal del panel administrativo.</li>
+        <li><code>validar_pago.html</code>: Página de validación de pagos.</li>
+        <li><code>crear_evento.html</code>: Formulario para registrar eventos.</li>
+        <li><code>subir_requisitos.html</code>: Subida de requisitos.</li>
+        <li><code>notas_asistencia.html</code>: Gestión de calificaciones y asistencia.</li>
+        <li><code>reporte_asistencia.html</code>, <code>reporte_notas.html</code>, <code>reporte_pagos.html</code>: Visualización de reportes.</li>
+        <li><code>documentacion.html</code>: Página con la documentación técnica.</li>
+        <li><code>css/styles.css</code>: Hoja de estilos con colores institucionales.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-uta-red">4. Créditos</h2>
+      <p>
+        Proyecto realizado por el equipo de los más LINDOS DE LA FISEI – UTA 2025.
+      </p>
+    </section>
+
+    <div class="text-center mt-5">
+      <a href="dashborad.html" class="btn btn-outline-primary">← Volver al Dashboard</a>
+    </div>
+
+  </main>
+
+  <footer class="text-center text-white bg-uta-red py-3 mt-5">
+    <small>&copy; 2025 Universidad Técnica de Ambato – Todos los derechos reservados</small>
+  </footer>
+
+</body>
+</html>
