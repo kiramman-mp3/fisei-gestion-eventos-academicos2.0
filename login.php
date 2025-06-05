@@ -1,6 +1,8 @@
 <?php
-require_once 'session.php';
+session_start();
 include('sql/conexion.php');
+include('includes/session.php'); // Incluir el archivo de sesión para usar las funciones auxiliares
+
 $cris = new Conexion();
 $conexion = $cris->conectar();
 
@@ -9,16 +11,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   try {
+    // Preparar la consulta con PDO
     $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = :correo");
 
-
+    // Ejecutar la consulta con el correo proporcionado
     $query->execute([':correo' => $correo]);
-    
+
     $user = $query->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-      $_SESSION['user'] = $user;
+      // Almacenar los datos en la sesión
+      $_SESSION['usuario_id'] = $user['id'];  // Asume que la columna id es la que identificará al usuario
+      $_SESSION['email'] = $user['correo'];
+      $_SESSION['nombre'] = $user['nombre'];
+      $_SESSION['apellido'] = $user['apellido'];
+      $_SESSION['rol'] = $user['rol'];  // Asume que la columna rol contiene el rol del usuario
 
+      // Redirigir al perfil
       header("Location: perfil.php");
       exit;
     } else {
