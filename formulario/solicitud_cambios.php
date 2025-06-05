@@ -1,14 +1,14 @@
 <?php
-session_start();
+if (!isLoggedIn()) {
+    header('Location: ../login.php');
+    exit();
+}
+
+require_once '../session.php';
 $uid = $_SESSION['uid'] ?? '';
 $uname = $_SESSION['uname'] ?? '';
 $uemail = $_SESSION['uemail'] ?? '';
 $urol = $_SESSION['urol'] ?? '';
-
-// $uid = $_SESSION['uid'] ?? '1';
-// $uname = $_SESSION['uname'] ?? 'Johan Rodríguez';
-// $uemail = $_SESSION['uemail'] ?? '907johan@gmail.com';
-// $urol = $_SESSION['urol'] ?? 'Administrador';
 
 $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($urol);
 ?>

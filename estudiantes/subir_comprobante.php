@@ -1,5 +1,10 @@
 <?php
-session_start();
+if (!isLoggedIn()) {
+    header('Location: ../login.php');
+    exit();
+}
+
+require_once '../session.php';
 require '../sql/conexion.php';
 
 if (!isset($_SESSION['usuario_id'])) {
