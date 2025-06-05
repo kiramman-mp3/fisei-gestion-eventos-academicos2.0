@@ -40,7 +40,7 @@ $pagos = [
     </table>
 
     <div class="d-flex justify-content-between mt-4">
-      <a href="dashboard.php" class="btn btn-secondary">← Volver al Dashboard</a>
+      <a href="dashboard.html" class="btn btn-secondary">← Volver al Dashboard</a>
       <a href="generar_pdf_pagos.php" class="btn btn-danger">Descargar PDF</a>
     </div>
   </div>
