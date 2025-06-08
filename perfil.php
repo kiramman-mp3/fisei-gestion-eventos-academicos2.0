@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="text-center" style="margin-top: 2rem;">
-          <a href="mis_cursos.php" class="btn btn-outline-primary"><i class="fas fa-book-open"></i> Ver mis cursos</a>
+          <a href="estudiantes/mis_cursos.php" class="btn btn-outline-primary"><i class="fas fa-book-open"></i> Ver mis cursos</a>
         </div>
       </form>
     </div>

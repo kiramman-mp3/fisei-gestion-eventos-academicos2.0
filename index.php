@@ -108,38 +108,69 @@
           const { rol, cursos } = data;
           const contenedor = document.getElementById('lista-cursos');
           contenedor.innerHTML = '';
+
           cursos.forEach(curso => {
             const rutaCruda = curso.ruta_imagen || '';
             const rutaLimpia = rutaCruda.replace(/^\.\.\/+/, '');
             const src = rutaLimpia !== '' ? rutaLimpia : 'resource/placeholder.svg';
-            const botonTexto = rol === 'estudiante' ? 'Inscribirse' : 'Administrar';
-            const botonClase = rol === 'estudiante' ? 'btn-primary' : 'btn-outline-secondary';
+
+            let botonHTML = '';
+            if (rol === 'estudiante') {
+              botonHTML = `<button class="btn btn-primary inscribirse-btn" data-id="${curso.id}">Inscribirse</button>`;
+            } else {
+              botonHTML = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary">Administrar</a>`;
+            }
 
             contenedor.innerHTML += `
-    <div class="card shadow-sm mb-4" style="max-width: 22rem;">
-      <img src="${src}" class="card-img-top" alt="Imagen del evento">
-      <div class="card-body">
-        <h5 class="card-title text-maroon">${curso.nombre_evento}</h5>
-        <p class="card-text mb-1"><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
-        <p class="card-text mb-1"><strong>Ponente:</strong> ${curso.ponentes}</p>
-        <p class="card-text mb-1"><strong>Horas académicas:</strong> ${curso.horas}</p>
-        <p class="card-text mb-3"><strong>Cupos disponibles:</strong> ${curso.cupos}</p>
-        <div class="text-center">
-          <button class="btn ${botonClase}">${botonTexto}</button>
-        </div>
-      </div>
-    </div>
-  `;
+            <div class="card shadow-sm mb-4" style="max-width: 22rem;">
+              <img src="${src}" class="card-img-top" alt="Imagen del evento">
+              <div class="card-body">
+                <h5 class="card-title text-maroon">${curso.nombre_evento}</h5>
+                <p class="card-text mb-1"><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
+                <p class="card-text mb-1"><strong>Ponente:</strong> ${curso.ponentes}</p>
+                <p class="card-text mb-1"><strong>Horas académicas:</strong> ${curso.horas}</p>
+                <p class="card-text mb-3"><strong>Cupos disponibles:</strong> ${curso.cupos}</p>
+                <div class="text-center">
+                  ${botonHTML}
+                </div>
+              </div>
+            </div>
+          `;
+          });
+
+          // Delegación de evento para los botones de inscripción
+          document.querySelectorAll('.inscribirse-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const eventoId = btn.getAttribute('data-id');
+              fetch('estudiantes/inscribirse_evento.php', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ evento_id: eventoId })
+              })
+                .then(res => res.json())
+                .then(response => {
+                  if (response.success) {
+                    alert('Inscripción realizada correctamente.');
+                    location.reload();
+                  } else {
+                    alert('Error al inscribirse: ' + response.message);
+                  }
+                })
+                .catch(err => alert('Error de red: ' + err.message));
+            });
           });
 
         })
         .catch(err => {
           document.getElementById('lista-cursos').innerHTML = `
-            <div class="alert alert-danger">No se pudieron cargar los cursos: ${err.message}</div>
-          `;
+          <div class="alert alert-danger">No se pudieron cargar los cursos: ${err.message}</div>
+        `;
         });
     });
   </script>
+
 </body>
 
 </html>

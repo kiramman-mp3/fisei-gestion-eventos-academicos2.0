@@ -1,14 +1,16 @@
 <?php
+
+require_once '../session.php';
 if (!isLoggedIn()) {
     header('Location: ../login.php');
     exit();
 }
 
 require_once '../session.php';
-$uid = $_SESSION['uid'] ?? '';
-$uname = $_SESSION['uname'] ?? '';
-$uemail = $_SESSION['uemail'] ?? '';
-$urol = $_SESSION['urol'] ?? '';
+$uid = getUserId() ?? '';
+$uname = getUserName() . ' ' . getUserLastname() ?? '';
+$uemail = getUserEmail() ?? '';
+$urol = getUserRole() ?? '';
 
 $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($urol);
 ?>

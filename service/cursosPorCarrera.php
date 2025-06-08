@@ -11,8 +11,8 @@ if (!isLoggedIn()) {
     exit;
 }
 
-$carrera = getUserCarrera(); 
 $rol = getUserRole();
+$carrera= getUserCarrera();
 
 $sql = "
     SELECT e.id, e.nombre_evento, e.fecha_inicio, e.fecha_fin, e.horas, e.cupos, e.ruta_imagen, e.ponentes
@@ -24,7 +24,7 @@ $sql = "
 $cris = new Conexion();
 $conn = $cris->conectar();
 $stmt = $conn->prepare($sql);
-$stmt->execute([$carrera]);  // Ej: "Software"
+$stmt->execute([$carrera]);
 $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 echo json_encode([
