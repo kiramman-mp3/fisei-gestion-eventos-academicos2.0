@@ -4,90 +4,188 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Cursos</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .parent {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto auto auto auto auto auto;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header,
+        .header2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--maroon-dark);
+            border-bottom: 2px solid var(--maroon);
+            padding-bottom: 0.5rem;
+        }
+
+        .div-form-categoria,
+        .div-form-tipo,
+        .div-form-curso {
+            background: #fff;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 
-<body class="container py-5">
-    <h2>Crear Categoría</h2>
-    <form id="formCategoria" class="mb-4">
-        <input type="hidden" name="id" id="cat-id">
-        <input type="text" name="nombre" id="cat-nombre" class="form-control" placeholder="Nombre de la categoría"
-            required>
-        <button type="submit" class="btn btn-secondary mt-2">Guardar Categoría</button>
-    </form>
-    <h4 class="mt-4">Categorías Existentes</h4>
-    <table class="table table-bordered" id="tablaCategorias">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <h2>Crear Tipo de Evento</h2>
-    <form id="formTipo" class="mb-4">
-        <input type="hidden" name="id" id="tipo-id">
-        <input type="text" name="nombre" id="tipo-nombre" class="form-control"
-            placeholder="Tipo de evento (curso, evento...)" required>
-        <button type="submit" class="btn btn-secondary mt-2">Guardar Tipo</button>
-    </form>
-    <h4 class="mt-4">Tipos de Evento Existentes</h4>
-    <table class="table table-bordered" id="tablaTipos">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<body>
+    <div class="parent">
+        <div class="header">Gestión de Categorías y Tipos</div>
+
+        <!-- FORMULARIO CATEGORÍA -->
+        <div class="div-form-categoria">
+            <form id="formCategoria">
+                <input type="hidden" name="id" id="cat-id">
+                <label for="cat-nombre"><span class="rojo">*</span> Nombre de la categoría</label>
+                <input type="text" name="nombre" id="cat-nombre" placeholder="Nombre de la categoría" required>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Guardar Categoría</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TABLA CATEGORÍAS -->
+        <div class="div-tabla-categoria">
+            <h2>Categorías Existentes</h2>
+            <table class="table-custom" id="tablaCategorias">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- FORMULARIO TIPO EVENTO -->
+        <div class="div-form-tipo">
+            <form id="formTipo">
+                <input type="hidden" name="id" id="tipo-id">
+                <label for="tipo-nombre"><span class="rojo">*</span> Tipo de evento</label>
+                <input type="text" name="nombre" id="tipo-nombre" placeholder="Tipo de evento (curso, evento...)"
+                    required>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Guardar Tipo</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TABLA TIPOS DE EVENTO -->
+        <div class="div-tabla-tipo">
+            <h2>Tipos de Evento Existentes</h2>
+            <table class="table-custom" id="tablaTipos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="header2">Gestión de Cursos</div>
+
+        <!-- FORMULARIO CURSO -->
+        <div class="div-form-curso">
+            <form id="formCurso" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="curso-id">
+
+                <label><span class="rojo">*</span> Nombre del curso</label>
+                <input type="text" name="nombre_evento" required placeholder="Nombre del curso">
+
+                <label for="selectTipo"><span class="rojo">*</span> Tipo de evento</label>
+                <select name="tipo_evento_id" required id="selectTipo">
+                    <option value="">Seleccionar tipo de evento</option>
+                </select>
+
+                <label for="selectCategoria"><span class="rojo">*</span> Categoría</label>
+                <select name="categoria_id" required id="selectCategoria">
+                    <option value="">Seleccionar categoría</option>
+                </select>
+
+                <label><span class="rojo">*</span> Ponentes</label>
+                <input type="text" name="ponentes" required placeholder="Ponentes">
+
+                <label>Fecha de inicio</label>
+                <input type="date" name="fecha_inicio" required>
+
+                <label>Fecha de fin</label>
+                <input type="date" name="fecha_fin" required>
+
+                <label>Inicio de inscripciones</label>
+                <input type="date" name="fecha_inicio_inscripciones" required>
+
+                <label>Fin de inscripciones</label>
+                <input type="date" name="fecha_fin_inscripciones" required>
+
+                <label>Horas</label>
+                <input type="number" name="horas" placeholder="Horas" required>
+
+                <label>Cupos</label>
+                <input type="number" name="cupos" placeholder="Cupos" required>
+
+                <label>Imagen del curso</label>
+                <input type="file" name="imagen" accept="image/*" required>
+
+                <label>Estado</label>
+                <select name="estado" required>
+                    <option value="abierto">Abierto</option>
+                    <option value="cerrado">Cerrado</option>
+                    <option value="en ejecucion">En ejecución</option>
+                    <option value="cerrado para inscripciones">Cerrado para inscripciones</option>
+                </select>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Guardar Curso</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TABLA CURSOS -->
+        <div class="div-tabla-curso">
+            <h2>Cursos Existentes</h2>
+            <table class="table-custom" id="tablaCursos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Categoría</th>
+                        <th>Ponentes</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Inicio Inscripción</th>
+                        <th>Fin Inscripción</th>
+                        <th>Horas</th>
+                        <th>Cupos</th>
+                        <th>Estado</th>
+                        <th>Imagen</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 - Facultad de Ingeniería en Sistemas, Electrónica e Industrial - UTA
+    </footer>
 
 
-    <h2 class="mb-4">Gestión de Cursos</h2>
-    <form id="formCurso" class="mb-4">
-        <input type="hidden" name="id" id="curso-id">
-        <input type="text" name="nombre_evento" class="form-control mb-2" placeholder="Nombre del curso" required>
-
-        <select name="tipo_evento_id" class="form-select mb-2" required id="selectTipo">
-            <option value="">Seleccionar tipo de evento</option>
-        </select>
-
-        <select name="categoria_id" class="form-select mb-2" required id="selectCategoria">
-            <option value="">Seleccionar categoría</option>
-        </select>
-
-        <input type="text" name="ponentes" class="form-control mb-2" placeholder="Ponentes" required>
-        <input type="date" name="fecha_inicio" class="form-control mb-2" required>
-        <input type="date" name="fecha_fin" class="form-control mb-2" required>
-        <input type="number" name="horas" class="form-control mb-2" placeholder="Horas" required>
-        <input type="number" name="cupos" class="form-control mb-2" placeholder="Cupos" required>
-
-        <select name="estado" class="form-select mb-2">
-            <option value="abierto">Abierto</option>
-        </select>
-
-        <button type="submit" class="btn btn-primary">Guardar Curso</button>
-    </form>
-
-    <h4>Cursos Existentes</h4>
-    <table class="table table-bordered" id="tablaCursos">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Categoría</th>
-                <th>Ponentes</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th>Horas</th>
-                <th>Cupos</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 
     <script>
         const tabla = document.querySelector("#tablaCursos tbody");
@@ -97,19 +195,22 @@
                 const res = await fetch("../service/curso.php?action=listar");
                 const cursos = await res.json();
                 tabla.innerHTML = cursos.map(c => `
-                    <tr>
-                        <td>${c.id}</td>
-                        <td>${c.nombre_evento}</td>
-                        <td>${c.tipo_nombre}</td>
-                        <td>${c.categoria_nombre}</td>
-                        <td>${c.ponentes}</td>
-                        <td>${c.fecha_inicio}</td>
-                        <td>${c.fecha_fin}</td>
-                        <td>${c.horas}</td>
-                        <td>${c.cupos}</td>
-                        <td>${c.estado}</td>
-                    </tr>
-                `).join("");
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.nombre_evento}</td>
+                    <td>${c.tipo_nombre}</td>
+                    <td>${c.categoria_nombre}</td>
+                    <td>${c.ponentes}</td>
+                    <td>${c.fecha_inicio}</td>
+                    <td>${c.fecha_fin}</td>
+                    <td>${c.fecha_inicio_inscripciones}</td>
+                    <td>${c.fecha_fin_inscripciones}</td>
+                    <td>${c.horas}</td>
+                    <td>${c.cupos}</td>
+                    <td>${c.estado}</td>
+                    <td><img src="${c.ruta_imagen}" alt="imagen" width="80"></td>
+                </tr>
+            `).join("");
             } catch (e) {
                 alert("Error al cargar cursos.");
             }
@@ -125,7 +226,10 @@
                     method: "POST",
                     body: formData
                 });
-                const result = await res.json();
+                const text = await res.text();
+                console.log("Respuesta:", text);
+                const result = JSON.parse(text);
+
                 if (result.success) {
                     alert("Curso guardado correctamente");
                     cargarCursos();
@@ -133,7 +237,8 @@
                 } else {
                     alert("Error al guardar curso.");
                 }
-            } catch {
+            } catch (err) {
+                console.error("Error:", err);
                 alert("Fallo en la conexión al guardar curso.");
             }
         });
@@ -173,6 +278,7 @@
                 alert("Error al guardar tipo de evento.");
             }
         });
+
         async function cargarSelects() {
             try {
                 const [tipos, categorias] = await Promise.all([
@@ -180,7 +286,6 @@
                     fetch("../service/categoria_evento.php?action=listar").then(r => r.json())
                 ]);
 
-                // Selectores para el formulario de cursos
                 const selTipo = document.getElementById("selectTipo");
                 selTipo.innerHTML = '<option value="">Seleccionar tipo de evento</option>';
                 tipos.forEach(t => {
@@ -193,29 +298,30 @@
                     selCat.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
                 });
 
-                // Poblar tabla de categorías
                 const tablaCat = document.querySelector("#tablaCategorias tbody");
-                tablaCat.innerHTML = categorias.map(c => `
-            <tr>
-                <td>${c.id}</td>
-                <td>${c.nombre}</td>
-            </tr>
-        `).join("");
+                if (tablaCat) {
+                    tablaCat.innerHTML = categorias.map(c => `
+                    <tr>
+                        <td>${c.id}</td>
+                        <td>${c.nombre}</td>
+                    </tr>
+                `).join("");
+                }
 
-                // Poblar tabla de tipos de evento
                 const tablaTipos = document.querySelector("#tablaTipos tbody");
-                tablaTipos.innerHTML = tipos.map(t => `
-            <tr>
-                <td>${t.id}</td>
-                <td>${t.nombre}</td>
-            </tr>
-        `).join("");
+                if (tablaTipos) {
+                    tablaTipos.innerHTML = tipos.map(t => `
+                    <tr>
+                        <td>${t.id}</td>
+                        <td>${t.nombre}</td>
+                    </tr>
+                `).join("");
+                }
             } catch (e) {
                 console.error(e);
                 alert("Error al cargar selectores.");
             }
         }
-
 
         cargarSelects();
         cargarCursos();
