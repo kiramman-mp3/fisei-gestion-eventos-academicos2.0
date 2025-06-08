@@ -38,10 +38,12 @@ CREATE TABLE eventos (
   fecha_fin_inscripciones DATE NOT NULL,
   horas INT NOT NULL,
   cupos INT NOT NULL,
+  ruta_imagen VARCHAR(255) NOT NULL,
   estado ENUM('abierto', 'cerrado', 'en_ejecucion', 'cerrado_inscripciones') NOT NULL DEFAULT 'abierto',
   FOREIGN KEY (tipo_evento_id) REFERENCES tipos_evento(id),
   FOREIGN KEY (categoria_id) REFERENCES categorias_evento(id)
 );
+
 
 -- Tabla de inscripciones
 CREATE TABLE inscripciones (
