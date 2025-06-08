@@ -46,7 +46,6 @@ if ($action === 'crear' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombreArchivo = uniqid() . '_' . basename($_FILES['imagen']['name']);
             $rutaDestino = $UPLOAD_DIR . $nombreArchivo;
             if (move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaDestino)) {
-                // Guardar ruta relativa navegable
                 $rutaImagen = $rutaDestino;
             }
         }

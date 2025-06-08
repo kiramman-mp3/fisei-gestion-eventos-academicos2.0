@@ -30,6 +30,11 @@ function getUserRole() {
     return $_SESSION['rol'] ?? null;
 }
 
+function getUserCarrera() {
+    return $_SESSION['carrera'] ?? null;
+}
+
 function isLoggedIn() {
     return isset($_SESSION['usuario_id']);
 }
+
