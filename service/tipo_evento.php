@@ -1,6 +1,7 @@
 <?php
 require_once '../sql/conexion.php';
-$conn = (new Conexion())->conectar();
+$cris = new Conexion();
+$conn = $cris->conectar();
 $action = $_GET['action'] ?? '';
 
 if ($action === 'listar') {

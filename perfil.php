@@ -7,24 +7,31 @@ if (!isLoggedIn()) {
   exit;
 }
 
-$correo = getUserEmail();
+$usuarioId = getUserId();
 
-// Validación de carrera protegida
+$cris = new Conexion();
+$conexion = $cris->conectar();
+$stmt = $conexion->prepare("SELECT * FROM estudiantes WHERE id = ?");
+$stmt->bindValue(1, $usuarioId, PDO::PARAM_INT);
+$stmt->execute();
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$usuario) {
+  echo "Usuario no encontrado.";
+  exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Solo institucional y sin carrera puede elegir una
-  if ($_SESSION['user']['tipo'] === 'institucional' && empty($_SESSION['user']['carrera'])) {
-    $carrera = $_POST['carrera'] ?? null;
-  } else {
-    $carrera = $_SESSION['user']['carrera'];
-  }
-
+  $carrera = $usuario['tipo'] === 'institucional' && empty($usuario['carrera']) ? ($_POST['carrera'] ?? null) : $usuario['carrera'];
+  $correo = $usuario['correo'];
   $uploadDir = 'uploads/documentos/' . str_replace('@', '_', $correo) . '/';
-  if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+  if (!file_exists($uploadDir))
+    mkdir($uploadDir, 0777, true);
 
   $rutas = [
-    'cedula_path' => $_SESSION['user']['cedula_path'],
-    'papeleta_path' => $_SESSION['user']['papeleta_path'],
-    'matricula_path' => $_SESSION['user']['matricula_path']
+    'cedula_path' => $usuario['cedula_path'],
+    'papeleta_path' => $usuario['papeleta_path'],
+    'matricula_path' => $usuario['matricula_path']
   ];
 
   foreach ($rutas as $key => &$ruta) {
@@ -38,15 +45,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 
-  $stmt = $conexion->prepare("UPDATE estudiantes SET carrera = ?, cedula_path = ?, papeleta_path = ?, matricula_path = ? WHERE correo = ?");
-  $stmt->bind_param("sssss", $carrera, $rutas['cedula_path'], $rutas['papeleta_path'], $rutas['matricula_path'], $correo);
-  $stmt->execute();
-
-  // Refrescar sesión
-  $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = ?");
-  $query->bind_param("s", $correo);
-  $query->execute();
-  $_SESSION['user'] = $query->get_result()->fetch_assoc();
+  $update = $conexion->prepare("
+    UPDATE estudiantes SET 
+        carrera = ?, 
+        cedula_path = ?, 
+        papeleta_path = ?, 
+        matricula_path = ?
+    WHERE id = ?
+  ");
+  $update->bindValue(1, $carrera);
+  $update->bindValue(2, $rutas['cedula_path']);
+  $update->bindValue(3, $rutas['papeleta_path']);
+  $update->bindValue(4, $rutas['matricula_path']);
+  $update->bindValue(5, $usuarioId);
+  $update->execute();
 
   header("Location: perfil.php");
   exit;
@@ -55,75 +67,181 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mi Perfil</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-  <div class="container py-5">
-    <h2 class="text-center text-primary mb-4">Mi Perfil</h2>
-    <div class="card p-4 shadow mx-auto" style="max-width: 600px;">
-      <p><strong>Nombre:</strong> <?= htmlspecialchars(getUserName()) . ' ' . htmlspecialchars(getUserLastname()) ?></p>
-      <p><strong>Cédula:</strong> <?= htmlspecialchars($_SESSION['user']['cedula']) ?></p>
-      <p><strong>Correo:</strong> <?= htmlspecialchars(getUserEmail()) ?></p>
-      <p><strong>Tipo:</strong> <?= $_SESSION['user']['tipo'] === 'institucional' ? 'Universitario UTA' : 'Público' ?></p>
-      <p><strong>Género:</strong> <?= htmlspecialchars($_SESSION['user']['genero']) ?></p>
-      <p><strong>Fecha de nacimiento:</strong> <?= htmlspecialchars($_SESSION['user']['fecha_nacimiento']) ?></p>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .thumbnail {
+      max-width: 50%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: block;
+    }
 
-      <form method="POST" enctype="multipart/form-data" class="mt-4">
-        <?php if ($_SESSION['user']['tipo'] === 'institucional' && empty($_SESSION['user']['carrera'])): ?>
+    .mb-3 label i {
+      margin-right: 6px;
+      color: var(--maroon-dark, #8e151d);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top-header">
+    <img src="ruta/logo.png" alt="Logo institucional">
+    <div class="site-name">Gestión de Usuario - FISEI</div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1><i class="fas fa-user"></i> Mi Perfil</h1>
+
+      <div style="line-height: 1.9;">
+        <p><strong>Nombre:</strong> <?= htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']) ?></p>
+        <p><strong>Cédula:</strong> <?= htmlspecialchars($usuario['cedula']) ?></p>
+        <p><strong>Correo:</strong> <?= htmlspecialchars($usuario['correo']) ?></p>
+        <p><strong>Tipo:</strong> <?= $usuario['tipo'] === 'institucional' ? 'Universitario UTA' : 'Público' ?></p>
+        <p><strong>Género:</strong> <?= htmlspecialchars($usuario['genero']) ?></p>
+        <p><strong>Fecha de nacimiento:</strong> <?= htmlspecialchars($usuario['fecha_nacimiento']) ?></p>
+      </div>
+
+      <form method="POST" enctype="multipart/form-data" style="margin-top: 2rem;">
+        <?php if ($usuario['tipo'] === 'institucional' && empty($usuario['carrera'])): ?>
           <div class="mb-3">
-            <label class="form-label">Seleccionar carrera:</label>
-            <select name="carrera" class="form-select" required>
+            <label for="carrera"><i class="fas fa-graduation-cap"></i><strong>Carrera:</strong></label>
+            <select name="carrera" id="carrera" required>
               <option value="">--Seleccione--</option>
               <option value="Software">Ingeniería en Software</option>
               <option value="Electrónica">Electrónica</option>
               <option value="Industrial">Industrial</option>
             </select>
           </div>
-        <?php elseif ($_SESSION['user']['tipo'] === 'publico'): ?>
-          <p class="alert alert-warning">Tu correo es público. No puedes seleccionar una carrera.</p>
+        <?php elseif ($usuario['tipo'] === 'publico'): ?>
+          <p class="alert alert-warning" style="color: var(--gray-600); margin-top: 12px;">
+            Tu correo es público. No puedes seleccionar una carrera.
+          </p>
           <input type="hidden" name="carrera" value="">
         <?php else: ?>
-          <p><strong>Carrera:</strong> <?= htmlspecialchars($_SESSION['user']['carrera']) ?: 'No asignada' ?></p>
-          <input type="hidden" name="carrera" value="<?= htmlspecialchars($_SESSION['user']['carrera']) ?>">
+          <p><strong><i class="fas fa-graduation-cap"></i> Carrera:</strong>
+            <?= htmlspecialchars($usuario['carrera']) ?: 'No asignada' ?></p>
+          <input type="hidden" name="carrera" value="<?= htmlspecialchars($usuario['carrera']) ?>">
         <?php endif; ?>
 
-        <div class="mb-3">
-          <label class="form-label">Subir o reemplazar cédula escaneada:</label>
-          <input type="file" name="cedula" class="form-control" accept="application/pdf,image/*">
-          <?php if ($_SESSION['user']['cedula_path']): ?>
-            <p class="mt-1"><a href="<?= $_SESSION['user']['cedula_path'] ?>" target="_blank">Ver archivo actual</a></p>
-          <?php endif; ?>
+        <fieldset style="margin-top: 2rem;">
+          <legend><i class="fas fa-folder-open"></i> Documentación</legend>
+
+          <?php
+          $docs = [
+            'cedula' => 'Cédula escaneada',
+            'papeleta' => 'Papeleta de votación',
+            'matricula' => 'Matrícula'
+          ];
+          foreach ($docs as $campo => $etiqueta):
+            $path = $usuario[$campo . '_path'];
+            $previewId = "preview-$campo";
+            ?>
+            <div class="mb-3">
+              <label for="<?= $campo ?>"><i class="fas fa-upload"></i><?= $etiqueta ?>:</label>
+              <input type="file" name="<?= $campo ?>" id="<?= $campo ?>" accept="application/pdf,image/*"
+                onchange="previewPDF(this, '<?= $previewId ?>')">
+              <?php if (!empty($path)): ?>
+                <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $path)): ?>
+                  <img src="<?= $path ?>" class="thumbnail">
+                <?php elseif (preg_match('/\.pdf$/i', $path)): ?>
+                  <embed src="<?= $path ?>" type="application/pdf" width="50%" height="400px" class="thumbnail">
+                <?php else: ?>
+                  <p style="color: red;">Archivo no soportado.</p>
+                <?php endif; ?>
+              <?php endif; ?>
+              <div id="<?= $previewId ?>"></div>
+            </div>
+          <?php endforeach; ?>
+        </fieldset>
+
+        <div class="actions" style="display: flex; justify-content: space-between; margin-top: 2.5rem;">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar cambios</button>
+          <a href="logout.php" class="btn btn-outline-secondary"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Subir o reemplazar papeleta de votación:</label>
-          <input type="file" name="papeleta" class="form-control" accept="application/pdf,image/*">
-          <?php if ($_SESSION['user']['papeleta_path']): ?>
-            <p class="mt-1"><a href="<?= $_SESSION['user']['papeleta_path'] ?>" target="_blank">Ver archivo actual</a></p>
-          <?php endif; ?>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Subir o reemplazar matrícula:</label>
-          <input type="file" name="matricula" class="form-control" accept="application/pdf,image/*">
-          <?php if ($_SESSION['user']['matricula_path']): ?>
-            <p class="mt-1"><a href="<?= $_SESSION['user']['matricula_path'] ?>" target="_blank">Ver archivo actual</a></p>
-          <?php endif; ?>
-        </div>
-
-        <div class="d-grid">
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <div class="text-center" style="margin-top: 2rem;">
+          <a href="estudiantes/mis_cursos.php" class="btn btn-outline-primary"><i class="fas fa-book-open"></i> Ver mis cursos</a>
         </div>
       </form>
     </div>
+  </main>
 
-    <div class="text-center mt-4">
-      <a href="mis_cursos.php" class="btn btn-outline-primary">Ver mis cursos</a>
-      <a href="logout.php" class="btn btn-outline-danger ms-2">Cerrar sesión</a>
+  <footer class="footer-expandido">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Sobre el sistema</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+          <li><a href="#"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+          <li><a href="#"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+          <li><a href="informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Soporte</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+          <li><a href="formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+          <li><a href="#"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+          <li><a href="#"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+          <li><a href="#"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>FISEI - UTA</h5>
+        <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <div class="footer-bottom">
+      © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+    </div>
+  </footer>
+
+
+  <script>
+    function previewPDF(input, previewId) {
+      const file = input.files[0];
+      const preview = document.getElementById(previewId);
+      preview.innerHTML = '';
+      if (!file) return;
+
+      if (file.type.includes('image')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.innerHTML = `<img src="${reader.result}" class="thumbnail">`;
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        const url = URL.createObjectURL(file);
+        preview.innerHTML = `<embed src="${url}" type="application/pdf" width="50%" height="400px" class="thumbnail">`;
+      } else {
+        preview.innerHTML = `<p style="color: red; margin-top: 8px;">Formato no soportado para vista previa.</p>`;
+      }
+    }
+  </script>
 </body>
+
 </html>

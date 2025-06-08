@@ -1,52 +1,47 @@
 <?php
+require_once '../session.php';
+include('../sql/conexion.php');
+
 if (!isLoggedIn()) {
     header('Location: ../login.php');
-    exit();
-}
-
-require_once '../session.php';
-require '../sql/conexion.php';
-
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../login.php");
     exit;
 }
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuarioId = getUserId();
+$eventoId = $_POST['evento_id'] ?? null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['comprobante'])) {
-    $inscripcion_id = intval($_POST['inscripcion_id']);
-    $archivo = $_FILES['comprobante'];
-    
-    // Validar tipo de archivo
-    $permitidos = ['image/jpeg', 'image/png', 'image/jpg'];
-    if (!in_array($archivo['type'], $permitidos)) {
-        echo "Error: Formato no permitido.";
-        exit;
-    }
-
-    // Crear ruta
-    $directorio = "../uploads/$usuario_id/evento_$inscripcion_id/";
-    if (!is_dir($directorio)) {
-        mkdir($directorio, 0777, true);
-    }
-
-    $nombre_archivo = basename($archivo['name']);
-    $ruta_archivo = $directorio . $nombre_archivo;
-
-    if (move_uploaded_file($archivo['tmp_name'], $ruta_archivo)) {
-        // Guardar en BD
-        $query = "UPDATE inscripciones 
-                  SET comprobante_pago = ?, estado = 'Esperando aprobación del admin' 
-                  WHERE id = ? AND usuario_id = ?";
-        $stmt = mysqli_prepare($conexion, $query);
-        mysqli_stmt_bind_param($stmt, "sii", $nombre_archivo, $inscripcion_id, $usuario_id);
-        mysqli_stmt_execute($stmt);
-
-        header("Location: mis_cursos.php?mensaje=ok");
-    } else {
-        echo "Error al subir el archivo.";
-    }
-} else {
-    echo "Acceso no permitido.";
+if (!is_numeric($eventoId) || !isset($_FILES['comprobante'])) {
+    exit('Datos inválidos.');
 }
+
+$comprobante = $_FILES['comprobante'];
+$permitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+
+if (!in_array($comprobante['type'], $permitidos) || $comprobante['error'] !== UPLOAD_ERR_OK) {
+    exit('Archivo inválido.');
+}
+
+// Subir archivo
+$dir = '../uploads/comprobantes/' . $usuarioId . '/';
+if (!file_exists($dir))
+    mkdir($dir, 0777, true);
+
+$ext = pathinfo($comprobante['name'], PATHINFO_EXTENSION);
+$nombreFinal = 'comprobante_' . $eventoId . '.' . $ext;
+$destino = $dir . $nombreFinal;
+
+if (!move_uploaded_file($comprobante['tmp_name'], $destino)) {
+    exit('Error al subir el archivo.');
+}
+
+// Guardar ruta en base de datos
+$conexion = (new Conexion())->conectar();
+$stmt = $conexion->prepare("
+    UPDATE inscripciones 
+    SET comprobante_pago = ?, estado = 'Esperando aprobación del admin' 
+    WHERE usuario_id = ? AND evento_id = ?
+");
+$stmt->execute([$destino, $usuarioId, $eventoId]);
+
+header("Location: mis_cursos.php");
+exit;

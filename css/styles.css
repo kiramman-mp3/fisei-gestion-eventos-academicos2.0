@@ -157,7 +157,21 @@ header,
   background: var(--btn-gray-hover) !important;
 }
 
+/* BOTÓN BLANCO PERSONALIZADO */
+.btn-white {
+  background-color: white !important;
+  color: var(--maroon) !important;
+  border: 2px solid var(--maroon) !important;
+  font-weight: 600;
+  font-size: 1.05rem !important;
+  transition: all 0.2s ease-in-out;
+}
 
+.btn-white:hover {
+  background-color: var(--maroon) !important;
+  color: white !important;
+  border-color: var(--maroon-dark) !important;
+}
 
 /* CARDS Y CONTENEDORES */
 .card,
@@ -174,6 +188,44 @@ header,
 .reporte-container {
   padding: 2rem;
 }
+
+input[type="file"] {
+  border: none;
+  background-color: var(--gray-100);
+  padding: 10px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+input[type="file"]::file-selector-button {
+  background-color: var(--maroon);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background-color 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--maroon-dark);
+}
+
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--maroon-dark);
+  text-decoration: none !important;
+
+}
+
 
 /* TABLAS */
 .table-custom {
@@ -195,10 +247,12 @@ header,
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ← exacto 3 por fila */
+  grid-template-columns: repeat(3, 1fr);
+  /* ← exacto 3 por fila */
   gap: 24px;
   margin-top: 32px;
 }
+
 /* Cada solicitud individual */
 .card-item {
   background-color: #fff;
@@ -206,6 +260,14 @@ header,
   padding: 24px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--gray-200);
+}
+
+.thumbnail {
+  max-width: 50%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: block;
 }
 
 /* FORMULARIOS */

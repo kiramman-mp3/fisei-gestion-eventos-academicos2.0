@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('sql/conexion.php');
-include('includes/session.php'); // Incluir el archivo de sesión para usar las funciones auxiliares
+include('session.php'); // Incluir el archivo de sesión para usar las funciones auxiliares
 
 $cris = new Conexion();
 $conexion = $cris->conectar();
@@ -11,24 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   try {
-    // Preparar la consulta con PDO
     $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = :correo");
-
-    // Ejecutar la consulta con el correo proporcionado
     $query->execute([':correo' => $correo]);
-
     $user = $query->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-      // Almacenar los datos en la sesión
-      $_SESSION['usuario_id'] = $user['id'];  // Asume que la columna id es la que identificará al usuario
+      $_SESSION['usuario_id'] = $user['id'];
       $_SESSION['email'] = $user['correo'];
       $_SESSION['nombre'] = $user['nombre'];
       $_SESSION['apellido'] = $user['apellido'];
-      $_SESSION['rol'] = $user['rol'];  // Asume que la columna rol contiene el rol del usuario
-
-      // Redirigir al perfil
-      header("Location: perfil.php");
+      $_SESSION['rol'] = $user['rol'];
+      $_SESSION['carrera'] = $user['carrera'] ?? null;
+      header("Location: index.php");
       exit;
     } else {
       $error = "Correo o contraseña incorrectos";
@@ -42,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Login - Eventos FISEI</title>
@@ -51,12 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    html, body { height: 100%; }
-    body { display: flex; flex-direction: column; }
-    main { flex: 2; }
-    .login-card { max-width: 600px; }
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 2;
+    }
+
+    .login-card {
+      max-width: 600px;
+    }
   </style>
 </head>
+
 <body>
 
   <header class="top-header">
@@ -90,7 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="text-center mt-3">
-        <a href="registro.php" class="btn btn-outline-primary text-decoration-none">¿No tienes cuenta? Regístrate aquí</a>
+        <a href="registro.php" class="btn btn-outline-primary text-decoration-none">¿No tienes cuenta? Regístrate
+          aquí</a>
       </div>
     </form>
   </main>
@@ -142,4 +152,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </footer>
 
 </body>
+
 </html>
