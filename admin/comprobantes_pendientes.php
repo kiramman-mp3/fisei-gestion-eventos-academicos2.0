@@ -7,11 +7,9 @@ if (!isLoggedIn()) {
     exit;
 }
 
-<?php
-  require_once '../session.php';
   $nombre = getUserName();
   $apellido = getUserLastname();
-?>
+
 
 $cris = new Conexion();
 $conexion = $cris->conectar();
@@ -40,22 +38,26 @@ $pendientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
-  <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center">
     <a href="../index.php">
-      <img src="../resource/logo-uta.png" alt="Logo institucional" style="height: 50px;">
-    </a>
-    <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
-  </div>
-  <div class="d-flex align-items-center gap-3">
-    <?php if (isLoggedIn()): ?>
-      <span class="fw-semibold">Hola, <?= htmlspecialchars($nombre) ?> <?= htmlspecialchars($apellido) ?></span>
-      <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
-    <?php else: ?>
-      <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
-      <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
-    <?php endif; ?>
-  </div>
-</header>
+  <img src="../resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
+</a>
+      <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <?php if (isLoggedIn()): ?>
+        <a href="../perfil.php" class="fw-semibold text-white text-decoration-none">
+  Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?>
+</a>
+
+        <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+      <?php else: ?>
+        <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+        <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
+      <?php endif; ?>
+    </div>
+  </header>
 
 <main>
   <div class="card">

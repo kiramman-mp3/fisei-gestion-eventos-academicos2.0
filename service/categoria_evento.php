@@ -1,4 +1,5 @@
 <?php
+require_once '../session.php';
 require_once '../sql/conexion.php';
 $cris = new Conexion();
 $conn = $cris->conectar();
