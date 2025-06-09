@@ -13,7 +13,8 @@ CREATE TABLE estudiantes (
   cedula_path TEXT DEFAULT NULL,
   papeleta_path TEXT DEFAULT NULL,
   matricula_path TEXT DEFAULT NULL,
-  fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  rol VARCHAR(20) 
 );
 
 CREATE TABLE tipos_evento (
