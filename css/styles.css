@@ -564,3 +564,45 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: white;
+  border-right: 2px solid var(--gray-200);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1048;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+.sidebar.visible {
+  transform: translateX(0%);
+}
+
+.transition-container {
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 0;
+}
+
+.transition-container.sidebar-open {
+  margin-left: 250px;
+}
+
+/* Estilo de enlaces del menú lateral */
+.sidebar-link {
+  font-weight: 600;
+  color: var(--maroon);
+  font-size: 1.05rem;
+  padding: 10px 0;
+  transition: color 0.2s;
+}
+
+.sidebar-link:hover {
+  color: var(--maroon-dark);
+}
