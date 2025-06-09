@@ -1,8 +1,8 @@
 <?php
-  require_once 'session.php';
-  $nombre = getUserName();
-  $apellido = getUserLastname();
-  ?>
+require_once 'session.php';
+$nombre = getUserName();
+$apellido = getUserLastname();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -16,22 +16,50 @@
 </head>
 
 <body class="bg-light">
-  
+
 
   <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
-    <a href="index.php">
-  <img src="resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
-</a>
+      <a href="index.php">
+        <img src="resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
+      </a>
       <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
     </div>
+
+    <?php if (isLoggedIn() && getUserRole() === 'admimistrador'): ?>
+      <!-- Botón para abrir el sidebar solo para administradores -->
+      <button id="toggleSidebar" class="btn btn-white d-flex align-items-center justify-content-center"
+        style="padding: 8px 18px;">
+        <i id="sidebarIcon" class="fas fa-bars" style="color: var(--maroon); font-size: 1.2rem;"></i>
+      </button>
+
+      <!-- Sidebar visible solo para administradores -->
+      <aside id="sidebar" class="sidebar hidden">
+        <div class="d-flex align-items-center justify-content-between px-4 py-3"
+          style="border-bottom: 1px solid var(--gray-200);">
+          <h5 style="color: var(--maroon-dark); font-weight: bold; margin: 0;">Menú de Administración</h5>
+          <i id="closeSidebar" class="fas fa-xmark" style="color: var(--maroon); font-size: 1.4rem; cursor: pointer;"></i>
+        </div>
+        <ul class="nav flex-column px-4 py-2">
+          <li class="nav-item"><a class="nav-link sidebar-link" href="views/cursos.php">Crear Curso</a></li>
+          <li class="nav-item"><a class="nav-link sidebar-link" href="index.php">Administrar Curso</a></li>
+          <li class="nav-item"><a class="nav-link sidebar-link" href="admin/crear_admin.php">Crear Administrador</a>
+          </li>
+          <li class="nav-item"><a class="nav-link sidebar-link" href="admin/solicitudes_admin.php">Solicitudes de
+              cambios</a>
+          </li>
+          <li class="nav-item"><a class="nav-link sidebar-link" href="admin/comprobantes_pendientes.php">Aprobar
+              comprobantes/a>
+              </li>
+        </ul>
+      </aside>
+    <?php endif; ?>
 
     <div class="d-flex align-items-center gap-3">
       <?php if (isLoggedIn()): ?>
         <a href="perfil.php" class="fw-semibold text-white text-decoration-none">
-  Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?>
-</a>
-
+          Hola, <?= htmlspecialchars(getUserName()) ?>   <?= htmlspecialchars(getUserLastname()) ?>
+        </a>
         <a href="logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
       <?php else: ?>
         <a href="login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
@@ -39,6 +67,7 @@
       <?php endif; ?>
     </div>
   </header>
+
 
   <main>
     <div class="container text-center mb-5">
@@ -52,47 +81,52 @@
     </div>
   </main>
 
- <footer class="footer-expandido mt-5">
-  <div class="footer-container">
-    <div class="footer-section">
-      <h5>Sobre el sistema</h5>
-      <ul>
-        <li><a href="../informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
-        <li><a href="../informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
-        <li><a href="../informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-        <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h5>Soporte</h5>
-      <ul>
-        <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
-        <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h5>Legal</h5>
-      <ul>
-        <li><a href="../legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
-        <li><a href="../legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
-        <li><a href="../legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h5>FISEI - UTA</h5>
-      <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
-      <div class="footer-social">
-        <a href="https://www.facebook.com/UTAFISEI"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/fisei_uta"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.linkedin.com/pub/dir?firstName=Fisei&lastName=uta&trk=people-guest_people-search-bar_search-submit"><i class="fab fa-linkedin-in"></i></a>
+  <footer class="footer-expandido mt-5">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Sobre el sistema</h5>
+        <ul>
+          <li><a href="informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos
+              FISEI?</a></li>
+          <li><a href="informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+          <li><a href="informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+          <li><a href="informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h5>Soporte</h5>
+        <ul>
+          <li><a href="informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas
+              frecuentes</a></li>
+          <li><a href="formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+          <li><a href="formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+          <li><a href="legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de
+              privacidad</a></li>
+          <li><a href="legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h5>FISEI - UTA</h5>
+        <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/UTAFISEI"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fisei_uta"><i class="fab fa-instagram"></i></a>
+          <a
+            href="https://www.linkedin.com/pub/dir?firstName=Fisei&lastName=uta&trk=people-guest_people-search-bar_search-submit"><i
+              class="fab fa-linkedin-in"></i></a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="footer-bottom">
-    © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
-  </div>
-</footer>
+    <div class="footer-bottom">
+      © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+    </div>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -112,9 +146,10 @@
             let botonHTML = '';
             if (rol === 'estudiante') {
               botonHTML = `<button class="btn btn-primary inscribirse-btn" data-id="${curso.id}">Inscribirse</button>`;
-            } else if (rol === 'docente' || rol === 'administrador') {
+            } else if (rol === 'admimistrador') {
               botonHTML = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary">Administrar</a>`;
             }
+
             // Si no hay rol, no se muestra ningún botón
 
             contenedor.innerHTML += `
@@ -164,7 +199,25 @@
       `;
         });
     });
-  </script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+
+    if (toggleBtn && sidebar && closeBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+      });
+
+      closeBtn.addEventListener('click', () => {
+        sidebar.classList.add('hidden');
+      });
+    }
+  });
+
+
+</script>
 
 </body>
 

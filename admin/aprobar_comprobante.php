@@ -2,10 +2,6 @@
 require_once '../session.php';
 include('../sql/conexion.php');
 
-if (!isLoggedIn()) {
-    header('Location: ../login.php');
-    exit;
-}
 
 $conexion = (new Conexion())->conectar();
 $inscripcionId = $_POST['inscripcion_id'] ?? null;
