@@ -5,6 +5,12 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
     exit();
 }
 
+<?php
+  require_once '../session.php';
+  $nombre = getUserName();
+  $apellido = getUserLastname();
+?>
+
 include_once '../sql/conexion.php';
 $cris = new Conexion();
 $conn = $cris->conectar();
@@ -29,9 +35,24 @@ $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <header class="top-header">
-        <div class="site-name">Universidad<br>Técnica de Ambato</div>
-    </header>
+
+<header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
+  <div class="d-flex align-items-center">
+    <a href="../index.php">
+      <img src="../resource/logo-uta.png" alt="Logo institucional" style="height: 50px;">
+    </a>
+    <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <?php if (isLoggedIn()): ?>
+      <span class="fw-semibold">Hola, <?= htmlspecialchars($nombre) ?> <?= htmlspecialchars($apellido) ?></span>
+      <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <?php else: ?>
+      <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+      <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
+    <?php endif; ?>
+  </div>
+</header>
 
     <main class="card">
         <h1>Solicitudes de Cambios</h1>
@@ -59,50 +80,48 @@ $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-    <footer class="footer-expandido">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h5>Sobre el sistema</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
-                    <li><a href="#"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
-                    <li><a href="#"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-                    <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h5>Soporte</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-                    <li><a href="../formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un
-                            error</a></li>
-                    <li><a href="#"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h5>Legal</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
-                    <li><a href="#"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
-                    <li><a href="#"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h5>FISEI - UTA</h5>
-                <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
+    <footer class="footer-expandido mt-5">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h5>Sobre el sistema</h5>
+      <ul>
+        <li><a href="../informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+        <li><a href="../informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+        <li><a href="../informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+        <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>Soporte</h5>
+      <ul>
+        <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+        <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="../legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+        <li><a href="../legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+        <li><a href="../legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>FISEI - UTA</h5>
+      <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/UTAFISEI"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/fisei_uta"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/pub/dir?firstName=Fisei&lastName=uta&trk=people-guest_people-search-bar_search-submit"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+  </div>
+</footer>
 
-        <div class="footer-bottom">
-            © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
-        </div>
-    </footer>
 </body>
 
 </html>
