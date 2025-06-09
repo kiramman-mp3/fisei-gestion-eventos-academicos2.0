@@ -56,7 +56,7 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
 <body>
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
-    <a href="index.php">
+    <a href="../index.php">
   <img src="../resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
 </a>
       <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
@@ -64,14 +64,14 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
 
     <div class="d-flex align-items-center gap-3">
       <?php if (isLoggedIn()): ?>
-        <a href="perfil.php" class="fw-semibold text-white text-decoration-none">
+        <a href="../perfil.php" class="fw-semibold text-white text-decoration-none">
   Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?>
 </a>
 
-        <a href="logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
       <?php else: ?>
-        <a href="login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
-        <a href="registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
+        <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+        <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
       <?php endif; ?>
     </div>
   </header>
