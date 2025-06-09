@@ -2,11 +2,9 @@
 require_once 'sql/conexion.php';
 require_once 'session.php';
 
-<?php
-  require_once '../session.php';
   $nombre = getUserName();
   $apellido = getUserLastname();
-?>
+
 
 $cris = new Conexion();
 $conexion = $cris->conectar();
@@ -93,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
   <div class="d-flex align-items-center">
     <a href="../index.php">
-      <img src="../resource/logo-uta.png" alt="Logo institucional" style="height: 50px;">
+      <img src="resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
     </a>
     <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
   </div>

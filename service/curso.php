@@ -1,5 +1,7 @@
 <?php
+require_once '../session.php';
 require_once '../sql/conexion.php';
+header('Content-Type: application/json');
 
 $conn = (new Conexion())->conectar();
 $action = $_GET['action'] ?? '';

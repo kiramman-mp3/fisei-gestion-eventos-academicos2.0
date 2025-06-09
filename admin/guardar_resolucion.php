@@ -1,6 +1,6 @@
 <?php
 require_once '../session.php';
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+if (!isLoggedIn()) {
     header('Location: ../login.php');
     exit();
 }

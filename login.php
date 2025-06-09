@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('sql/conexion.php');
 include('session.php'); // Incluir el archivo de sesión para usar las funciones auxiliares
 
@@ -69,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <header class="top-header">
-    <img src="resource/logo-uta.png" alt="Logo UTA">
+    <img src="resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo UTA">
     <div class="site-name">Eventos Académicos FISEI</div>
   </header>
 
