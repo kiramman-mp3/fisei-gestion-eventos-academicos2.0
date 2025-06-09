@@ -23,7 +23,7 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
     <title>Solicitud de Cambios</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         .alert-success {
             position: fixed;
@@ -202,6 +202,6 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
     © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
