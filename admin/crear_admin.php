@@ -1,6 +1,6 @@
 <?php
-require_once 'sql/conexion.php';
-require_once 'session.php';
+require_once '../sql/conexion.php';
+require_once '../session.php';
 
 $cris = new Conexion();
 $conexion = $cris->conectar();
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $stmt->bindValue(':rol', $rol);
 
       if ($stmt->execute()) {
-        header("Location: dashboard.html?mensaje=Admin creado con éxito");
+        header("Location: ../dashboard.html?mensaje=Admin creado con éxito");
         exit;
       } else {
         $error = "Este correo ya está registrado.";
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <title>Registrar Nuevo Administrador</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/styles.css?v=1">
+  <link rel="stylesheet" href="../css/styles.css?v=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <div class="text-center mt-3">
-      <a href="dashboard.html" class="btn btn-secondary">Volver al dashboard</a>
+      <a href="../dashboard.html" class="btn btn-secondary">Volver al dashboard</a>
     </div>
   </main>
 </body>
