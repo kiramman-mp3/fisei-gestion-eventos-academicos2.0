@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créditos</title>
+  <title>Preguntas Frecuentes</title>
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,71 +33,44 @@
     </div>
   </header>
 
-  <main class="container mt-4">
-    <h1 class="display-5">Créditos</h1>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col">
-        <div class="card h-100">
-          <img src="../resource/pablo.png" class="card-img-top" alt="Pablo Vayas">
-          <div class="card-body">
-            <h5 class="card-title">Pablo Vayas</h5>
-            <p class="card-text">Estudiante de Software, especializado en frontend y bases de datos...</p>
-            <div class="d-flex gap-2 mt-3">
-              <a href="https://www.facebook.com/pablo.vayas.33" class="btn btn-outline-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/pablo.vayas/" class="btn btn-outline-danger" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+  <main class="container my-5">
+    <h1 class="display-5 mb-4">Preguntas Frecuentes</h1>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            ¿Cómo me inscribo en un evento?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Puedes inscribirte accediendo al listado de eventos disponibles y seleccionando el botón "Inscribirse" en el evento de tu interés.
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="../resource/alexis.jpg" class="card-img-top" alt="Alexis López">
-          <div class="card-body">
-            <h5 class="card-title">Alexis López</h5>
-            <p class="card-text">Apasionado por la programación web y el diseño visual interactivo...</p>
-            <div class="d-flex gap-2 mt-3">
-              <a href="https://www.facebook.com/alexis.lopez.737521" class="btn btn-outline-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/alexislp.z/" class="btn btn-outline-danger" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            ¿Cómo sé si estoy inscrito correctamente?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Puedes verificar tus inscripciones en tu perfil, dentro del apartado "Mis eventos inscritos".
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="../resource/jose.jpg" class="card-img-top" alt="José Manzano">
-          <div class="card-body">
-            <h5 class="card-title">José Manzano</h5>
-            <p class="card-text">Estudiante de Software con interés en computación gráfica y desarrollo de videojuegos...</p>
-            <div class="d-flex gap-2 mt-3">
-              <a href="https://www.facebook.com/profile.php?id=100036996780282" class="btn btn-outline-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/manzano8555/" class="btn btn-outline-danger" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="../resource/johan.jpg" class="card-img-top" alt="Johan Rodriguez">
-          <div class="card-body">
-            <h5 class="card-title">Johan Rodriguez</h5>
-            <p class="card-text">Estudiante de Software con experiencia en simulaciones gráficas y sistemas interactivos...</p>
-            <div class="d-flex gap-2 mt-3">
-              <a href="https://www.facebook.com/johan.kiramman/" class="btn btn-outline-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/jhnrx907/" class="btn btn-outline-danger" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="../resource/alan.jpg" class="card-img-top" alt="Alan Puruncajas">
-          <div class="card-body">
-            <h5 class="card-title">Alan Puruncajas</h5>
-            <p class="card-text">Estudiante apasionado por el diseño gráfico y la realidad aumentada...</p>
-            <div class="d-flex gap-2 mt-3">
-              <a href="https://www.facebook.com/alan.puruncajas" class="btn btn-outline-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/alam_cuenquita/" class="btn btn-outline-danger" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            ¿Qué pasa si no asisto a un evento?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Si no asistes a un evento al que te inscribiste, podrías no recibir certificado de participación.
           </div>
         </div>
       </div>
@@ -145,5 +118,6 @@
       © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
