@@ -35,7 +35,6 @@
     </div>
   </header>
 
-
   <main>
     <div class="container text-center mb-5">
       <h1>Gestión de Eventos Académicos - FISEI</h1>
@@ -100,10 +99,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       fetch('service/CursosPorCarrera.php')
-        .then(response => {
-          if (!response.ok) throw new Error('No autorizado o error de servidor');
-          return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
           const { rol, cursos } = data;
           const contenedor = document.getElementById('lista-cursos');
@@ -117,56 +113,56 @@
             let botonHTML = '';
             if (rol === 'estudiante') {
               botonHTML = `<button class="btn btn-primary inscribirse-btn" data-id="${curso.id}">Inscribirse</button>`;
-            } else {
+            } else if (rol === 'docente' || rol === 'administrador') {
               botonHTML = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary">Administrar</a>`;
             }
+            // Si no hay rol, no se muestra ningún botón
 
             contenedor.innerHTML += `
-            <div class="card shadow-sm mb-4" style="max-width: 22rem;">
-              <img src="${src}" class="card-img-top" alt="Imagen del evento">
-              <div class="card-body">
-                <h5 class="card-title text-maroon">${curso.nombre_evento}</h5>
-                <p class="card-text mb-1"><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
-                <p class="card-text mb-1"><strong>Ponente:</strong> ${curso.ponentes}</p>
-                <p class="card-text mb-1"><strong>Horas académicas:</strong> ${curso.horas}</p>
-                <p class="card-text mb-3"><strong>Cupos disponibles:</strong> ${curso.cupos}</p>
-                <div class="text-center">
-                  ${botonHTML}
-                </div>
-              </div>
+          <div class="card shadow-sm mb-4" style="max-width: 22rem;">
+            <img src="${src}" class="card-img-top" alt="Imagen del evento">
+            <div class="card-body">
+              <h5 class="card-title text-maroon">${curso.nombre_evento}</h5>
+              <p class="card-text mb-1"><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
+              <p class="card-text mb-1"><strong>Ponente:</strong> ${curso.ponentes}</p>
+              <p class="card-text mb-1"><strong>Horas académicas:</strong> ${curso.horas}</p>
+              <p class="card-text mb-3"><strong>Cupos disponibles:</strong> ${curso.cupos}</p>
+              ${botonHTML ? `<div class="text-center">${botonHTML}</div>` : ''}
             </div>
-          `;
+          </div>
+        `;
           });
 
-          // Delegación de evento para los botones de inscripción
-          document.querySelectorAll('.inscribirse-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const eventoId = btn.getAttribute('data-id');
-              fetch('estudiantes/inscribirse_evento.php', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ evento_id: eventoId })
-              })
-                .then(res => res.json())
-                .then(response => {
-                  if (response.success) {
-                    alert('Inscripción realizada correctamente.');
-                    location.reload();
-                  } else {
-                    alert('Error al inscribirse: ' + response.message);
-                  }
+          // Activar solo si hay botones de inscripción
+          if (rol === 'estudiante') {
+            document.querySelectorAll('.inscribirse-btn').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const eventoId = btn.getAttribute('data-id');
+                fetch('estudiantes/inscribirse_evento.php', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ evento_id: eventoId })
                 })
-                .catch(err => alert('Error de red: ' + err.message));
+                  .then(res => res.json())
+                  .then(response => {
+                    if (response.success) {
+                      alert('Inscripción realizada correctamente.');
+                      location.reload();
+                    } else {
+                      alert('Error al inscribirse: ' + response.message);
+                    }
+                  })
+                  .catch(err => alert('Error de red: ' + err.message));
+              });
             });
-          });
-
+          }
         })
         .catch(err => {
           document.getElementById('lista-cursos').innerHTML = `
-          <div class="alert alert-danger">No se pudieron cargar los cursos: ${err.message}</div>
-        `;
+        <div class="alert alert-danger">No se pudieron cargar los cursos: ${err.message}</div>
+      `;
         });
     });
   </script>
