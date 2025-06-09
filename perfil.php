@@ -116,8 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <select name="carrera" id="carrera" required>
               <option value="">--Seleccione--</option>
               <option value="Software">Ingeniería en Software</option>
-              <option value="Electrónica">Electrónica</option>
-              <option value="Industrial">Industrial</option>
+              <option value="Electrónica">Ingeniería Electrónica</option>
+              <option value="Industrial">Ingeniería Industrial</option>
             </select>
           </div>
         <?php elseif ($usuario['tipo'] === 'publico'): ?>
