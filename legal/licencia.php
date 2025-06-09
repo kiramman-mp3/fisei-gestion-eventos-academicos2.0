@@ -1,34 +1,20 @@
 <?php
-require_once '../session.php';
-if (!isLoggedIn()) {
-    header('Location: ../login.php');
-    exit();
-}
-
-$uid = $_SESSION['uid'] ?? '';
-$uname = $_SESSION['uname'] ?? '';
-$uemail = $_SESSION['uemail'] ?? '';
-$urol = $_SESSION['urol'] ?? '';
-
-$sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($urol);
+  require_once '../session.php';
+  $nombre = getUserName();
+  $apellido = getUserLastname();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solicitar ayuda</title>
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Licencia</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-<?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-<div class="alert-success">
-    ✅ ¡Tu solicitud ha sido enviada!
-</div>
-<?php endif; ?>
 
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
   <div class="d-flex align-items-center">
@@ -39,7 +25,7 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
   </div>
   <div class="d-flex align-items-center gap-3">
     <?php if (isLoggedIn()): ?>
-      <span class="fw-semibold">Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?></span>
+      <span class="fw-semibold">Hola, <?= htmlspecialchars($nombre) ?> <?= htmlspecialchars($apellido) ?></span>
       <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
     <?php else: ?>
       <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
@@ -48,36 +34,25 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
   </div>
 </header>
 
-<main class="card">
-    <h1>Solicitar ayuda</h1>
-
-    <form action="enviar_ayuda.php" method="POST">
-        <label>
-            <span class="rojo">Título:</span><br />
-            <input type="text" name="titulo" required>
-        </label>
-
-        <label style="display:block;margin-top:16px;">
-            <span class="rojo">Descripción del problema:</span><br />
-            <textarea name="descripcion" rows="5" required></textarea>
-        </label>
-
-        <fieldset class="user-info" style="margin-top:20px;">
-            <legend>Información del usuario</legend>
-            <input type="text" name="uid" value="<?= htmlspecialchars($uid) ?>" readonly>
-            <input type="text" name="uname" value="<?= htmlspecialchars($uname) ?>" readonly>
-            <input type="email" name="uemail" value="<?= htmlspecialchars($uemail) ?>" readonly>
-            <input type="text" name="urol" value="<?= htmlspecialchars($urol) ?>" readonly>
-        </fieldset>
-
-        <div class="actions">
-            <button type="reset" class="btn cancelar">Cancelar</button>
-            <button type="submit" class="btn enviar">Enviar</button>
-        </div>
-    </form>
+<main class="container mt-4">
+  <div class="card p-4">
+    <h1 class="mb-3">Licencia</h1>
+    <p class="fs-5">
+      Este sistema está licenciado bajo los términos establecidos por la Facultad de Ingeniería en Sistemas, Electrónica e Industrial (FISEI) de la Universidad Técnica de Ambato.
+    </p>
+    <ul class="fs-5">
+      <li><strong>Derechos de autor:</strong> Todos los derechos reservados. El contenido, diseño y código fuente pertenecen a FISEI-UTA.</li>
+      <li><strong>Uso autorizado:</strong> El sistema está destinado exclusivamente al uso académico y administrativo dentro del ámbito institucional.</li>
+      <li><strong>Modificaciones:</strong> No se permite modificar o redistribuir el sistema sin la autorización correspondiente de FISEI.</li>
+      <li><strong>Distribución:</strong> Queda prohibida la comercialización o uso externo del sistema sin licencia explícita.</li>
+    </ul>
+    <p class="fs-5 mt-3">
+      Al acceder a este sistema, el usuario acepta las condiciones aquí establecidas. Cualquier uso indebido puede ser sancionado conforme a las normativas de la UTA.
+    </p>
+  </div>
 </main>
 
-<footer class="footer-expandido">
+<footer class="footer-expandido mt-5">
   <div class="footer-container">
     <div class="footer-section">
       <h5>Sobre el sistema</h5>
@@ -118,6 +93,6 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
     © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
   </div>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

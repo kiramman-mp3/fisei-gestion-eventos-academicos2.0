@@ -1,5 +1,4 @@
 <?php
-
 require_once '../session.php';
 if (!isLoggedIn()) {
     header('Location: ../login.php');
@@ -15,7 +14,6 @@ $urol = getUserRole() ?? '';
 $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($urol);
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,6 +23,7 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
     <title>Solicitud de Cambios</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         .alert-success {
             position: fixed;
@@ -53,23 +52,29 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
             line-height: 1;
         }
     </style>
-
 </head>
 
 <body>
-    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-        <div id="alertSuccess" class="alert-success">
-            ✅ ¡La solicitud se ha enviado correctamente!
-            <button class="close-btn" onclick="document.getElementById('alertSuccess').style.display='none'">×</button>
-        </div>
+<header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
+  <div class="d-flex align-items-center">
+    <a href="../index.php">
+      <img src="../resource/logo-uta.png" alt="Logo institucional" style="height: 50px;">
+    </a>
+    <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <?php if (isLoggedIn()): ?>
+      <span class="fw-semibold">Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?></span>
+      <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <?php else: ?>
+      <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+      <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
     <?php endif; ?>
+  </div>
+</header>
 
-    <header class="top-header">
-        <div class="site-name">Universidad<br>Técnica de Ambato</div>
-    </header>
-
-    <main class="card">
-        <h1>Solicitud de cambios:</h1>
+<main class="card">
+ <h1>Solicitud de cambios:</h1>
 
         <form id="solicitudForm" action="guardar_solicitud.php" method="POST" enctype="multipart/form-data" novalidate>
             <div class="main-grid">
@@ -154,123 +159,49 @@ $sesion_activa = !empty($uid) && !empty($uname) && !empty($uemail) && !empty($ur
 
             </div>
         </form>
-    </main>
+</main>
 
-    <footer class="footer-expandido">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h5>Sobre el sistema</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
-                    <li><a href="#"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
-                    <li><a href="#"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-                    <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h5>Soporte</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-                    <li><a href="#"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
-                    <li><a href="#"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h5>Legal</h5>
-                <ul>
-                    <li><a href="#"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
-                    <li><a href="#"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
-                    <li><a href="#"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h5>FISEI - UTA</h5>
-                <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
-        </div>
-    </footer>
-
-    <script>
-
-
-        // Lógica de subida de imagen personalizada
-        const captureInput = document.getElementById("captureInput");
-        const captureBar = document.getElementById("captureBar");
-        const fileNameSpan = document.getElementById("fileName");
-        const addCaptureBtn = document.getElementById("addCaptureBtn");
-        const takeAnotherBtn = document.getElementById("takeAnotherBtn");
-        const deleteCaptureBtn = document.getElementById("deleteCaptureBtn");
-
-        addCaptureBtn.addEventListener("click", () => captureInput.click());
-        takeAnotherBtn.addEventListener("click", () => captureInput.click());
-
-        deleteCaptureBtn.addEventListener("click", () => {
-            captureInput.value = "";
-            captureBar.style.display = "none";
-            addCaptureBtn.style.display = "inline-block";
-        });
-
-        captureInput.addEventListener("change", () => {
-            if (captureInput.files && captureInput.files[0]) {
-                fileNameSpan.textContent = captureInput.files[0].name;
-                captureBar.style.display = "flex";
-                addCaptureBtn.style.display = "none";
-            }
-        });
-
-        document.getElementById("solicitudForm").addEventListener("submit", function (e) {
-            const camposObligatorios = [
-                "titulo",
-                "fecha",
-                "tipo",
-                "descripcion",
-                "justificacion",
-                "contexto",
-                "uid",
-                "uname",
-                "uemail",
-                "urol",
-            ];
-
-            let formIsValid = true;
-
-            camposObligatorios.forEach((campoId) => {
-                const campo = document.getElementById(campoId);
-                if (!campo || campo.value.trim() === "") {
-                    campo.style.borderColor = "red";
-                    formIsValid = false;
-                } else {
-                    campo.style.borderColor = ""; // limpiar si ya estaba rojo
-                }
-            });
-
-            if (!formIsValid) {
-                alert("Por favor, completa todos los campos obligatorios.");
-                e.preventDefault(); // bloquear envío
-            }
-        });
-
-        camposObligatorios.forEach((id) => {
-            const campo = document.getElementById(id);
-            campo.addEventListener("input", () => {
-                if (campo.value.trim() !== "") {
-                    campo.style.borderColor = "";
-                }
-            });
-        });
-    </script>
+<footer class="footer-expandido">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h5>Sobre el sistema</h5>
+      <ul>
+        <li><a href="../informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+        <li><a href="../informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+        <li><a href="../informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+        <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>Soporte</h5>
+      <ul>
+        <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+        <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="../legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+        <li><a href="../legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+        <li><a href="../legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>FISEI - UTA</h5>
+      <p>Facultad de Ingeniería en Sistemas,<br> Electrónica e Industrial</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/UTAFISEI"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/fisei_uta"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/pub/dir?firstName=Fisei&lastName=uta&trk=people-guest_people-search-bar_search-submit"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+  </div>
+</footer>
 
 </body>
+</html>

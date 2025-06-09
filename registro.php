@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $_SESSION['apellido']   = $user['apellido'];
           $_SESSION['email']      = $user['correo'];
           $_SESSION['rol']        = $user['rol'];
-          header("Location: perfil.php");
+          $_SESSION['carrera'] = $user['carrera'] ?? null;
+          header("Location: index.php");
           exit;
         }
       } else {
