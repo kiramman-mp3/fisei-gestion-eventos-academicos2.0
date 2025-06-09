@@ -1,0 +1,105 @@
+-- Tabla de estudiantes
+CREATE TABLE estudiantes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  apellido VARCHAR(100) NOT NULL,
+  cedula VARCHAR(20) NOT NULL UNIQUE,
+  correo VARCHAR(100) UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  genero VARCHAR(20) NOT NULL,
+  fecha_nacimiento DATE NOT NULL,
+  tipo ENUM('institucional', 'publico') NOT NULL DEFAULT 'publico',
+  carrera VARCHAR(100) DEFAULT NULL,
+  cedula_path TEXT DEFAULT NULL,
+  papeleta_path TEXT DEFAULT NULL,
+  matricula_path TEXT DEFAULT NULL,
+  fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tipos_evento (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL UNIQUE -- ejemplo: 'curso', 'evento'
+);
+
+CREATE TABLE categorias_evento (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE -- ejemplo: 'Sistemas', 'Civil', 'Público'
+);
+
+CREATE TABLE eventos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre_evento VARCHAR(255) NOT NULL,
+  tipo_evento_id INT NOT NULL,
+  categoria_id INT NOT NULL,
+  ponentes TEXT NOT NULL,
+  fecha_inicio DATE NOT NULL,
+  fecha_fin DATE NOT NULL,
+  fecha_inicio_inscripciones DATE NOT NULL,
+  fecha_fin_inscripciones DATE NOT NULL,
+  horas INT NOT NULL,
+  cupos INT NOT NULL,
+  ruta_imagen VARCHAR(255) NOT NULL,
+  estado ENUM('abierto', 'cerrado', 'en_ejecucion', 'cerrado_inscripciones') NOT NULL DEFAULT 'abierto',
+  FOREIGN KEY (tipo_evento_id) REFERENCES tipos_evento(id),
+  FOREIGN KEY (categoria_id) REFERENCES categorias_evento(id)
+);
+
+
+-- Tabla de inscripciones
+CREATE TABLE inscripciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NOT NULL,
+  evento_id INT NOT NULL,
+  estado ENUM('En espera de orden de pago', 'Esperando aprobación del admin', 'Pagado', 'Error') DEFAULT 'En espera de orden de pago',
+  nota DECIMAL(4,2) DEFAULT NULL,
+  asistencia DECIMAL(5,2) DEFAULT NULL,
+  comprobante_pago TEXT DEFAULT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES estudiantes(id),
+  FOREIGN KEY (evento_id) REFERENCES eventos(id)
+);
+
+-- Tabla de requisitos por evento
+CREATE TABLE requisitos_evento (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  evento_id INT NOT NULL,
+  descripcion TEXT NOT NULL,
+  FOREIGN KEY (evento_id) REFERENCES eventos(id)
+);
+
+-- Tabla de archivos subidos como requisitos por inscripción
+CREATE TABLE requisitos_inscripcion (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  inscripcion_id INT NOT NULL,
+  requisito_id INT NOT NULL,
+  archivo TEXT NOT NULL,
+  FOREIGN KEY (inscripcion_id) REFERENCES inscripciones(id),
+  FOREIGN KEY (requisito_id) REFERENCES requisitos_evento(id)
+);
+
+-- Tabla de solicitudes de cambios
+CREATE TABLE solicitudes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    justificacion TEXT,
+    contexto TEXT,
+    captura VARCHAR(500), -- Ruta al archivo de imagen
+    uid VARCHAR(50) NOT NULL,
+    uname VARCHAR(255) NOT NULL,
+    uemail VARCHAR(255) NOT NULL,
+    urol VARCHAR(100) NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tala de resoluciones
+CREATE TABLE resoluciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud INT NOT NULL,
+    prioridad VARCHAR(50),
+    comentario TEXT,
+    estado VARCHAR(50),
+    fecha_resolucion DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_solicitud) REFERENCES solicitudes(id) ON DELETE CASCADE
+);
