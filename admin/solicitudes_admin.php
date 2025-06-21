@@ -1,9 +1,5 @@
 <?php
 require_once '../session.php';
-if (!isLoggedIn()) {
-    header('Location: ../login.php');
-    exit();
-}
 
   $nombre = getUserName();
   $apellido = getUserLastname();

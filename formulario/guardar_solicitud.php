@@ -1,9 +1,5 @@
 <?php
 require_once '../session.php';
-if (!isLoggedIn()) {
-    header('Location: ../login.php');
-    exit();
-}
 
 include_once '../sql/conexion.php';
 
