@@ -21,14 +21,14 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <header class="ctt-header">
         <div class="top-bar">
             <div class="logo">
-                <img src="resources/logo.png" alt="Logo FISEI">
+                <img src="uploads/logo.png" alt="Logo FISEI">
             </div>
             <div class="top-links">
                 <div class="link-box">
                     <i class="fas fa-desktop"></i>
                     <div>
                         <span class="title">Plataforma Educativa</span><br>
-                        <a href="#">Ingresa aquí</a>
+                        <a href="ver_cursos.php">Ingresa aquí</a>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <div class="overlay">
                         <h1><?= htmlspecialchars($c['titulo']) ?></h1>
                         <p><?= htmlspecialchars($c['descripcion']) ?></p>
-                        <a href="ver_cursos.php?index=<?= $index ?>" class="boton">Ver más</a>
+                        <a href="ver_cursos.php" class="boton">Ver más</a>
                     </div>
                 </div>
             <?php endforeach; ?>
