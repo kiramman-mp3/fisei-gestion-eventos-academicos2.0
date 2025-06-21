@@ -1,0 +1,769 @@
+/* VARIABLES */
+:root {
+    --primary-color: #B02A37;
+    --primary-color-dark: #8d1f2d;
+    --text-color: #2C3E50;
+    --font-family: 'Segoe UI', sans-serif;
+    --bg-light: #fff;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-light);
+}
+
+/* UTILIDADES */
+.etiqueta {
+    color: var(--primary-color);
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.seccion {
+    padding: 80px 20px;
+    background-color: var(--bg-light);
+    text-align: center;
+}
+
+.boton {
+    display: inline-block;
+    padding: 12px 40px;
+    background-color: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.boton:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.indicador-circular {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicador-circular.active {
+    background-color: var(--primary-color);
+}
+
+/* HEADER */
+.ctt-header {
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 15px 30px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    height: 130px;
+    max-width: 100%;
+    padding-left: 30px;
+    object-fit: contain;
+}
+
+.top-links {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    padding-right: 30px;
+}
+
+.link-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.link-box i {
+    font-size: 32px;
+    color: var(--primary-color);
+}
+
+.link-box .title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+.link-box a {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.link-box a:hover {
+    text-decoration: underline;
+}
+
+/* MENÚ */
+.main-nav {
+    margin-top: 10px;
+    display: none;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* CARRUSEL */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 550px;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: none;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    background-color: rgba(0, 0, 0, 0.55);
+    padding: 40px 50px;
+    border-radius: 15px;
+    max-width: 700px;
+    color: #fff;
+    z-index: 5;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+}
+
+.overlay h1 {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.overlay p {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.overlay .boton {
+    margin-top: 10px;
+}
+
+/* CARRUSEL CONTROLES */
+.carousel-controls {
+    position: absolute;
+    width: 96%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 50px;
+    z-index: 100;
+}
+
+.carousel-controls button {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(70, 1, 1, 0.4);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-controls button:hover {
+    background-color: rgba(255, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+/* NOSOTROS */
+.nosotros {
+    display: flex;
+    justify-content: center;
+}
+
+.nosotros-container {
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.nosotros-img img {
+    width: 100%;
+    max-width: 550px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.nosotros-texto {
+    max-width: 600px;
+    text-align: left;
+}
+
+.nosotros-texto h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-color);
+    margin: 15px 0;
+}
+
+.nosotros-texto p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #444;
+    text-align: justify;
+}
+
+/* AUTORIDADES */
+.autoridades-header h2 {
+    font-size: 32px;
+    color: var(--text-color);
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+.autoridades-grid {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.autoridad-card {
+    background-color: #f9f9fc;
+    border-radius: 15px;
+    max-width: 250px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.autoridad-card:hover {
+    transform: translateY(-5px);
+}
+
+.autoridad-card img {
+    width: 100%;
+    display: block;
+}
+
+.autoridad-info {
+    padding: 20px;
+}
+
+.autoridad-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.autoridad-info p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* RESEÑAS */
+.resenas-header h2 {
+    font-size: 32px;
+    color: var(--text-color);
+    font-weight: 800;
+    margin: 10px 0 40px;
+}
+
+.resena-slider {
+    max-width: 900px;
+    margin: auto;
+}
+
+.resena-slide {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.resena-slide.active {
+    display: block;
+}
+
+.quote-icon {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.resena-texto {
+    font-size: 30px;
+    color: var(--text-color);
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+.resena-persona {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.resena-persona img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.resena-persona strong {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.resena-persona span {
+    font-size: 14px;
+    color: #666;
+}
+
+.resena-indicadores {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Panel de Administración */
+.admin-panel {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-panel h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+.admin-section {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--primary-color);
+}
+
+.admin-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--primary-color-dark);
+    font-weight: 800;
+}
+
+/* Formulario tipo card */
+.admin-form {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+/* Imagen editable */
+.imagen-editable {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    transition: 0.3s ease all;
+}
+
+.imagen-editable img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.3s ease all;
+    display: block;
+    border-radius: 12px;
+}
+
+.imagen-editable::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: 0.3s ease;
+}
+
+.imagen-editable:hover::after {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.editar-icono {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1.8rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    padding: 12px;
+    opacity: 0;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.imagen-editable:hover .editar-icono {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.imagen-editable input[type="file"] {
+    display: none;
+}
+
+/* Campos del formulario */
+.admin-form-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.admin-form-fields input[type="text"],
+.admin-form-fields textarea {
+    padding: 0.7rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    width: 100%;
+    resize: vertical;
+    transition: border 0.2s ease;
+}
+
+.admin-form-fields input[type="text"]:focus,
+.admin-form-fields textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Botones */
+/* Panel de Administración */
+.admin-panel {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-panel h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+.admin-section {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--primary-color);
+}
+
+.admin-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--primary-color-dark);
+    font-weight: 800;
+}
+
+/* Formulario tipo card */
+.admin-form {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+/* Imagen editable */
+.imagen-editable {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    transition: 0.3s ease all;
+    cursor: pointer;
+}
+
+.imagen-editable img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    transition: 0.3s ease all;
+}
+
+.imagen-editable::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease;
+}
+
+.imagen-editable:hover::after {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.editar-icono {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
+    z-index: 1;
+    border: 2px dashed red;
+}
+
+.imagen-editable:hover .editar-icono {
+    opacity: 1;
+}
+
+.imagen-editable input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+
+
+/* Campos del formulario */
+.admin-form-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.admin-form-fields input[type="text"],
+.admin-form-fields textarea {
+    padding: 0.7rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    width: 100%;
+    resize: vertical;
+    transition: border 0.2s ease;
+}
+
+.admin-form-fields input[type="text"]:focus,
+.admin-form-fields textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Botones */
+.admin-form-fields button {
+    align-self: flex-start;
+    padding: 0.5rem 1.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-form-fields button:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.admin-form-fields a {
+    color: #b20000;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.admin-form-fields a:hover {
+    text-decoration: underline;
+}
+
+/* Nuevo contenido */
+.admin-section h3 {
+    font-size: 1.2rem;
+    margin: 2rem 0 1rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.admin-form-fields button:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.admin-form-fields a {
+    color: #b20000;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.admin-form-fields a:hover {
+    text-decoration: underline;
+}
+
+/* Nuevo contenido */
+.admin-section h3 {
+    font-size: 1.2rem;
+    margin: 2rem 0 1rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
