@@ -1,47 +1,58 @@
 <?php
+// ====== cursosporcarrera.php ======
 require_once '../session.php';
 require_once '../sql/conexion.php';
 
 header('Content-Type: application/json');
 
-$cris = new Conexion();
-$conn = $cris->conectar();
+$conn = (new Conexion())->conectar();
 
-if (isLoggedIn()) {
-    $rol = getUserRole();
-    $carrera = getUserCarrera();
+try {
+    $rol = isLoggedIn() ? getUserRole() : null;
+    $carrera = isLoggedIn() ? getUserCarrera() : null;
+    $usuario_id = isLoggedIn() ? getUserId() : null;
 
-    // Si es docente o administrador, mostrar todos los cursos abiertos
-    if ($rol === 'docente' || $rol === 'administrador') {
-        $sql = "SELECT * FROM eventos WHERE estado = 'abierto'";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-    }
-    // Si es estudiante con carrera definida, filtrar por carrera
-    elseif ($rol === 'estudiante' && !empty($carrera)) {
-        $sql = "
-            SELECT e.*
-            FROM eventos e
-            INNER JOIN categorias_evento c ON e.categoria_id = c.id
-            WHERE c.nombre = ? AND e.estado = 'abierto'
-        ";
-        $stmt = $conn->prepare($sql);
+    $sqlBase = "
+        SELECT e.*, c.nombre AS categoria_nombre, t.nombre AS tipo_nombre
+        FROM eventos e
+        JOIN categorias_evento c ON e.categoria_id = c.id
+        JOIN tipos_evento t ON e.tipo_evento_id = t.id
+        WHERE e.estado = 'abierto'
+    ";
+
+    if ($rol === 'estudiante' && !empty($carrera)) {
+        $sqlBase .= " AND c.nombre = ?";
+        $stmt = $conn->prepare($sqlBase);
         $stmt->execute([$carrera]);
-    }
-    // Si no hay carrera o el rol es inválido, mostrar todos los cursos
-    else {
-        $sql = "SELECT * FROM eventos WHERE estado = 'abierto'";
-        $stmt = $conn->prepare($sql);
+    } else {
+        $stmt = $conn->prepare($sqlBase);
         $stmt->execute();
     }
 
     $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode(['rol' => $rol, 'cursos' => $cursos]);
-} else {
-    // Usuario no logueado → mostrar todos los cursos, sin botones
-    $sql = "SELECT * FROM eventos WHERE estado = 'abierto'";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode(['rol' => null, 'cursos' => $cursos]);
+
+    // Obtener inscripciones del estudiante si aplica
+    $idsInscritos = [];
+    if ($rol === 'estudiante' && $usuario_id) {
+        $stmt2 = $conn->prepare("SELECT evento_id FROM inscripciones WHERE usuario_id = ?");
+        $stmt2->execute([$usuario_id]);
+        $idsInscritos = $stmt2->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    foreach ($cursos as &$curso) {
+        $curso['inscrito'] = in_array($curso['id'], $idsInscritos);
+    }
+
+    echo json_encode([
+        'rol' => $rol,
+        'usuario_id' => $usuario_id,
+        'cursos' => $cursos
+    ]);
+} catch (PDOException $e) {
+    echo json_encode([
+        'rol' => null,
+        'usuario_id' => null,
+        'cursos' => [],
+        'error' => $e->getMessage()
+    ]);
 }
