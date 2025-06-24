@@ -1,5 +1,6 @@
 <?php
 include 'sql/conexion.php';
+
 $conn = (new Conexion())->conectar();
 $stmt = $conn->query("SELECT tipo, contenido FROM info_fisei");
 $data = [];

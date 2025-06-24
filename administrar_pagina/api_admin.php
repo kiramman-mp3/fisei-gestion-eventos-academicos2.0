@@ -3,20 +3,24 @@ include '../sql/conexion.php';
 $conn = (new Conexion())->conectar();
 
 function subirImagen($archivo, $imgActual = null) {
-    $dir = 'uploads/landing/';
-    if (!is_dir($dir)) mkdir($dir, 0777, true);
+    $dirServidor = realpath(__DIR__ . '/../uploads/landing/') . DIRECTORY_SEPARATOR;
+    if (!is_dir($dirServidor)) mkdir($dirServidor, 0777, true);
 
     $nombreArchivo = uniqid() . '_' . basename($archivo['name']);
-    $rutaDestino = $dir . $nombreArchivo;
+    $rutaDestinoServidor = $dirServidor . $nombreArchivo;
 
-    if (move_uploaded_file($archivo['tmp_name'], $rutaDestino)) {
-        // Eliminar imagen anterior si existe
-        if ($imgActual && file_exists($imgActual)) {
-            unlink($imgActual);
+    if (move_uploaded_file($archivo['tmp_name'], $rutaDestinoServidor)) {
+        // Eliminar imagen anterior si existe (ruta guardada en DB es relativa)
+        if ($imgActual) {
+            $rutaImagenAnteriorServidor = realpath(__DIR__ . '/../' . $imgActual);
+            if ($rutaImagenAnteriorServidor && file_exists($rutaImagenAnteriorServidor)) {
+                unlink($rutaImagenAnteriorServidor);
+            }
         }
-        return $rutaDestino;
+        // Devolver ruta relativa para usar en URLs
+        return 'uploads/landing/' . $nombreArchivo;
     }
-    return $imgActual;
+    return $imgActual; // devuelve la ruta anterior si fallo la subida
 }
 
 // ELIMINAR
