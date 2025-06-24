@@ -1,10 +1,47 @@
 <?php
 include 'sql/conexion.php';
+
+// Función para validar y corregir rutas de imágenes
+function validarRutaImagen($ruta) {
+    if (empty($ruta)) {
+        return 'resource/placeholder.svg';
+    }
+    
+    // Limpiar la ruta
+    $ruta = trim($ruta);
+    
+    // Si la ruta no empieza con resource/ o uploads/, agregarla
+    if (!str_starts_with($ruta, 'resource/') && !str_starts_with($ruta, 'uploads/')) {
+        // Intentar con resource/ primero
+        if (file_exists('resource/' . basename($ruta))) {
+            return 'resource/' . basename($ruta);
+        }
+        // Luego con uploads/
+        if (file_exists('uploads/' . basename($ruta))) {
+            return 'uploads/' . basename($ruta);
+        }
+    }
+    
+    // Verificar si el archivo existe
+    if (file_exists($ruta)) {
+        return $ruta;
+    }
+    
+    // Si no existe, usar placeholder
+    return 'resource/placeholder.svg';
+}
+
 $conn = (new Conexion())->conectar();
 $stmt = $conn->query("SELECT tipo, contenido FROM info_fisei");
 $data = [];
 while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $val = in_array($r['tipo'], ['autoridad', 'resena', 'carrusel', 'nosotros']) ? json_decode($r['contenido'], true) : $r['contenido'];
+    
+    // Validar rutas de imágenes
+    if (is_array($val) && isset($val['img'])) {
+        $val['img'] = validarRutaImagen($val['img']);
+    }
+    
     $data[$r['tipo']][] = $val;
 }
 ?><!DOCTYPE html>
@@ -21,7 +58,7 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <header class="ctt-header">
         <div class="top-bar">
             <div class="logo">
-                <img src="uploads/logo.png" alt="Logo FISEI">
+                <img src="<?= file_exists('uploads/logo.png') ? 'uploads/logo.png' : 'resource/logo.png' ?>" alt="Logo FISEI" onerror="this.src='resource/placeholder.svg'">
             </div>
             <div class="top-links">
                 <div class="link-box">
@@ -50,10 +87,10 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <div class="slides">
             <?php foreach ($data['carrusel'] ?? [] as $index => $c): ?>
                 <div class="slide<?= $index === 0 ? ' active' : '' ?>">
-                    <img src="<?= $c['img'] ?>" alt="">
+                    <img src="<?= validarRutaImagen($c['img'] ?? '') ?>" alt="Imagen del carrusel" onerror="this.src='resource/placeholder.svg'">
                     <div class="overlay">
-                        <h1><?= htmlspecialchars($c['titulo']) ?></h1>
-                        <p><?= htmlspecialchars($c['descripcion']) ?></p>
+                        <h1><?= htmlspecialchars($c['titulo'] ?? '') ?></h1>
+                        <p><?= htmlspecialchars($c['descripcion'] ?? '') ?></p>
                         <a href="ver_cursos.php" class="boton">Ver más</a>
                     </div>
                 </div>
@@ -76,12 +113,12 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <section class="nosotros seccion">
             <div class="nosotros-container">
                 <div class="nosotros-img">
-                    <img src="<?= htmlspecialchars($item['img']) ?>" alt="Imagen Nosotros">
+                    <img src="<?= validarRutaImagen($item['img'] ?? '') ?>" alt="Imagen Nosotros" onerror="this.src='resource/placeholder.svg'">
                 </div>
                 <div class="nosotros-texto">
                     <span class="etiqueta">SOBRE NOSOTROS</span>
-                    <h2><?= htmlspecialchars($item['titulo']) ?></h2>
-                    <p><?= htmlspecialchars($item['descripcion']) ?></p>
+                    <h2><?= htmlspecialchars($item['titulo'] ?? '') ?></h2>
+                    <p><?= htmlspecialchars($item['descripcion'] ?? '') ?></p>
                     <a href="#" class="boton">Ver más</a>
                 </div>
             </div>
@@ -96,10 +133,10 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <div class="autoridades-grid">
             <?php foreach ($data['autoridad'] ?? [] as $a): ?>
                 <div class="autoridad-card">
-                    <img src="<?= htmlspecialchars($a['img']) ?>" alt="Foto de <?= htmlspecialchars($a['nombre']) ?>">
+                    <img src="<?= validarRutaImagen($a['img'] ?? '') ?>" alt="Foto de <?= htmlspecialchars($a['nombre'] ?? '') ?>" onerror="this.src='resource/placeholder.svg'">
                     <div class="autoridad-info">
-                        <h3><?= htmlspecialchars($a['nombre']) ?></h3>
-                        <p><?= htmlspecialchars($a['cargo']) ?></p>
+                        <h3><?= htmlspecialchars($a['nombre'] ?? '') ?></h3>
+                        <p><?= htmlspecialchars($a['cargo'] ?? '') ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -116,12 +153,12 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <?php foreach ($data['resena'] ?? [] as $i => $r): ?>
                 <div class="resena-slide<?= $i === 0 ? ' active' : '' ?>">
                     <i class="fas fa-quote-left quote-icon"></i>
-                    <p class="resena-texto"><?= htmlspecialchars($r['texto']) ?></p>
+                    <p class="resena-texto"><?= htmlspecialchars($r['texto'] ?? '') ?></p>
                     <div class="resena-persona">
-                        <img src="<?= htmlspecialchars($r['img']) ?>" alt="Foto de <?= htmlspecialchars($r['autor']) ?>">
+                        <img src="<?= validarRutaImagen($r['img'] ?? '') ?>" alt="Foto de <?= htmlspecialchars($r['autor'] ?? '') ?>" onerror="this.src='resource/placeholder.svg'">
                         <div>
-                            <strong><?= htmlspecialchars($r['autor']) ?></strong><br>
-                            <span><?= htmlspecialchars($r['rol']) ?></span>
+                            <strong><?= htmlspecialchars($r['autor'] ?? '') ?></strong><br>
+                            <span><?= htmlspecialchars($r['rol'] ?? '') ?></span>
                         </div>
                     </div>
                 </div>

@@ -41,7 +41,7 @@ $apellido = getUserLastname();
           <i id="closeSidebar" class="fas fa-xmark" style="color: var(--maroon); font-size: 1.4rem; cursor: pointer;"></i>
         </div>
         <ul class="nav flex-column px-4 py-2">
-          <li class="nav-item"><a class="nav-link sidebar-link" href="views/cursos.php">Crear Curso</a></li>
+          <li class="nav-item"><a class="nav-link sidebar-link" href="dashboard.html">Crear Curso</a></li>
           <li class="nav-item"><a class="nav-link sidebar-link" href="index.php">Administrar Curso</a></li>
           <li class="nav-item"><a class="nav-link sidebar-link" href="admin/crear_admin.php">Crear Administrador</a>
           </li>
@@ -131,7 +131,7 @@ $apellido = getUserLastname();
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      fetch('service/CursosPorCarrera.php')
+      fetch('service/cursosPorCarrera.php')
         .then(response => response.json())
         .then(data => {
           const { rol, cursos } = data;

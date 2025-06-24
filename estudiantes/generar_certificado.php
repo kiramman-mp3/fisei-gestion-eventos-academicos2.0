@@ -1,11 +1,12 @@
 <?php
+require_once '../session.php';
+
 if (!isLoggedIn()) {
-    header('Location: ../../login.php');
+    header('Location: ../login.php');
     exit();
 }
 
 require_once("../libs/fpdf/fpdf.php");
-require_once '../session.php';
 
 // Simulación de sesión y GET
 $_SESSION['usuario_id'] = 1;

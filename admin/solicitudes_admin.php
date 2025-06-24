@@ -31,7 +31,7 @@ $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
-    <a href="index.php">
+    <a href="../index.php">
   <img src="../resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
 </a>
       <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
@@ -92,7 +92,7 @@ $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <h5>Soporte</h5>
       <ul>
         <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+        <li><a href="../formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
         <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
       </ul>
     </div>

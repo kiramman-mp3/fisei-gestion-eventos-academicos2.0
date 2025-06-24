@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
   <div class="d-flex align-items-center">
-    <a href="../index.php">
+    <a href="index.php">
       <img src="resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
     </a>
     <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
@@ -98,10 +98,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="d-flex align-items-center gap-3">
     <?php if (isLoggedIn()): ?>
       <span class="fw-semibold">Hola, <?= htmlspecialchars($nombre) ?> <?= htmlspecialchars($apellido) ?></span>
-      <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+      <a href="logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
     <?php else: ?>
-      <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
-      <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
+      <a href="login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+      <a href="registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
     <?php endif; ?>
   </div>
 </header>
@@ -196,26 +196,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer-section">
       <h5>Sobre el sistema</h5>
       <ul>
-        <li><a href="../informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
-        <li><a href="../informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
-        <li><a href="../informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-        <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+        <li><a href="informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+        <li><a href="informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+        <li><a href="informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+        <li><a href="informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h5>Soporte</h5>
       <ul>
-        <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
-        <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+        <li><a href="informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+        <li><a href="formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+        <li><a href="formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h5>Legal</h5>
       <ul>
-        <li><a href="../legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
-        <li><a href="../legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
-        <li><a href="../legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+        <li><a href="legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+        <li><a href="legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+        <li><a href="legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
       </ul>
     </div>
     <div class="footer-section">

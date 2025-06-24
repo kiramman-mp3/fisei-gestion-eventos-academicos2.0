@@ -1,5 +1,5 @@
 <?php
-  require_once 'session.php';
+  require_once '../session.php';
   $nombre = getUserName();
   $apellido = getUserLastname();
 ?>
@@ -15,7 +15,7 @@
 <body>
 <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
-    <a href="index.php">
+    <a href="../index.php">
   <img src="../resource/logo-universidad-tecnica-de-ambato.webp" alt="Logo institucional" style="height: 50px;">
 </a>
       <div class="site-name ms-3 fw-bold">Gestión de Eventos Académicos - FISEI</div>
@@ -23,14 +23,14 @@
 
     <div class="d-flex align-items-center gap-3">
       <?php if (isLoggedIn()): ?>
-        <a href="perfil.php" class="fw-semibold text-white text-decoration-none">
+        <a href="../perfil.php" class="fw-semibold text-white text-decoration-none">
   Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?>
 </a>
 
-        <a href="logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+        <a href="../logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
       <?php else: ?>
-        <a href="login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
-        <a href="registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
+        <a href="../login.php" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+        <a href="../registro.php" class="btn btn-white"><i class="fas fa-user-plus"></i> Registrarse</a>
       <?php endif; ?>
     </div>
   </header>
@@ -69,7 +69,7 @@
         <h5>Soporte</h5>
         <ul>
           <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-          <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+          <li><a href="../formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
           <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
         </ul>
       </div>

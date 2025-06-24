@@ -185,26 +185,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer-section">
       <h5>Sobre el sistema</h5>
       <ul>
-        <li><a href="../informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
-        <li><a href="../informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
-        <li><a href="../informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
-        <li><a href="../informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
+        <li><a href="informativo/que_es_eventos.php"><i class="fa-solid fa-circle-question"></i> ¿Qué es Eventos FISEI?</a></li>
+        <li><a href="informativo/manual_usuario.php"><i class="fa-solid fa-book"></i> Manual de usuario</a></li>
+        <li><a href="informativo/versiones.php"><i class="fa-solid fa-code-branch"></i> Versiones</a></li>
+        <li><a href="informativo/nosotros.php"><i class="fa-solid fa-user-group"></i> Créditos</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h5>Soporte</h5>
       <ul>
-        <li><a href="../informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
-        <li><a href="../formulario/solictud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
-        <li><a href="../formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
+        <li><a href="informativo/preguntas_frecuentes.php"><i class="fa-solid fa-circle-info"></i> Preguntas frecuentes</a></li>
+        <li><a href="formulario/solicitud_cambios.php"><i class="fa-solid fa-bug"></i> Reportar un error</a></li>
+        <li><a href="formulario/solicitar_ayuda.php"><i class="fa-solid fa-headset"></i> Solicitar ayuda</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h5>Legal</h5>
       <ul>
-        <li><a href="../legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
-        <li><a href="../legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
-        <li><a href="../legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
+        <li><a href="legal/terminos_uso.php"><i class="fa-solid fa-file-contract"></i> Términos de uso</a></li>
+        <li><a href="legal/politica_privacidad.php"><i class="fa-solid fa-user-shield"></i> Política de privacidad</a></li>
+        <li><a href="legal/licencia.php"><i class="fa-solid fa-scroll"></i> Licencia</a></li>
       </ul>
     </div>
     <div class="footer-section">
