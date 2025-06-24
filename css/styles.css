@@ -1,9 +1,7 @@
 /* VARIABLES PRINCIPALES Y PALETA DE COLORES */
 :root {
   --maroon: #b61b28;
-  /* Rojo UTA */
   --maroon-dark: #8e151d;
-  /* Rojo más oscuro */
   --gray-050: #f8f8f8;
   --gray-100: #eeeeee;
   --gray-200: #d8d8d8;
@@ -12,11 +10,6 @@
   --btn-gray: #9ca3af;
   --btn-gray-hover: #6b7280;
 }
-
-/* FUENTES Y ESTILO GENERAL */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
-
 
 * {
   box-sizing: border-box;
