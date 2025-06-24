@@ -1397,3 +1397,51 @@ main.container h1.display-5 {
     background-color: #e4405f;
     color: #fff;
 }
+
+/* Misión y Visión */
+.mv-contenedor {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 40px;
+  align-items: stretch;
+}
+
+.mv-card {
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  border-top: 5px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-4px);
+}
+
+.mv-icon {
+  font-size: 40px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.mv-titulo {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary-color-dark);
+  margin-bottom: 15px;
+}
+
+.mv-texto {
+  font-size: 16px;
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: justify;
+}

@@ -2,18 +2,28 @@
 include '../sql/conexion.php';
 $conn = (new Conexion())->conectar();
 
-$tipos = ['carrusel', 'nosotros', 'autoridad', 'resena'];
+// Cargar contenido por tipo
+$tipos = ['carrusel', 'nosotros', 'autoridad', 'resena', 'mision', 'vision'];
 $datos = [];
+
 foreach ($tipos as $tipo) {
   $stmt = $conn->prepare("SELECT id, contenido FROM info_fisei WHERE tipo = ?");
   $stmt->execute([$tipo]);
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $contenido = json_decode($row['contenido'], true);
-    $contenido['id'] = $row['id'];
-    $datos[$tipo][] = $contenido;
+    if (in_array($tipo, ['mision', 'vision'])) {
+      $datos[$tipo] = [
+        'id' => $row['id'],
+        'texto' => $row['contenido']
+      ];
+    } else {
+      $contenido = json_decode($row['contenido'], true);
+      $contenido['id'] = $row['id'];
+      $datos[$tipo][] = $contenido;
+    }
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -36,7 +46,7 @@ foreach ($tipos as $tipo) {
           <i class="fa-solid fa-arrow-left"></i>
           <div>
             <span class="title">Regresar</span><br>
-            <a href="javascript:history.back()">Regrega al Dashboard</a>
+            <a href="javascript:history.back()">Regresa al Dashboard</a>
           </div>
         </div>
       </div>
@@ -46,16 +56,17 @@ foreach ($tipos as $tipo) {
   <main class="admin-panel">
     <h1 class="titulo-formulario"><i class="fas fa-sliders-h"></i> Panel de Administración</h1>
 
-    <!-- Pestañas -->
+    <!-- PESTAÑAS -->
     <ul class="pestanas">
       <li><button class="active" data-tab="carrusel"><i class="fas fa-images"></i> Carrusel</button></li>
       <li><button data-tab="nosotros"><i class="fas fa-users"></i> Nosotros</button></li>
       <li><button data-tab="autoridades"><i class="fas fa-user-tie"></i> Autoridades</button></li>
       <li><button data-tab="resenas"><i class="fas fa-comment-dots"></i> Reseñas</button></li>
+      <li><button data-tab="mision-vision"><i class="fas fa-bullseye"></i> Misión y Visión</button></li>
     </ul>
 
-    <!-- Contenedor general para las secciones -->
     <div class="contenedor-secciones">
+
       <!-- CARRUSEL -->
       <section id="carrusel" class="tab-content active">
         <div class="admin-section">
@@ -102,7 +113,7 @@ foreach ($tipos as $tipo) {
         <div class="admin-section">
           <h2>Nosotros</h2>
           <?php foreach ($datos['nosotros'] ?? [] as $n): ?>
-            <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <form action="=" api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
               <input type="hidden" name="id" value="<?= $n['id'] ?>">
               <input type="hidden" name="tipo" value="nosotros">
               <input type="hidden" name="imagen_actual" value="<?= $n['img'] ?>">
@@ -144,26 +155,9 @@ foreach ($tipos as $tipo) {
               </div>
             </form>
           <?php endforeach; ?>
-
-          <!-- NUEVA AUTORIDAD -->
-          <h3>Nueva Autoridad</h3>
-          <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
-            <input type="hidden" name="tipo" value="autoridad">
-            <div class="imagen-editable">
-              <img src="" style="display:none;">
-              <label for="imgNuevoAutoridad" class="editar-icono"><i class="fas fa-plus"></i></label>
-              <input type="file" name="nueva_img" id="imgNuevoAutoridad" accept="image/*" required>
-            </div>
-            <div class="admin-form-fields">
-              <input type="text" name="nombre" placeholder="Nombre completo" required>
-              <input type="text" name="cargo" placeholder="Cargo" required>
-              <button type="submit" onclick="localStorage.setItem('toastMsg','creado')">Agregar</button>
-            </div>
-          </form>
         </div>
       </section>
 
-      <!-- RESEÑAS -->
       <!-- RESEÑAS -->
       <section id="resenas" class="tab-content">
         <div class="admin-section">
@@ -188,25 +182,41 @@ foreach ($tipos as $tipo) {
               </div>
             </form>
           <?php endforeach; ?>
+        </div>
+      </section>
 
-          <!-- NUEVA RESEÑA -->
-          <h3>Nueva Reseña</h3>
-          <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
-            <input type="hidden" name="tipo" value="resena">
-            <div class="imagen-editable">
-              <img src="" alt="Vista previa" style="display: none;">
-              <label for="imgNuevaResena" class="editar-icono"><i class="fas fa-plus"></i></label>
-              <input type="file" name="nueva_img" id="imgNuevaResena" accept="image/*" required>
-            </div>
+      <section id="mision-vision" class="tab-content">
+        <div class="admin-section">
+          <h2>Misión y Visión</h2>
+
+          <!-- Misión -->
+          <form action="api_admin.php" method="post" class="admin-form">
+            <input type="hidden" name="tipo" value="mision">
+            <?php if (!empty($datos['mision']['id'])): ?>
+              <input type="hidden" name="id" value="<?= $datos['mision']['id'] ?>">
+            <?php endif; ?>
             <div class="admin-form-fields">
-              <input type="text" name="autor" placeholder="Autor de la reseña" required>
-              <input type="text" name="rol" placeholder="Rol o cargo" required>
-              <textarea name="texto" placeholder="Escribe la reseña aquí..." required></textarea>
-              <button type="submit" onclick="localStorage.setItem('toastMsg','creado')">Agregar</button>
+              <label>Misión</label>
+              <textarea name="texto" required><?= htmlspecialchars($datos['mision']['texto'] ?? '') ?></textarea>
+              <button type="submit">Guardar Misión</button>
+            </div>
+          </form>
+
+          <!-- Visión -->
+          <form action="api_admin.php" method="post" class="admin-form">
+            <input type="hidden" name="tipo" value="vision">
+            <?php if (!empty($datos['vision']['id'])): ?>
+              <input type="hidden" name="id" value="<?= $datos['vision']['id'] ?>">
+            <?php endif; ?>
+            <div class="admin-form-fields">
+              <label>Visión</label>
+              <textarea name="texto" required><?= htmlspecialchars($datos['vision']['texto'] ?? '') ?></textarea>
+              <button type="submit">Guardar Visión</button>
             </div>
           </form>
         </div>
       </section>
+    </div>
   </main>
 
   <script>
