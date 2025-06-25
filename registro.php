@@ -22,7 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $apellido = $_POST['apellido'];
   $correo = $_POST['correo'];
   $cedula = $_POST['cedula'];
-  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $confirmar = $_POST['confirmar_password'];
+  $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s'\"%;\\\\])(?=.*\.).{8,}$/";
+  if (!preg_match($regex, $_POST['password'])) {
+    $error = "La contraseña no cumple los requisitos: mínimo 8 caracteres, una mayúscula, una minúscula, un número, un carácter especial válido y un punto (.).";
+  } elseif ($_POST['password'] !== $confirmar) {
+    $error = "Las contraseñas no coinciden.";
+  } else {
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  }
   $genero = $_POST['genero'];
   $fecha_nacimiento = $_POST['anio'] . '-' . $_POST['mes'] . '-' . $_POST['dia'];
 
@@ -193,9 +201,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="correo" placeholder="Correo electrónico" required>
           </div>
 
-          <div class="mb-3">
-            <input type="password" name="password" placeholder="Contraseña nueva" required>
+          <div class="mb-3 position-relative">
+            <input type="password" name="password" id="password" placeholder="Contraseña nueva" required
+              class="form-control">
+            <div id="password-box" class="password-popup d-none">
+              <p class="mb-2 fw-bold">Debe contener:</p>
+              <ul class="list-unstyled small">
+                <li id="length" class="invalid">❌ Al menos 8 caracteres</li>
+                <li id="uppercase" class="invalid">❌ Una letra mayúscula</li>
+                <li id="lowercase" class="invalid">❌ Una letra minúscula</li>
+                <li id="number" class="invalid">❌ Un número</li>
+                <li id="special" class="invalid">❌ Un símbolo válido (*!@#...)</li>
+                <li id="dot" class="invalid">❌ Contiene un punto (.)</li>
+              </ul>
+            </div>
           </div>
+
+          <div class="mb-3">
+            <input type="password" name="confirmar_password" id="confirmar_password" placeholder="Confirmar contraseña"
+              required class="form-control">
+          </div>
+
+          <div id="match-error" class="alert alert-danger d-none">Las contraseñas no coinciden.</div>
+
 
           <div class="text-center">
             <button type="submit" class="boton-grande">Crear cuenta</button>
@@ -208,6 +236,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </main>
     </div>
   </div>
+  <script>
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmar_password');
+    const passwordBox = document.getElementById('password-box');
+    const matchError = document.getElementById('match-error');
+
+    const requirements = {
+      length: /.{8,}/,
+      uppercase: /[A-Z]/,
+      lowercase: /[a-z]/,
+      number: /\d/,
+      special: /[^a-zA-Z0-9\s'"%;\\]/,
+      dot: /\./,
+    };
+
+    passwordInput.addEventListener('input', () => {
+      if (passwordInput.value.length > 0) {
+        passwordBox.classList.remove('d-none');
+      } else {
+        passwordBox.classList.add('d-none');
+      }
+
+      for (const [id, regex] of Object.entries(requirements)) {
+        const el = document.getElementById(id);
+        if (regex.test(passwordInput.value)) {
+          el.textContent = '✔️ ' + el.textContent.slice(2);
+          el.classList.add('valid');
+          el.classList.remove('invalid');
+        } else {
+          el.textContent = '❌ ' + el.textContent.slice(2);
+          el.classList.add('invalid');
+          el.classList.remove('valid');
+        }
+      }
+    });
+
+    passwordInput.addEventListener('blur', () => {
+      setTimeout(() => passwordBox.classList.add('d-none'), 150); // Evita que desaparezca al clickear
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+      const pass = passwordInput.value;
+      const confirm = confirmInput.value;
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s'"%;\\])(?=.*\.).{8,}$/;
+
+      let valid = true;
+      for (const key in requirements) {
+        if (!requirements[key].test(pass)) valid = false;
+      }
+
+      if (!valid) {
+        alert("La contraseña no cumple todos los requisitos.");
+        e.preventDefault();
+        return;
+      }
+
+      if (pass !== confirm) {
+        matchError.classList.remove('d-none');
+        e.preventDefault();
+      } else {
+        matchError.classList.add('d-none');
+      }
+    });
+  </script>
+
+
 </body>
 
 </html>
