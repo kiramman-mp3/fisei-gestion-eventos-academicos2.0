@@ -34,7 +34,7 @@ $apellido = getUserLastname();
           <div class="link-box">
             <i class="fas fa-desktop"></i>
             <div>
-              <span class="title">Pagina informativa</span><br>
+              <span class="title">Página informativa</span><br>
               <a href="index.php">Mira aquí</a>
             </div>
           </div>
@@ -58,7 +58,7 @@ $apellido = getUserLastname();
             <div class="link-box">
               <i class="fas fa-desktop"></i>
               <div>
-                <span class="title">Pagina informativa</span><br>
+                <span class="title">Página informativa</span><br>
                 <a href="index.php">Mira aquí</a>
               </div>
             </div>
