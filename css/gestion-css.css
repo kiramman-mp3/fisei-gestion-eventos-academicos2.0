@@ -1,0 +1,465 @@
+ /* ==========================
+        VARIABLES CSS
+        ========================== */
+ :root {
+     --primary-color: #B02A37;
+     --primary-color-dark: #8d1f2d;
+     --text-color: #2C3E50;
+     --font-family: 'Segoe UI', sans-serif;
+     --bg-light: #fff;
+
+     /* Variables para colores de botones de acción */
+     --edit-button-color: var(--primary-color);
+     --save-button-color: #28a745;
+     /* Verde Bootstrap */
+     --delete-button-color: #dc3545;
+     /* Rojo Bootstrap */
+
+     /* Nuevas variables para el formulario e inputs */
+     --input-border-color: #ced4da;
+     --input-focus-border-color: var(--primary-color);
+     --input-placeholder-color: #6c757d;
+ }
+
+ /* HEADER */
+ .ctt-header {
+     background-color: white;
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+     padding: 15px 30px;
+ }
+
+ .top-bar {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     flex-wrap: wrap;
+ }
+
+ .logo img {
+     height: 130px;
+     max-width: 100%;
+     padding-left: 30px;
+     object-fit: contain;
+ }
+
+ .top-links {
+     display: flex;
+     gap: 30px;
+     align-items: center;
+ }
+
+ .link-box {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     padding: 10px 15px;
+ }
+
+ .link-box i {
+     font-size: 32px;
+     color: var(--primary-color);
+ }
+
+ .link-box .title {
+     font-weight: 600;
+     color: var(--text-color);
+     font-size: 16px;
+ }
+
+ .link-box a {
+     color: var(--primary-color);
+     font-weight: 500;
+     font-size: 15px;
+     text-decoration: none;
+ }
+
+ .link-box a:hover {
+     text-decoration: underline;
+ }
+
+ /* MENÚ */
+ .main-nav {
+     margin-top: 10px;
+     display: none;
+ }
+
+ .menu-icon {
+     display: none;
+ }
+
+ .menu {
+     list-style: none;
+     display: flex;
+     gap: 20px;
+ }
+
+ .menu li a {
+     text-decoration: none;
+     color: var(--text-color);
+     font-weight: 500;
+ }
+
+ /* ==========================
+        PESTAÑAS TIPO CARDS CON ICONOS
+        ========================== */
+ .pestanas {
+     display: flex;
+     gap: 10px;
+     padding: 0;
+     border-bottom: 2px solid #eee;
+     margin: 20px 0;
+     flex-wrap: wrap;
+ }
+
+ .pestanas li {
+     list-style: none;
+ }
+
+ .pestanas button {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     background-color: #fff;
+     border: 1px solid #ddd;
+     border-bottom: none;
+     padding: 12px 20px;
+     font-size: 1rem;
+     font-weight: 600;
+     color: var(--text-color);
+     border-radius: 16px 16px 0 0;
+     cursor: pointer;
+     transition: all 0.3s ease;
+ }
+
+ .pestanas button i {
+     font-size: 1.1rem;
+ }
+
+ .pestanas button:hover {
+     background-color: #f7f7f7;
+ }
+
+ .pestanas button.active {
+     color: var(--primary-color);
+     background-color: #fff;
+     border-color: var(--primary-color);
+     font-weight: 700;
+ }
+
+ .contenedor-secciones {
+     padding: 30px;
+     margin-top: 0;
+     max-width: 1300px;
+     margin-inline: auto;
+ }
+
+ /* Contenido de pestaña */
+ .tab-content {
+     display: none;
+     padding: 30px;
+     background: #fff;
+     border: 1px solid #ddd;
+     border-radius: 0 0 16px 16px;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+     animation: fadeIn 0.3s ease-in-out;
+ }
+
+ .tab-content.active {
+     display: block;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ /* ==========================
+        ESTILOS PARA BOTONES DE ACCIÓN (TABLAS)
+        ========================== */
+ .btn-info {
+     background-color: var(--edit-button-color);
+     color: #fff;
+     border-color: var(--edit-button-color);
+     transition: background-color 0.2s ease;
+ }
+
+ .btn-info:hover {
+     background-color: var(--primary-color-dark);
+     border-color: var(--primary-color-dark);
+ }
+
+ .btn-success {
+     background-color: var(--save-button-color);
+     color: #fff;
+     border-color: var(--save-button-color);
+     transition: background-color 0.2s ease;
+ }
+
+ .btn-success:hover {
+     background-color: #218838;
+     /* Un tono de verde más oscuro */
+     border-color: #1e7e34;
+ }
+
+ .btn-danger {
+     background-color: var(--delete-button-color);
+     color: #fff;
+     border-color: var(--delete-button-color);
+     transition: background-color 0.2s ease;
+ }
+
+ .btn-danger:hover {
+     background-color: #c82333;
+     /* Un tono de rojo más oscuro */
+     border-color: #bd2130;
+ }
+
+ /* Estilos generales para botones de acción en tablas */
+ .table .btn-sm {
+     padding: .25rem .5rem;
+     font-size: .875rem;
+     line-height: 1.5;
+     border-radius: .2rem;
+ }
+
+ /* ==========================
+        ESTILOS PARA FORMULARIOS Y INPUTS
+        ========================== */
+ .admin-section {
+     padding: 0;
+     /* Asegura que no haya padding extra que interfiera con el admin-form */
+ }
+
+ .admin-section h2 {
+     color: var(--primary-color);
+     margin-bottom: 25px;
+     font-size: 1.8rem;
+     border-bottom: 2px solid var(--primary-color);
+     padding-bottom: 10px;
+     display: inline-block;
+ }
+
+ .admin-form {
+     background-color: #f8f9fa;
+     padding: 25px;
+     border-radius: 8px;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+     margin-bottom: 30px;
+     border: 1px solid #e9ecef;
+ }
+
+ .admin-form-fields {
+     display: grid;
+     grid-template-columns: 1fr;
+     /* Una columna por defecto en móviles */
+     gap: 20px 30px;
+     /* Espacio entre filas y columnas: 20px vertical, 30px horizontal */
+     align-items: start;
+     /* Alinea los elementos al inicio de su celda */
+ }
+
+ /* Media query para pantallas medianas y grandes (ej. tablets y desktops) */
+ @media (min-width: 768px) {
+     .admin-form-fields {
+         grid-template-columns: repeat(2, 1fr);
+         /* Dos columnas en pantallas más grandes */
+     }
+
+     /* Ocupar toda la fila para el botón de enviar */
+     .admin-form-fields button[type="submit"] {
+         grid-column: 1 / -1;
+         /* Ocupa todas las columnas */
+         justify-self: center;
+         /* Centra el botón si está solo en la fila */
+         width: fit-content;
+         /* El botón solo ocupa el ancho de su contenido */
+     }
+
+     /* Agrupar etiquetas e inputs en un contenedor para mejor control en el grid */
+     /* Esto se aplica a los <div> directos dentro de admin-form-fields */
+     .admin-form-fields>div {
+         display: flex;
+         flex-direction: column;
+     }
+
+     /* Estilos para los pares de campos de fecha (ej. Fecha Inicio/Fin) */
+     .admin-form-fields .date-pair {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         /* Dos columnas para las fechas */
+         gap: 10px;
+         /* Espacio entre las fechas */
+         margin-top: 5px;
+         /* Pequeño ajuste para separar de la etiqueta principal */
+     }
+
+     /* Asegúrate de que las etiquetas para los pares de fecha también se vean bien */
+     .admin-form-fields .date-pair label {
+         grid-column: 1 / -1;
+         /* Si tuvieran una label individual, ocuparía toda la fila */
+         margin-bottom: 0;
+         /* La etiqueta principal ya tiene su margen */
+     }
+ }
+
+ .admin-form label {
+     display: block;
+     margin-bottom: 5px;
+     font-weight: 600;
+     color: var(--text-color);
+     font-size: 0.95rem;
+ }
+
+ .admin-form input[type="text"],
+ .admin-form input[type="date"],
+ .admin-form input[type="number"],
+ .admin-form select {
+     width: 100%;
+     padding: 10px 12px;
+     border: 1px solid var(--input-border-color);
+     border-radius: 5px;
+     font-size: 1rem;
+     color: var(--text-color);
+     background-color: #fff;
+     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .075);
+     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+ }
+
+ /* Estilo específico para el input[type="file"] */
+ .admin-form input[type="file"] {
+     width: 100%;
+     padding: 7px 12px;
+     /* Un poco menos de padding para el input file */
+     border: 1px solid var(--input-border-color);
+     border-radius: 5px;
+     background-color: #fff;
+     font-size: 0.95rem;
+ }
+
+ /* Esto es para que el texto 'Seleccionar archivo...' y el botón se vean bien */
+ .admin-form input[type="file"]::-webkit-file-upload-button {
+     background-color: var(--primary-color);
+     color: white;
+     padding: 8px 15px;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     margin-right: 10px;
+     transition: background-color 0.2s ease;
+ }
+
+ .admin-form input[type="file"]::-webkit-file-upload-button:hover {
+     background-color: var(--primary-color-dark);
+ }
+
+ .admin-form input:focus,
+ .admin-form select:focus {
+     border-color: var(--input-focus-border-color);
+     outline: 0;
+     /* Usamos los valores RGB de --primary-color directamente */
+     box-shadow: 0 0 0 0.25rem rgba(176, 42, 55, .25);
+ }
+
+ .admin-form input::placeholder {
+     color: var(--input-placeholder-color);
+     opacity: 1;
+ }
+
+ .admin-form button[type="submit"] {
+     background-color: var(--primary-color);
+     color: #fff;
+     padding: 12px 25px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-size: 1.1rem;
+     font-weight: 600;
+     margin-top: 20px;
+     /* Asegura un buen espacio sobre el botón */
+     width: fit-content;
+     /* El botón se ajusta a su contenido */
+     transition: background-color 0.2s ease, transform 0.1s ease;
+ }
+
+ .admin-form button[type="submit"]:hover {
+     background-color: var(--primary-color-dark);
+     transform: translateY(-1px);
+ }
+
+ /* Estilo para el asterisco rojo de campos requeridos */
+ .rojo {
+     color: var(--delete-button-color);
+     margin-right: 3px;
+ }
+
+ /* ==========================
+        ESTILOS PARA LAS TABLAS EXISTENTES
+        ========================== */
+ .admin-section h3 {
+     color: var(--primary-color);
+     margin-top: 30px;
+     margin-bottom: 15px;
+     font-size: 1.5rem;
+     border-bottom: 1px dashed #e9ecef;
+     padding-bottom: 5px;
+ }
+
+ .table-responsive {
+     overflow-x: auto;
+     /* Permite scroll horizontal en pantallas pequeñas */
+     -webkit-overflow-scrolling: touch;
+     /* Suaviza el scroll en iOS */
+     margin-top: 20px;
+     /* Espacio sobre la tabla */
+ }
+
+ .table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 0.9rem;
+     /* Un poco más pequeño para tablas densas */
+     min-width: 1000px;
+     /* Ancho mínimo para forzar el scroll horizontal si es necesario */
+ }
+
+ .table th,
+ .table td {
+     padding: 10px 12px;
+     /* Reducir un poco el padding para más compactación */
+     border: 1px solid #dee2e6;
+     text-align: left;
+     vertical-align: middle;
+ }
+
+ .table thead th {
+     background-color: #e9ecef;
+     color: var(--text-color);
+     font-weight: 700;
+     white-space: nowrap;
+     /* Evita que los encabezados se envuelvan */
+ }
+
+ .table-striped tbody tr:nth-of-type(odd) {
+     background-color: rgba(0, 0, 0, .03);
+     /* Un poco más suave que .05 */
+ }
+
+ .table img {
+     max-width: 60px;
+     /* Reducir el tamaño de la imagen en la tabla */
+     height: auto;
+     border-radius: 4px;
+     display: block;
+     /* Para que margin: auto funcione si quieres centrarla */
+     margin: 0 auto;
+     /* Centrar la imagen dentro de su celda */
+     object-fit: cover;
+     /* Asegura que la imagen se vea bien dentro de sus dimensiones */
+ }
