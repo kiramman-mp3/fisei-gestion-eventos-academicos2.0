@@ -1,4 +1,5 @@
 <?php
+require_once 'enviar_codigo_verificacion.php';
 require_once 'sql/conexion.php';
 require_once 'session.php';
 
@@ -17,47 +18,122 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   }
 }
 
+function validarCedulaEcuatoriana($cedula)
+{
+  if (!preg_match("/^\d{10}$/", $cedula))
+    return false;
+  $digitos = str_split($cedula);
+  $provincia = intval(substr($cedula, 0, 2));
+  $tercerDigito = intval($cedula[2]);
+  if ($provincia < 1 || $provincia > 24 || $tercerDigito >= 6)
+    return false;
+
+  $suma = 0;
+  for ($i = 0; $i < 9; $i++) {
+    $val = intval($digitos[$i]);
+    if ($i % 2 === 0) {
+      $val *= 2;
+      if ($val > 9)
+        $val -= 9;
+    }
+    $suma += $val;
+  }
+  $verificador = (10 - ($suma % 10)) % 10;
+  return $verificador == intval($digitos[9]);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nombre = $_POST['nombre'];
   $apellido = $_POST['apellido'];
   $correo = $_POST['correo'];
   $cedula = $_POST['cedula'];
+  $telefono = $_POST['telefono'] ?? null;
   $confirmar = $_POST['confirmar_password'];
-  $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s'\"%;\\\\])(?=.*\.).{8,}$/";
-  if (!preg_match($regex, $_POST['password'])) {
+  $carrera = $_POST['carrera'] ?? null;
+
+  // Validar cédula
+  if (!validarCedulaEcuatoriana($cedula)) {
+    $error = "Número de cédula ecuatoriana inválido.";
+  }
+
+  // Validar correo
+  elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+    $error = "Correo electrónico inválido.";
+  }
+
+  // Validar teléfono celular (solo números que empiecen con 09 y tengan 10 dígitos)
+  elseif (!preg_match("/^09\d{8}$/", $telefono)) {
+    $error = "Número de celular inválido. Debe comenzar con 09 y tener 10 dígitos.";
+  }
+
+  // Validar edad (mayor a 17 años)
+  else {
+    $fecha_nacimiento = $_POST['anio'] . '-' . $_POST['mes'] . '-' . $_POST['dia'];
+    $fecha_actual = new DateTime();
+    $fecha_nac = DateTime::createFromFormat('Y-m-d', $fecha_nacimiento);
+    $edad = $fecha_actual->diff($fecha_nac)->y;
+
+    if ($edad < 17) {
+      $error = "Debes ser mayor de 17 años para registrarte.";
+    }
+  }
+
+  // Validación de contraseña
+  $regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s\'\"%;\\\\])(?=.*\.).{8,}$/';
+  if (!isset($error) && !preg_match($regex, $_POST['password'])) {
     $error = "La contraseña no cumple los requisitos: mínimo 8 caracteres, una mayúscula, una minúscula, un número, un carácter especial válido y un punto (.).";
-  } elseif ($_POST['password'] !== $confirmar) {
+  } elseif (!isset($error) && $_POST['password'] !== $confirmar) {
     $error = "Las contraseñas no coinciden.";
   } else {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
   }
-  $genero = $_POST['genero'];
-  $fecha_nacimiento = $_POST['anio'] . '-' . $_POST['mes'] . '-' . $_POST['dia'];
 
-  if (str_ends_with($correo, '@uta.edu.ec')) {
-    $tipo = 'institucional';
-  } elseif (preg_match('/@.+\..+/', $correo)) {
-    $tipo = 'publico';
-  } else {
-    $error = "Correo inválido.";
+  // Tipo de correo y carrera
+  if (!isset($error)) {
+    if (str_ends_with($correo, '@uta.edu.ec')) {
+      $tipo = 'institucional';
+      if (empty($carrera)) {
+        $error = "Debe seleccionar una carrera si usa correo institucional.";
+      }
+    } elseif (preg_match('/@.+\..+/', $correo)) {
+      $tipo = 'publico';
+      $carrera = 0; // No aplica
+    } else {
+      $error = "Correo inválido.";
+    }
   }
 
+  // Insertar en base si no hay error
   if (!isset($error)) {
     try {
       $stmt = $conexion->prepare("INSERT INTO estudiantes 
-        (nombre, apellido, correo, password, cedula, genero, fecha_nacimiento, tipo, rol)
-        VALUES (:nombre, :apellido, :correo, :password, :cedula, :genero, :fecha_nacimiento, :tipo, 'estudiante')");
+        (nombre, apellido, correo, password, cedula, genero, fecha_nacimiento, tipo, rol, telefono, carrera)
+        VALUES (:nombre, :apellido, :correo, :password, :cedula, :genero, :fecha_nacimiento, :tipo, 'estudiante', :telefono, :carrera)");
 
       $stmt->bindValue(':nombre', $nombre);
       $stmt->bindValue(':apellido', $apellido);
       $stmt->bindValue(':correo', $correo);
       $stmt->bindValue(':password', $password);
       $stmt->bindValue(':cedula', $cedula);
-      $stmt->bindValue(':genero', $genero);
+      $stmt->bindValue(':genero', $_POST['genero']);
       $stmt->bindValue(':fecha_nacimiento', $fecha_nacimiento);
       $stmt->bindValue(':tipo', $tipo);
+      $stmt->bindValue(':telefono', $telefono);
+      $stmt->bindValue(':carrera', $carrera);
 
       if ($stmt->execute()) {
+        // Generar y guardar el código
+        $codigo = generarCodigoVerificacion();
+        $stmtCodigo = $conexion->prepare("UPDATE estudiantes SET codigo_verificacion = :codigo WHERE correo = :correo");
+        $stmtCodigo->bindValue(':codigo', $codigo);
+        $stmtCodigo->bindValue(':correo', $correo);
+        $stmtCodigo->execute();
+
+        // Enviar correo
+        if (!enviarCodigoCorreo($correo, $codigo)) {
+          $error = "Usuario registrado pero error al enviar el correo de verificación.";
+        }
+
         $query = $conexion->prepare("SELECT * FROM estudiantes WHERE correo = :correo LIMIT 1");
         $query->bindValue(':correo', $correo);
         $query->execute();
@@ -152,6 +228,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               title="Debe contener 10 dígitos numéricos" required>
           </div>
 
+          <!-- Campo nuevo: Teléfono celular -->
+          <div class="mb-3">
+            <input type="text" name="telefono" placeholder="Número de celular" pattern="09[0-9]{8}"
+              title="El número debe comenzar con 09 y tener 10 dígitos en total" required>
+          </div>
+
           <div class="mb-3">
             <label class="form-label">Fecha de nacimiento:</label>
             <div class="row">
@@ -201,6 +283,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="correo" placeholder="Correo electrónico" required>
           </div>
 
+          <!-- Campo carrera, solo visible si el correo es institucional -->
+          <div class="mb-3 d-none" id="carrera-container">
+            <label for="carrera" class="form-label">Carrera:</label>
+            <select name="carrera" id="carrera" class="form-select">
+              <option value="">Seleccione una carrera</option>
+              <?php
+              $cat = $conexion->query("SELECT id, nombre FROM categorias_evento ORDER BY nombre ASC");
+              while ($fila = $cat->fetch(PDO::FETCH_ASSOC)) {
+                echo "<option value=\"{$fila['id']}\">{$fila['nombre']}</option>";
+              }
+              ?>
+            </select>
+          </div>
+
           <div class="mb-3 position-relative">
             <input type="password" name="password" id="password" placeholder="Contraseña nueva" required
               class="form-control">
@@ -224,11 +320,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
           <div id="match-error" class="alert alert-danger d-none">Las contraseñas no coinciden.</div>
 
-
           <div class="text-center">
             <button type="submit" class="boton-grande">Crear cuenta</button>
           </div>
         </form>
+
 
         <div class="text-center mt-3">
           <a href="login.php" class="link-secundario">¿Ya tienes cuenta? Inicia sesión aquí</a>
@@ -237,6 +333,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
   <script>
+
+    function ajustarAlturaCarrusel() {
+      const wrapper = document.querySelector('.registro-wrapper');
+      const carrusel = document.querySelector('.carousel-fondo');
+      if (wrapper && carrusel) {
+        const altoForm = wrapper.offsetHeight;
+        const altoHeader = document.querySelector('.ctt-header')?.offsetHeight || 0;
+        carrusel.style.height = (altoForm + altoHeader + 60) + 'px';
+        document.querySelectorAll('.carousel-item, .carousel-item img, .carousel-inner').forEach(el => {
+          el.style.height = carrusel.style.height;
+        });
+      }
+    }
+
+    window.addEventListener('load', ajustarAlturaCarrusel);
+    window.addEventListener('resize', ajustarAlturaCarrusel);
+
     const passwordInput = document.getElementById('password');
     const confirmInput = document.getElementById('confirmar_password');
     const passwordBox = document.getElementById('password-box');
@@ -299,9 +412,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         matchError.classList.add('d-none');
       }
     });
+
+    const correoInput = document.querySelector('input[name="correo"]');
+    const carreraContainer = document.getElementById('carrera-container');
+
+    correoInput.addEventListener('input', () => {
+      const value = correoInput.value.trim();
+      if (value.endsWith('@uta.edu.ec')) {
+        carreraContainer.classList.remove('d-none');
+      } else {
+        carreraContainer.classList.add('d-none');
+      }
+    });
   </script>
-
-
 </body>
 
 </html>
