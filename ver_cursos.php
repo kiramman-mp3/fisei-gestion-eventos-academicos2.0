@@ -33,9 +33,9 @@ $apellido = getUserLastname();
         <i id="closeSidebar" class="fas fa-xmark" style="color: var(--maroon); font-size: 1.4rem; cursor: pointer;"></i>
       </div>
       <ul class="nav flex-column px-4 py-2">
-      <a class="nav-link sidebar-link" href="admin/crear_curso_p1.php">
-  <i class="fas fa-plus-circle me-2"></i> Crear nuevo curso
-</a>
+        <a class="nav-link sidebar-link" href="admin/crear_curso_p1.php">
+          <i class="fas fa-plus-circle me-2"></i> Crear nuevo curso
+        </a>
         <li class="nav-item"><a class="nav-link sidebar-link" href="index.php">Administrar Curso</a></li>
         <li class="nav-item"><a class="nav-link sidebar-link" href="admin/crear_admin.php">Crear Administrador</a></li>
         <li class="nav-item"><a class="nav-link sidebar-link" href="admin/solicitudes_admin.php">Solicitudes de cambios</a></li>
@@ -88,6 +88,10 @@ $apellido = getUserLastname();
               <p><strong>Cupos:</strong> <span id="modalCupos"></span></p>
               <h6 class="mt-3">Requisitos:</h6>
               <ul id="lista-requisitos" class="list-group list-group-flush"></ul>
+              <div id="campoMotivacion" class="mt-3" style="display: none;">
+                <label for="motivacion" class="form-label">Carta de motivación:</label>
+                <textarea class="form-control" id="motivacion" rows="3"></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -160,11 +164,16 @@ $apellido = getUserLastname();
             document.getElementById('modalCupos').textContent = curso.cupos;
             document.getElementById('modalImagenCurso').src = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
 
-            const requisitosHTML = requisitos.length
-              ? requisitos.map(r => `<li class="list-group-item">${r.cumplido ? '✅' : '❌'} ${r.descripcion}</li>`).join('')
-              : '<li class="list-group-item text-muted">Sin requisitos</li>';
+            let html = '';
+            let requiereTexto = false;
+            requisitos.forEach(r => {
+              if (r.tipo === 'texto') requiereTexto = true;
+              html += `<li class="list-group-item">${r.cumplido ? '✅' : '❌'} ${r.descripcion}</li>`;
+            });
 
-            document.getElementById('lista-requisitos').innerHTML = requisitosHTML;
+            document.getElementById('lista-requisitos').innerHTML = html || '<li class="list-group-item text-muted">Sin requisitos</li>';
+            document.getElementById('campoMotivacion').style.display = requiereTexto ? 'block' : 'none';
+            document.getElementById('motivacion').value = '';
             document.getElementById('btnConfirmarInscripcion').setAttribute('data-id', id);
 
             new bootstrap.Modal(document.getElementById('modalInscripcion')).show();
@@ -174,18 +183,15 @@ $apellido = getUserLastname();
 
       document.getElementById('btnConfirmarInscripcion').addEventListener('click', async () => {
         const eventoId = document.getElementById('btnConfirmarInscripcion').getAttribute('data-id');
+        const motivacion = document.getElementById('motivacion').value;
         const res = await fetch('estudiantes/inscribirse_evento.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ evento_id: eventoId })
+          body: JSON.stringify({ evento_id: eventoId, texto_adicional: motivacion }) // <- clave corregida aquí
         });
         const result = await res.json();
-        if (result.success) {
-          alert('Inscripción realizada correctamente.');
-          location.reload();
-        } else {
-          alert('Error al inscribirse: ' + result.message);
-        }
+        alert(result.message);
+        if (result.success) location.reload();
       });
 
       const toggleBtn = document.getElementById('toggleSidebar');
