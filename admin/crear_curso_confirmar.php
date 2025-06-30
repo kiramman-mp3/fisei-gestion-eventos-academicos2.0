@@ -60,10 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $evento_id = $conexion->lastInsertId();
 
         if (!empty($curso['requisitos'])) {
-            $stmtReq = $conexion->prepare("INSERT INTO requisitos_evento (evento_id, descripcion) VALUES (?, ?)");
+            $stmtReq = $conexion->prepare("INSERT INTO requisitos_evento (evento_id, descripcion, tipo, campo_estudiante) VALUES (?, ?, ?, ?)");
             foreach ($curso['requisitos'] as $req) {
-                if (trim($req) !== '') {
-                    $stmtReq->execute([$evento_id, $req]);
+                if (is_array($req) && isset($req['descripcion'])) {
+                    $stmtReq->execute([
+                        $evento_id,
+                        $req['descripcion'],
+                        $req['tipo'] ?? 'archivo',
+                        $req['campo_estudiante'] ?? null
+                    ]);
                 }
             }
         }
@@ -172,7 +177,7 @@ $apellidoUsuario = getUserLastname();
     <?php if (isset($curso['requisitos']) && is_array($curso['requisitos']) && count($curso['requisitos']) > 0): ?>
         <ul>
             <?php foreach ($curso['requisitos'] as $r): ?>
-                <li><?= htmlspecialchars($r) ?></li>
+                <li><?= htmlspecialchars(is_array($r) && isset($r['descripcion']) ? $r['descripcion'] : (string)$r) ?></li>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>

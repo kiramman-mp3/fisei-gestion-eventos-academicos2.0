@@ -19,12 +19,12 @@ if (!$evento_id || !$usuario_id) {
 try {
     $conn = (new Conexion())->conectar();
 
-    // Obtener requisitos
-    $stmt = $conn->prepare("SELECT id, descripcion FROM requisitos_evento WHERE evento_id = ?");
+    // Obtener requisitos con campos
+    $stmt = $conn->prepare("SELECT id, descripcion, tipo, campo_estudiante FROM requisitos_evento WHERE evento_id = ?");
     $stmt->execute([$evento_id]);
     $requisitos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Obtener inscripción
+    // Verificar inscripción existente
     $stmt2 = $conn->prepare("SELECT id FROM inscripciones WHERE evento_id = ? AND usuario_id = ?");
     $stmt2->execute([$evento_id, $usuario_id]);
     $inscripcion = $stmt2->fetch(PDO::FETCH_ASSOC);
@@ -37,14 +37,27 @@ try {
         $entregados = array_column($stmt3->fetchAll(PDO::FETCH_ASSOC), 'requisito_id');
     }
 
+    // Datos del estudiante para validar requisitos tipo 'archivo'
+    $stmt4 = $conn->prepare("SELECT cedula_path, matricula_path, papeleta_path FROM estudiantes WHERE id = ?");
+    $stmt4->execute([$usuario_id]);
+    $estudiante = $stmt4->fetch(PDO::FETCH_ASSOC) ?: [];
+
+    // Marcar si cada requisito está cumplido
     foreach ($requisitos as &$req) {
-        $req['cumplido'] = in_array($req['id'], $entregados);
+        if ($req['tipo'] === 'archivo') {
+            $campo = $req['campo_estudiante'];
+            $req['cumplido'] = isset($estudiante[$campo]) && !empty($estudiante[$campo]);
+        } elseif ($req['tipo'] === 'texto') {
+            $req['cumplido'] = in_array($req['id'], $entregados);
+        } else {
+            $req['cumplido'] = false;
+        }
     }
 
     // Traer también info del curso
-    $stmt4 = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
-    $stmt4->execute([$evento_id]);
-    $curso = $stmt4->fetch(PDO::FETCH_ASSOC);
+    $stmt5 = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
+    $stmt5->execute([$evento_id]);
+    $curso = $stmt5->fetch(PDO::FETCH_ASSOC);
 
     echo json_encode([
         'success' => true,
