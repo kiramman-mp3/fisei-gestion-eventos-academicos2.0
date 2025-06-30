@@ -1,0 +1,312 @@
+
+:root {
+    --primary-color: #B02A37;
+    --primary-color-dark: #8d1f2d;
+    --text-color: #2C3E50;
+    --font-family: 'Segoe UI', sans-serif;
+    --bg-light: #fff;
+    --input-border-color: #ced4da;
+    --input-focus-border-color: var(--primary-color);
+    --input-placeholder-color: #6c757d;
+    --delete-button-color: #dc3545;
+}
+
+/* General body styling for consistency (if not already in global CSS) */
+body {
+    font-family: var(--font-family, 'Segoe UI', sans-serif); /* Use fallback if var not found */
+    background-color: #f0f2f5; /* Lighter background to make card stand out */
+    color: var(--text-color, #2C3E50);
+    line-height: 1.6;
+}
+
+/* Header styles - Simplified for this page as per image */
+.ctt-header {
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 15px 30px;
+    margin-bottom: 30px; /* Space below header */
+    display: flex; /* Ensure it's still a flex container for top-links */
+    justify-content: flex-end; /* Align user info to the right */
+    align-items: center;
+}
+
+.ctt-header .top-bar {
+    justify-content: flex-end; /* Overrides default justify-content: space-between */
+    width: 100%; /* Take full width of header */
+}
+
+.ctt-header .logo {
+    display: none; /* Hide the logo for this page as per image */
+}
+.ctt-header .site-name {
+    display: none; /* Hide site name */
+}
+
+.ctt-header .top-links {
+    gap: 20px; /* Adjusted gap */
+}
+
+.ctt-header .user-greeting {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.ctt-header .boton {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px; /* Smaller padding for header button */
+    background-color: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.ctt-header .boton:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.ctt-header .boton i {
+    margin-right: 8px;
+}
+
+/* Main Content Card - Specific to this form page */
+.form-page-card { /* Using a more specific class to avoid conflicts */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 900px; /* Wider to accommodate 2-column layout */
+    margin: 30px auto; /* Center the card */
+    border-top: 5px solid var(--primary-color); /* Top border as per image */
+}
+
+/* Form Title */
+.form-page-card .titulo-formulario {
+    font-size: 1.8rem;
+    color: var(--text-color, #2C3E50); /* Darker text color for title */
+    margin-bottom: 30px;
+    text-align: left; /* Align title to left */
+    border-bottom: 2px solid var(--primary-color, #B02A37); /* Red underline */
+    padding-bottom: 15px;
+}
+
+.form-page-card .titulo-formulario i {
+    margin-right: 10px;
+    color: var(--primary-color-dark);
+}
+
+/* Alert messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.alert ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alert li {
+    margin-bottom: 5px;
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Default to 2 columns */
+    gap: 20px 30px; /* Vertical and horizontal gap */
+}
+
+.form-group {
+    margin-bottom: 0; /* Remove default mb-3 from previous version, handled by grid gap */
+}
+
+.form-group.span-2-columns {
+    grid-column: span 2; /* Make this group span both columns */
+}
+
+/* Labels */
+.form-group label {
+    display: block;
+    margin-bottom: 8px; /* Space between label and input */
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+/* Input Fields (text, date, number, select) */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd; /* Lighter border */
+    border-radius: 5px; /* Slightly more rounded */
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: #fdfdfd; /* Light background */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06); /* Subtle inner shadow */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(176, 42, 55, .25); /* Focus glow from primary color */
+}
+
+/* Placeholder color */
+.form-group input::placeholder {
+    color: var(--input-placeholder-color, #6c757d);
+    opacity: 1;
+}
+
+/* Date Range Group (for Fechas and Inscripciones) */
+.date-range-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns for dates */
+    gap: 15px; /* Space between date inputs */
+}
+
+.date-range-group input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    /* Style for date picker icon if necessary, might need vendor prefixes */
+}
+
+/* Custom File Input Styling */
+.file-input-group .custom-file-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+    padding: 5px; /* Inner padding for the container */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.file-input-group .file-input-hidden {
+    display: none; /* Hide the actual file input */
+}
+
+.file-input-group .file-input-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0; /* Prevents button from shrinking */
+}
+
+.file-input-group .file-input-button:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.file-input-group .file-name-display {
+    flex-grow: 1;
+    color: var(--input-placeholder-color);
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px; /* Padding for the text */
+}
+
+/* Form Submission Button */
+.form-submit-button {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.btn.btn-save-course { /* Specific style for the "Guardar Curso" button */
+    padding: 12px 30px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn.btn-save-course:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ctt-header {
+        padding: 10px 15px;
+    }
+
+    .form-page-card {
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .form-page-card .titulo-formulario {
+        font-size: 1.5rem;
+        text-align: center;
+        border-bottom: none; /* Remove underline on small screens */
+        padding-bottom: 0;
+        margin-bottom: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr; /* Stack columns on small screens */
+        gap: 20px;
+    }
+
+    .form-group.span-2-columns {
+        grid-column: span 1; /* Reset span for small screens */
+    }
+
+    .date-range-group {
+        grid-template-columns: 1fr; /* Stack dates too */
+        gap: 10px;
+    }
+
+    .form-submit-button {
+        text-align: center;
+    }
+
+    .file-input-group .custom-file-input {
+        flex-direction: column; /* Stack button and text */
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .file-input-group .file-input-button {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px; /* Space between button and text */
+    }
+    .file-input-group .file-name-display {
+        text-align: left;
+        width: 100%;
+    }
+}
