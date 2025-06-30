@@ -1,13 +1,22 @@
 <?php
 include 'sql/conexion.php';
+
 $conn = (new Conexion())->conectar();
 $stmt = $conn->query("SELECT tipo, contenido FROM info_fisei");
 $data = [];
+
 while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $val = in_array($r['tipo'], ['autoridad', 'resena', 'carrusel', 'nosotros']) ? json_decode($r['contenido'], true) : $r['contenido'];
-    $data[$r['tipo']][] = $val;
+    if (in_array($r['tipo'], ['autoridad', 'resena', 'carrusel', 'nosotros'])) {
+        $val = json_decode($r['contenido'], true);
+        $data[$r['tipo']][] = $val;
+    } elseif (in_array($r['tipo'], ['mision', 'vision'])) {
+        $data[$r['tipo']] = $r['contenido']; // CORREGIDO: texto plano
+    } else {
+        $data[$r['tipo']][] = $r['contenido'];
+    }
 }
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -34,9 +43,7 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
             </div>
         </div>
         <nav class="main-nav">
-            <div class="menu-icon">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="menu-icon"><i class="fas fa-bars"></i></div>
             <ul class="menu">
                 <li><a href="#">Inicio</a></li>
                 <li><a href="#">Nosotros</a></li>
@@ -46,11 +53,12 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </nav>
     </header>
 
+    <!-- CARRUSEL -->
     <section class="carousel">
         <div class="slides">
             <?php foreach ($data['carrusel'] ?? [] as $index => $c): ?>
                 <div class="slide<?= $index === 0 ? ' active' : '' ?>">
-                    <img src="<?= $c['img'] ?>" alt="">
+                    <img src="<?= htmlspecialchars($c['img']) ?>" alt="">
                     <div class="overlay">
                         <h1><?= htmlspecialchars($c['titulo']) ?></h1>
                         <p><?= htmlspecialchars($c['descripcion']) ?></p>
@@ -59,12 +67,10 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </div>
             <?php endforeach; ?>
         </div>
-
         <div class="carousel-controls">
             <button onclick="prevSlide()">&#10094;</button>
             <button onclick="nextSlide()">&#10095;</button>
         </div>
-
         <div class="carousel-indicators">
             <?php foreach ($data['carrusel'] ?? [] as $i => $c): ?>
                 <span class="indicador-circular<?= $i === 0 ? ' active' : '' ?>" onclick="goToSlide(<?= $i ?>)"></span>
@@ -72,6 +78,7 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </div>
     </section>
 
+    <!-- NOSOTROS -->
     <?php foreach ($data['nosotros'] ?? [] as $item): ?>
         <section class="nosotros seccion">
             <div class="nosotros-container">
@@ -88,6 +95,32 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </section>
     <?php endforeach; ?>
 
+    <section class="mision-vision-grid seccion">
+        <div class="mv-contenedor">
+
+            <!-- Misión -->
+            <?php if (!empty($data['mision'])): ?>
+                <div class="mv-card mv-mision">
+                    <i class="fas fa-bullseye mv-icon"></i>
+                    <h2 class="mv-titulo">Misión</h2>
+                    <p class="mv-texto"><?= htmlspecialchars($data['mision']) ?></p>
+                </div>
+            <?php endif; ?>
+
+            <!-- Visión -->
+            <?php if (!empty($data['vision'])): ?>
+                <div class="mv-card mv-vision">
+                    <i class="fas fa-eye mv-icon"></i>
+                    <h2 class="mv-titulo">Visión</h2>
+                    <p class="mv-texto"><?= htmlspecialchars($data['vision']) ?></p>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </section>
+
+
+    <!-- AUTORIDADES -->
     <section class="autoridades seccion">
         <div class="autoridades-header">
             <span class="etiqueta">FISEI</span>
@@ -106,12 +139,12 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </div>
     </section>
 
+    <!-- RESEÑAS -->
     <section class="resenas seccion">
         <div class="resenas-header">
             <span class="etiqueta">RESEÑAS</span>
             <h2>OPINIONES</h2>
         </div>
-
         <div class="resena-slider">
             <?php foreach ($data['resena'] ?? [] as $i => $r): ?>
                 <div class="resena-slide<?= $i === 0 ? ' active' : '' ?>">
@@ -127,7 +160,6 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </div>
             <?php endforeach; ?>
         </div>
-
         <div class="resena-indicadores">
             <?php foreach ($data['resena'] ?? [] as $i => $r): ?>
                 <span class="indicador-circular<?= $i === 0 ? ' active' : '' ?>" onclick="cambiarResena(<?= $i ?>)"></span>
@@ -135,8 +167,8 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </div>
     </section>
 
+    <!-- SCRIPTS -->
     <script>
-        // CARRUSEL
         let slideIndex = 0;
         const slides = document.querySelectorAll('.slide');
         const indicators = document.querySelectorAll('.carousel-indicators .indicador-circular');
@@ -181,7 +213,6 @@ while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
             mostrarResena(resenaIndex);
         }, 7000);
     </script>
-
 </body>
 
 </html>

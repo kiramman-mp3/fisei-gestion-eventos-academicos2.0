@@ -89,15 +89,15 @@ body {
 
 .top-links {
     display: flex;
-    gap: 40px;
+    gap: 30px;
     align-items: center;
-    padding-right: 30px;
 }
 
 .link-box {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 10px 15px;
 }
 
 .link-box i {
@@ -766,4 +766,682 @@ body {
 .toast.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+.user-greeting {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+    padding-left: 50px;
+}
+
+.user-greeting i {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.main-menu ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.main-menu a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #2e2e3a;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.main-menu a:hover {
+    color: var(--primary-color-dark);
+}
+
+.main-menu a.active {
+    color: var(--primary-color-dark);
+    font-weight: bold;
+}
+
+
+/* CARRUSEL DE FONDO */
+.carousel-fondo {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.carousel-fondo .carousel-item img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* LOGIN CENTRADO SOBRE EL CARRUSEL */
+.login-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.97);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-card h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.login-card p {
+    font-size: 15px;
+    color: var(--text-color);
+}
+
+.login-card .form-control {
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.login-card .btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.login-card .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.form-register a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.form-register a:hover {
+    text-decoration: underline;
+}
+
+/* GRID DE TARJETAS */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 0 10px;
+}
+
+/* TARJETA DE CURSO */
+.card-curso {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-curso:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-curso img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* BOTÓN PERSONALIZADO */
+.boton-inscribirse {
+    margin-top: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.boton-inscribirse:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* MAIN CARD */
+main {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.card {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+}
+
+.card h1 {
+    font-size: 2rem;
+    color: var(--primary-color-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+/* FORMULARIOS */
+form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+form select,
+form input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 0.3rem;
+    font-size: 0.95rem;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+/* MINIATURAS DE DOCUMENTOS */
+.thumbnail {
+    display: block;
+    margin-top: 10px;
+    max-width: 300px;
+    max-height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* BOTÓN DE CURSOS */
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* ALERTAS */
+.alert {
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.form-submit.align-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Contenedor principal */
+main.card {
+    background: #fff;
+    padding: 2.5rem 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    width: fit-content;
+    /* Ajuste al contenido real */
+    max-width: 100%;
+    /* Evita desbordes */
+    margin: 2rem auto;
+    /* Margen vertical y centrado horizontal */
+}
+
+/* Título alineado correctamente */
+main.card h1.titulo-formulario {
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    padding-bottom: 0.7rem;
+    font-size: 2.2rem;
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color-dark);
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Distribución del grid principal */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+}
+
+/* Grid de fecha y título */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* Inputs y selects */
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 0.5rem;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    margin-top: 24px;
+}
+
+label span.rojo {
+    color: var(--primary-color-dark);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Botones */
+.btn {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn.cancelar {
+    background-color: #ccc;
+    color: #333;
+    margin-right: 12px;
+}
+
+.btn.cancelar:hover {
+    background-color: #bbb;
+}
+
+.btn.enviar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn.enviar:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Área de envío de formulario */
+.form-submit.align-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2.5rem;
+    gap: 12px;
+}
+
+/* Botones de captura */
+.btn-capture {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    margin-top: 12px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.btn-capture.tomar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-capture.tomar:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.btn-capture.eliminar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-capture.eliminar:hover {
+    background-color: #a91e2a;
+}
+
+/* Barra de archivo cargado */
+.capture-bar {
+    background-color: #f1f1f1;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.capture-bar .file-name {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+/* Información del usuario */
+.user-info {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.02);
+    font-size: 0.95rem;
+}
+
+.user-info input {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #111;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.user-info input:read-only {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.user-info legend {
+    font-weight: 700;
+    color: var(--primary-color-dark);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-submit.align-right {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+main.container {
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+main.container h1.display-5 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--primary-color-dark);
+    margin-bottom: 2.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.credits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #555;
+    flex-grow: 1;
+}
+
+.social-links {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a[title="Facebook"] {
+    color: #1877f2;
+    border: 2px solid #1877f2;
+}
+
+.social-links a[title="Facebook"]:hover {
+    background-color: #1877f2;
+    color: #fff;
+}
+
+.social-links a[title="Instagram"] {
+    color: #e4405f;
+    border: 2px solid #e4405f;
+}
+
+.social-links a[title="Instagram"]:hover {
+    background-color: #e4405f;
+    color: #fff;
+}
+
+/* Misión y Visión */
+.mv-contenedor {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 40px;
+  align-items: stretch;
+}
+
+.mv-card {
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  border-top: 5px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-4px);
+}
+
+.mv-icon {
+  font-size: 40px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.mv-titulo {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary-color-dark);
+  margin-bottom: 15px;
+}
+
+.mv-texto {
+  font-size: 16px;
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: justify;
 }

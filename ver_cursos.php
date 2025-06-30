@@ -10,11 +10,13 @@ $apellido = getUserLastname();
   <meta charset="UTF-8">
   <title>Inicio - Gestión de Eventos FISEI</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css"> <!-- Usamos el estilo más reciente -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 </head>
 
 <body class="bg-light">
+
+  <!-- HEADER -->
   <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
       <a href="index.php">
@@ -46,7 +48,7 @@ $apellido = getUserLastname();
     <div class="d-flex align-items-center gap-3">
       <?php if (isLoggedIn()): ?>
       <a href="perfil.php" class="fw-semibold text-white text-decoration-none">
-        Hola, <?= htmlspecialchars(getUserName()) ?> <?= htmlspecialchars(getUserLastname()) ?>
+        Hola, <?= htmlspecialchars($nombre) ?> <?= htmlspecialchars($apellido) ?>
       </a>
       <a href="logout.php" class="btn btn-white"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
       <?php else: ?>
@@ -56,6 +58,7 @@ $apellido = getUserLastname();
     </div>
   </header>
 
+  <!-- MAIN -->
   <main>
     <div class="container text-center mb-5">
       <h1>Gestión de Eventos Académicos - FISEI</h1>
@@ -67,6 +70,7 @@ $apellido = getUserLastname();
     </div>
   </main>
 
+  <!-- MODAL INSCRIPCIÓN -->
   <div class="modal fade" id="modalInscripcion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -90,6 +94,7 @@ $apellido = getUserLastname();
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer-expandido mt-5">
     <div class="footer-container">
       <!-- contenido del footer -->
@@ -99,6 +104,7 @@ $apellido = getUserLastname();
     </div>
   </footer>
 
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -111,17 +117,22 @@ $apellido = getUserLastname();
           contenedor.innerHTML = '';
 
           cursos.forEach(curso => {
-            const btn = (rol === 'estudiante' && !curso.inscrito)
-              ? `<button class="btn btn-primary inscribirse-btn mt-3" data-id="${curso.id}">Inscribirse</button>`
-              : (rol === 'administrador')
-              ? `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary mt-3">Administrar</a>`
-              : '';
+            const rutaCruda = curso.ruta_imagen || '';
+            const rutaLimpia = rutaCruda.replace(/^(\.\.\/)+/, '');
+            const src = rutaLimpia !== '' ? rutaLimpia : 'resource/placeholder.svg';
+
+            let btn = '';
+            if (rol === 'estudiante' && !curso.inscrito) {
+              btn = `<button class="btn btn-primary inscribirse-btn mt-3" data-id="${curso.id}">Inscribirse</button>`;
+            } else if (rol === 'administrador') {
+              btn = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary mt-3">Administrar</a>`;
+            }
 
             const tarjeta = document.createElement('div');
             tarjeta.className = 'col-md-4';
             tarjeta.innerHTML = `
               <div class="card h-100 shadow-sm">
-                <img src="${(curso.ruta_imagen || 'resource/placeholder.svg').replace(/^(\.\.\/)+/, '')}" class="card-img-top" alt="Imagen del evento">
+                <img src="${src}" class="card-img-top" alt="Imagen del evento">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">${curso.nombre_evento}</h5>
                   <p><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
@@ -135,6 +146,7 @@ $apellido = getUserLastname();
           });
         });
 
+      // Mostrar modal con requisitos
       document.addEventListener('click', async e => {
         if (e.target.classList.contains('inscribirse-btn')) {
           const id = e.target.getAttribute('data-id');
@@ -145,19 +157,19 @@ $apellido = getUserLastname();
             const { curso, requisitos } = data;
             document.getElementById('modalTituloCurso').textContent = curso.nombre_evento;
             document.getElementById('modalPonente').textContent = curso.ponentes;
-            document.getElementById('modalFechas').textContent = curso.fecha_inicio + ' al ' + curso.fecha_fin;
+            document.getElementById('modalFechas').textContent = `${curso.fecha_inicio} al ${curso.fecha_fin}`;
             document.getElementById('modalHoras').textContent = curso.horas;
             document.getElementById('modalCupos').textContent = curso.cupos;
             document.getElementById('lista-requisitos').innerHTML = requisitos.map(r =>
               `<li>${r.completado ? '✅' : '❌'} ${r.descripcion}</li>`).join('');
             document.getElementById('btnConfirmarInscripcion').setAttribute('data-id', id);
 
-            const modal = new bootstrap.Modal(document.getElementById('modalInscripcion'));
-            modal.show();
+            new bootstrap.Modal(document.getElementById('modalInscripcion')).show();
           }
         }
       });
 
+      // Confirmar inscripción
       document.getElementById('btnConfirmarInscripcion').addEventListener('click', async () => {
         const eventoId = document.getElementById('btnConfirmarInscripcion').getAttribute('data-id');
         const res = await fetch('estudiantes/inscribirse_evento.php', {
@@ -174,6 +186,7 @@ $apellido = getUserLastname();
         }
       });
 
+      // Sidebar toggle
       const toggleBtn = document.getElementById('toggleSidebar');
       const sidebar = document.getElementById('sidebar');
       const closeBtn = document.getElementById('closeSidebar');
