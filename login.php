@@ -25,6 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query->execute([':correo' => $correo]);
     $user = $query->fetch(PDO::FETCH_ASSOC);
 
+    if (!$user['verificado']) {
+      echo "<script>
+    alert('Debes verificar tu cuenta antes de iniciar sesión. Revisa tu correo.');
+    window.location.href = 'verificar.php?correo=" . urlencode($correo) . "';
+  </script>";
+      exit;
+    }
+
+
     if ($user && password_verify($password, $user['password'])) {
       $_SESSION['usuario_id'] = $user['id'];
       $_SESSION['email'] = $user['correo'];

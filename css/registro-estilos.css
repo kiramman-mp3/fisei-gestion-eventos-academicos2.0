@@ -81,17 +81,17 @@ body {
 .carousel-fondo {
     position: relative;
     width: 100%;
-    height: 120vh;
+    min-height: 100vh; /* valor por defecto mínimo */
     overflow: hidden;
 }
-
 .carousel-fondo .carousel-inner,
 .carousel-fondo .carousel-item,
 .carousel-fondo .carousel-item img {
-    height: 120vh;
     width: 100%;
+    height: 100%;
     object-fit: cover;
 }
+
 
 /* FORMULARIO CENTRADO */
 .registro-wrapper {
