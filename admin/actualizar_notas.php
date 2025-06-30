@@ -13,20 +13,38 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $conexion = (new Conexion())->conectar();
+
 $notas = $_POST['notas'] ?? [];
 $asistencias = $_POST['asistencias'] ?? [];
+$legalizados = $_POST['legalizados'] ?? [];
+$pagos = $_POST['pagos'] ?? [];
 
 foreach ($notas as $inscripcionId => $nota) {
-    if ($nota === '') continue; // No actualizar si está vacío
+    if ($nota === '') continue;
     $stmt = $conexion->prepare("UPDATE inscripciones SET nota = ? WHERE id = ?");
     $stmt->execute([$nota, $inscripcionId]);
 }
 
 foreach ($asistencias as $inscripcionId => $asistencia) {
-    if ($asistencia === '') continue; // No actualizar si está vacío
+    if ($asistencia === '') continue;
     $stmt = $conexion->prepare("UPDATE inscripciones SET asistencia = ? WHERE id = ?");
     $stmt->execute([$asistencia, $inscripcionId]);
 }
 
-header("Location: administrar_evento.php?id=" . ($_POST['evento_id'] ?? 0));
+// Marcar como legalizado (si está presente en el POST)
+$stmtLegalizado = $conexion->prepare("UPDATE inscripciones SET legalizado = ? WHERE id = ?");
+foreach ($notas as $inscripcionId => $_) {
+    $valor = isset($legalizados[$inscripcionId]) ? 1 : 0;
+    $stmtLegalizado->execute([$valor, $inscripcionId]);
+}
+
+// Marcar como pago confirmado (si está presente en el POST)
+$stmtPago = $conexion->prepare("UPDATE inscripciones SET pago_confirmado = ? WHERE id = ?");
+foreach ($notas as $inscripcionId => $_) {
+    $valor = isset($pagos[$inscripcionId]) ? 1 : 0;
+    $stmtPago->execute([$valor, $inscripcionId]);
+}
+
+$eventoId = $_POST['evento_id'] ?? 0;
+header("Location: administrar_evento.php?id=$eventoId");
 exit;

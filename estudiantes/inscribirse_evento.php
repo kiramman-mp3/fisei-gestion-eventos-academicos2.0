@@ -20,7 +20,7 @@ if (!$evento_id || !$usuario_id) {
 try {
     $conn = (new Conexion())->conectar();
 
-    // 1. Validar si ya está inscrito
+    // Verificar si ya está inscrito
     $stmt = $conn->prepare("SELECT COUNT(*) FROM inscripciones WHERE usuario_id = ? AND evento_id = ?");
     $stmt->execute([$usuario_id, $evento_id]);
     if ($stmt->fetchColumn() > 0) {
@@ -28,11 +28,24 @@ try {
         exit;
     }
 
-    // 2. Insertar inscripción
-    $stmt = $conn->prepare("INSERT INTO inscripciones (usuario_id, evento_id) VALUES (?, ?)");
+    // Verificar si el curso tiene requisitos
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM requisitos_evento WHERE evento_id = ?");
+    $stmt->execute([$evento_id]);
+    $total_requisitos = $stmt->fetchColumn();
+
+    if ($total_requisitos > 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Este curso tiene requisitos obligatorios que aún no se gestionan. No puedes inscribirte por ahora.'
+        ]);
+        exit;
+    }
+
+    // Insertar inscripción si no hay requisitos
+    $stmt = $conn->prepare("INSERT INTO inscripciones (usuario_id, evento_id, legalizado, pago_confirmado) VALUES (?, ?, 0, 0)");
     $stmt->execute([$usuario_id, $evento_id]);
 
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => true, 'message' => 'Inscripción realizada con éxito.']);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Error al inscribirse: ' . $e->getMessage()]);
 }

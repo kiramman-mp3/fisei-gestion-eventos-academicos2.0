@@ -7,11 +7,8 @@ if (!isLoggedIn()) {
   exit;
 }
 
-
-
 $nombre = getUserName();
 $apellido = getUserLastname();
-
 
 $id = (int) $_GET['id'];
 $conexion = (new Conexion())->conectar();
@@ -57,49 +54,44 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 
 <body>
-
   <header class="ctt-header">
-    <div class="top-bar">
-      <div class="logo"><img src="../uploads/logo.png" alt="Logo FISEI"></div>
+    <div class="top-bar d-flex justify-content-between align-items-center p-3 bg-danger text-white">
+      <div class="logo">
+        <img src="../uploads/logo.png" alt="Logo FISEI" style="height: 60px;">
+      </div>
       <div class="top-links">
-        <div class="link-box">
-          <i class="fa-solid fa-arrow-left"></i>
-          <div>
-            <span class="title">Regresar</span><br>
-            <a href="javascript:history.back()">Regrega al Dashboard</a>
-          </div>
-        </div>
+        <a href="javascript:history.back()" class="btn btn-light">
+          <i class="fa-solid fa-arrow-left"></i> Regresar al Dashboard
+        </a>
       </div>
     </div>
   </header>
-  <main>
-    <div class="card">
-      <h1><?= htmlspecialchars($evento['nombre_evento']) ?></h1>
+
+  <main class="container my-5">
+    <div class="card p-4 shadow-sm">
+      <h2 class="mb-4"><?= htmlspecialchars($evento['nombre_evento']) ?></h2>
 
       <div class="mb-4">
         <p><strong>Tipo:</strong> <?= htmlspecialchars($evento['tipo_evento']) ?></p>
         <p><strong>Categoría:</strong> <?= htmlspecialchars($evento['categoria']) ?></p>
         <p><strong>Fechas:</strong> <?= $evento['fecha_inicio'] ?> al <?= $evento['fecha_fin'] ?></p>
-        <p><strong>Inscripciones:</strong> <?= $evento['fecha_inicio_inscripciones'] ?> al
-          <?= $evento['fecha_fin_inscripciones'] ?>
-        </p>
+        <p><strong>Inscripciones:</strong> <?= $evento['fecha_inicio_inscripciones'] ?> al <?= $evento['fecha_fin_inscripciones'] ?></p>
         <p><strong>Horas académicas:</strong> <?= $evento['horas'] ?></p>
         <p><strong>Ponente:</strong> <?= htmlspecialchars($evento['ponentes']) ?></p>
         <p><strong>Cupos disponibles:</strong> <?= $evento['cupos'] ?></p>
         <p><strong>Estado:</strong> <?= $evento['estado'] ?></p>
       </div>
-      <div class="text-end mb-3">
+
+      <div class="text-end mb-4">
         <a href="pdf_evento.php?id=<?= $id ?>" target="_blank" class="btn btn-outline-secondary">
           <i class="fa fa-file-pdf"></i> Imprimir PDF
         </a>
       </div>
 
-
-      <h4>Requisitos del Evento</h4>
+      <h5>Requisitos del Evento</h5>
       <?php if (count($requisitos) > 0): ?>
         <ul class="list-group mb-4">
           <?php foreach ($requisitos as $req): ?>
@@ -110,14 +102,15 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="text-muted">Este evento no tiene requisitos registrados.</p>
       <?php endif; ?>
 
-      <h4>Inscritos (<?= count($inscritos) ?>)</h4>
+      <h5 class="mt-5">Inscritos (<?= count($inscritos) ?>)</h5>
+
       <?php if (count($inscritos) > 0): ?>
         <form id="formNotas" method="POST" action="actualizar_notas.php">
           <input type="hidden" name="evento_id" value="<?= $id ?>">
 
           <div class="table-responsive">
-            <table class="table table-custom">
-              <thead>
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="table-light">
                 <tr>
                   <th>#</th>
                   <th>Estudiante</th>
@@ -138,11 +131,11 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($ins['estado']) ?></td>
                     <td>
                       <input type="number" name="notas[<?= $ins['id'] ?>]" class="form-control"
-                        value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10">
+                             value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10">
                     </td>
                     <td>
                       <input type="number" name="asistencias[<?= $ins['id'] ?>]" class="form-control"
-                        value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100">
+                             value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100">
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -150,7 +143,7 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
           </div>
 
-          <div class="text-end mt-4">
+          <div class="text-end mt-3">
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
           </div>
         </form>
@@ -159,8 +152,6 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
       <?php endif; ?>
     </div>
   </main>
-
-
 </body>
 
 </html>

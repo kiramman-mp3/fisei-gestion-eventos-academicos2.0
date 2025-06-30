@@ -10,13 +10,11 @@ $apellido = getUserLastname();
   <meta charset="UTF-8">
   <title>Inicio - Gestión de Eventos FISEI</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css"> <!-- Usamos el estilo más reciente -->
+  <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
 </head>
 
 <body class="bg-light">
-
-  <!-- HEADER -->
   <header class="top-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm --maroon">
     <div class="d-flex align-items-center">
       <a href="index.php">
@@ -29,14 +27,15 @@ $apellido = getUserLastname();
     <button id="toggleSidebar" class="btn btn-outline-light">
       <i id="sidebarIcon" class="fas fa-bars" style="color: var(--maroon); font-size: 1.2rem;"></i>
     </button>
-
     <aside id="sidebar" class="sidebar hidden">
-      <div class="d-flex align-items-center justify-content-between px-4 py-3" style="border-bottom: 1px solid var(--gray-200);">
-        <h5 style="color: var(--maroon-dark); font-weight: bold; margin: 0;">Menú de Administración</h5>
+      <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+        <h5 class="text-maroon fw-bold m-0">Menú de Administración</h5>
         <i id="closeSidebar" class="fas fa-xmark" style="color: var(--maroon); font-size: 1.4rem; cursor: pointer;"></i>
       </div>
       <ul class="nav flex-column px-4 py-2">
-        <li class="nav-item"><a class="nav-link sidebar-link" href="views/cursos.php">Crear Curso</a></li>
+      <a class="nav-link sidebar-link" href="admin/crear_curso_p1.php">
+  <i class="fas fa-plus-circle me-2"></i> Crear nuevo curso
+</a>
         <li class="nav-item"><a class="nav-link sidebar-link" href="index.php">Administrar Curso</a></li>
         <li class="nav-item"><a class="nav-link sidebar-link" href="admin/crear_admin.php">Crear Administrador</a></li>
         <li class="nav-item"><a class="nav-link sidebar-link" href="admin/solicitudes_admin.php">Solicitudes de cambios</a></li>
@@ -58,35 +57,41 @@ $apellido = getUserLastname();
     </div>
   </header>
 
-  <!-- MAIN -->
   <main>
-    <div class="container text-center mb-5">
+    <div class="container text-center my-5">
       <h1>Gestión de Eventos Académicos - FISEI</h1>
       <p class="lead">Bienvenido al sistema de gestión de cursos y eventos académicos de la Facultad de Ingeniería en Sistemas, Electrónica e Industrial.</p>
     </div>
 
-    <div class="container my-5">
+    <div class="container mb-5">
       <div id="lista-cursos" class="row g-4"></div>
     </div>
   </main>
 
   <!-- MODAL INSCRIPCIÓN -->
   <div class="modal fade" id="modalInscripcion" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalTituloCurso">Curso</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-light border-bottom">
+          <h5 class="modal-title fw-bold" id="modalTituloCurso">Curso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <p><strong>Ponente:</strong> <span id="modalPonente"></span></p>
-          <p><strong>Fechas:</strong> <span id="modalFechas"></span></p>
-          <p><strong>Horas:</strong> <span id="modalHoras"></span></p>
-          <p><strong>Cupos:</strong> <span id="modalCupos"></span></p>
-          <h6>Requisitos:</h6>
-          <ul id="lista-requisitos"></ul>
+          <div class="row g-4">
+            <div class="col-md-5">
+              <img id="modalImagenCurso" src="resource/placeholder.svg" class="img-fluid rounded border shadow-sm" alt="Imagen del curso">
+            </div>
+            <div class="col-md-7">
+              <p><strong>Ponente:</strong> <span id="modalPonente"></span></p>
+              <p><strong>Fechas:</strong> <span id="modalFechas"></span></p>
+              <p><strong>Horas:</strong> <span id="modalHoras"></span></p>
+              <p><strong>Cupos:</strong> <span id="modalCupos"></span></p>
+              <h6 class="mt-3">Requisitos:</h6>
+              <ul id="lista-requisitos" class="list-group list-group-flush"></ul>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-light border-top">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-primary" id="btnConfirmarInscripcion">Confirmar inscripción</button>
         </div>
@@ -94,17 +99,13 @@ $apellido = getUserLastname();
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer-expandido mt-5">
-    <div class="footer-container">
-      <!-- contenido del footer -->
-    </div>
+    <div class="footer-container"></div>
     <div class="footer-bottom">
       © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -117,11 +118,9 @@ $apellido = getUserLastname();
           contenedor.innerHTML = '';
 
           cursos.forEach(curso => {
-            const rutaCruda = curso.ruta_imagen || '';
-            const rutaLimpia = rutaCruda.replace(/^(\.\.\/)+/, '');
-            const src = rutaLimpia !== '' ? rutaLimpia : 'resource/placeholder.svg';
-
+            const ruta = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
             let btn = '';
+
             if (rol === 'estudiante' && !curso.inscrito) {
               btn = `<button class="btn btn-primary inscribirse-btn mt-3" data-id="${curso.id}">Inscribirse</button>`;
             } else if (rol === 'administrador') {
@@ -132,7 +131,7 @@ $apellido = getUserLastname();
             tarjeta.className = 'col-md-4';
             tarjeta.innerHTML = `
               <div class="card h-100 shadow-sm">
-                <img src="${src}" class="card-img-top" alt="Imagen del evento">
+                <img src="${ruta}" class="card-img-top" alt="Imagen del evento">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">${curso.nombre_evento}</h5>
                   <p><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
@@ -146,7 +145,6 @@ $apellido = getUserLastname();
           });
         });
 
-      // Mostrar modal con requisitos
       document.addEventListener('click', async e => {
         if (e.target.classList.contains('inscribirse-btn')) {
           const id = e.target.getAttribute('data-id');
@@ -160,8 +158,13 @@ $apellido = getUserLastname();
             document.getElementById('modalFechas').textContent = `${curso.fecha_inicio} al ${curso.fecha_fin}`;
             document.getElementById('modalHoras').textContent = curso.horas;
             document.getElementById('modalCupos').textContent = curso.cupos;
-            document.getElementById('lista-requisitos').innerHTML = requisitos.map(r =>
-              `<li>${r.completado ? '✅' : '❌'} ${r.descripcion}</li>`).join('');
+            document.getElementById('modalImagenCurso').src = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
+
+            const requisitosHTML = requisitos.length
+              ? requisitos.map(r => `<li class="list-group-item">${r.cumplido ? '✅' : '❌'} ${r.descripcion}</li>`).join('')
+              : '<li class="list-group-item text-muted">Sin requisitos</li>';
+
+            document.getElementById('lista-requisitos').innerHTML = requisitosHTML;
             document.getElementById('btnConfirmarInscripcion').setAttribute('data-id', id);
 
             new bootstrap.Modal(document.getElementById('modalInscripcion')).show();
@@ -169,7 +172,6 @@ $apellido = getUserLastname();
         }
       });
 
-      // Confirmar inscripción
       document.getElementById('btnConfirmarInscripcion').addEventListener('click', async () => {
         const eventoId = document.getElementById('btnConfirmarInscripcion').getAttribute('data-id');
         const res = await fetch('estudiantes/inscribirse_evento.php', {
@@ -186,7 +188,6 @@ $apellido = getUserLastname();
         }
       });
 
-      // Sidebar toggle
       const toggleBtn = document.getElementById('toggleSidebar');
       const sidebar = document.getElementById('sidebar');
       const closeBtn = document.getElementById('closeSidebar');
@@ -197,5 +198,4 @@ $apellido = getUserLastname();
     });
   </script>
 </body>
-
 </html>
