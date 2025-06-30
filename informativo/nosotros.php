@@ -40,7 +40,7 @@ $apellido = getUserLastname();
         <img src="../resource/pablo.png" class="card-img-top" alt="Pablo Vayas">
         <div class="card-body">
           <h5 class="card-title">Pablo Vayas</h5>
-          <p class="card-text">Estudiante de Software, especializado en frontend y bases de datos...</p>
+          <p class="card-text">Estudiante de Software, especializado en frontend y bases de datos</p>
           <div class="social-links">
             <a href="https://www.facebook.com/pablo.vayas.33" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/pablo.vayas/" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -52,7 +52,7 @@ $apellido = getUserLastname();
         <img src="../resource/alexis.jpg" class="card-img-top" alt="Alexis López">
         <div class="card-body">
           <h5 class="card-title">Alexis López</h5>
-          <p class="card-text">Apasionado por la programación web y el diseño visual interactivo...</p>
+          <p class="card-text">Apasionado por la programación web y el diseño visual interactivo</p>
           <div class="social-links">
             <a href="https://www.facebook.com/alexis.lopez.737521" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/alexislp.z/" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -64,7 +64,7 @@ $apellido = getUserLastname();
         <img src="../resource/jose.jpg" class="card-img-top" alt="José Manzano">
         <div class="card-body">
           <h5 class="card-title">José Manzano</h5>
-          <p class="card-text">Estudiante de Software con interés en computación gráfica y desarrollo de videojuegos...</p>
+          <p class="card-text">Estudiante de Software con interés en computación gráfica y desarrollo de videojuegos</p>
           <div class="social-links">
             <a href="https://www.facebook.com/profile.php?id=100036996780282" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/manzano8555/" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -76,7 +76,7 @@ $apellido = getUserLastname();
         <img src="../resource/johan.jpg" class="card-img-top" alt="Johan Rodriguez">
         <div class="card-body">
           <h5 class="card-title">Johan Rodriguez</h5>
-          <p class="card-text">Estudiante de Software con experiencia en simulaciones gráficas y sistemas interactivos...</p>
+          <p class="card-text">Estudiante de Software con experiencia en simulaciones gráficas y sistemas interactivos</p>
           <div class="social-links">
             <a href="https://www.facebook.com/johan.kiramman/" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/jhnrx907/" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -88,7 +88,7 @@ $apellido = getUserLastname();
         <img src="../resource/alan.jpg" class="card-img-top" alt="Alan Puruncajas">
         <div class="card-body">
           <h5 class="card-title">Alan Puruncajas</h5>
-          <p class="card-text">Estudiante apasionado por el diseño gráfico y la realidad aumentada...</p>
+          <p class="card-text">Estudiante apasionado por el diseño gráfico y la realidad aumentada</p>
           <div class="social-links">
             <a href="https://www.facebook.com/alan.puruncajas" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/alam_cuenquita/" title="Instagram"><i class="fab fa-instagram"></i></a>
