@@ -13,9 +13,9 @@ $apellido = getUserLastname();
 $id = (int) $_GET['id'];
 $conexion = (new Conexion())->conectar();
 
-// Datos del evento
+// Datos del evento con requisitos de categoría
 $stmt = $conexion->prepare("
-    SELECT e.*, t.nombre AS tipo_evento, c.nombre AS categoria 
+    SELECT e.*, t.nombre AS tipo_evento, c.nombre AS categoria, c.requiere_nota, c.requiere_asistencia
     FROM eventos e
     JOIN tipos_evento t ON e.tipo_evento_id = t.id
     JOIN categorias_evento c ON e.categoria_id = c.id
@@ -24,8 +24,8 @@ $stmt = $conexion->prepare("
 $stmt->execute([$id]);
 $evento = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$evento) {
-  echo "<h2>Evento no encontrado.</h2>";
-  exit;
+    echo "<h2>Evento no encontrado.</h2>";
+    exit;
 }
 
 // Requisitos
@@ -83,6 +83,15 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
         <p><strong>Ponente:</strong> <?= htmlspecialchars($evento['ponentes']) ?></p>
         <p><strong>Cupos disponibles:</strong> <?= $evento['cupos'] ?></p>
         <p><strong>Estado:</strong> <?= $evento['estado'] ?></p>
+        
+        <!-- Información de requisitos de categoría -->
+        <div class="alert alert-info mt-3">
+          <h6><i class="fas fa-info-circle"></i> Requisitos de la Categoría:</h6>
+          <ul class="mb-0">
+            <li><strong>Calificación:</strong> <?= $evento['requiere_nota'] ? 'Obligatoria' : 'Opcional' ?></li>
+            <li><strong>Asistencia:</strong> <?= $evento['requiere_asistencia'] ? 'Obligatoria' : 'Opcional' ?></li>
+          </ul>
+        </div>
       </div>
 
       <div class="text-end mb-4">
@@ -131,11 +140,21 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($ins['estado']) ?></td>
                     <td>
                       <input type="number" name="notas[<?= $ins['id'] ?>]" class="form-control"
-                             value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10">
+                             value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10"
+                             <?= $evento['requiere_nota'] ? 'required' : '' ?>
+                             <?= $evento['requiere_nota'] ? 'style="border-color: #dc3545;"' : '' ?>>
+                      <?php if ($evento['requiere_nota']): ?>
+                        <small class="text-danger">* Obligatorio para esta categoría</small>
+                      <?php endif; ?>
                     </td>
                     <td>
                       <input type="number" name="asistencias[<?= $ins['id'] ?>]" class="form-control"
-                             value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100">
+                             value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100"
+                             <?= $evento['requiere_asistencia'] ? 'required' : '' ?>
+                             <?= $evento['requiere_asistencia'] ? 'style="border-color: #dc3545;"' : '' ?>>
+                      <?php if ($evento['requiere_asistencia']): ?>
+                        <small class="text-danger">* Obligatorio para esta categoría</small>
+                      <?php endif; ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>
