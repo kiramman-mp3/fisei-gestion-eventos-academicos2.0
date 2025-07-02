@@ -53,20 +53,8 @@ $apellido = getUserLastname();
                             <label for="cat-nombre"><span class="rojo">*</span>Nombre de la categoría</label>
                             <input type="text" name="nombre" id="cat-nombre" required>
                         </div>
-                        <div>
-                            <label for="cat-requiere-nota">
-                                <input type="checkbox" name="requiere_nota" id="cat-requiere-nota" value="1">
-                                Requiere calificación
-                            </label>
-                        </div>
-                        <div>
-                            <label for="cat-requiere-asistencia">
-                                <input type="checkbox" name="requiere_asistencia" id="cat-requiere-asistencia" value="1">
-                                Requiere control de asistencia
-                            </label>
-                        </div>
                         <div class="text-muted small">
-                            <i class="fas fa-info-circle"></i> Debe seleccionar al menos una opción (calificación o asistencia)
+                            <i class="fas fa-info-circle"></i> Las categorías ahora solo agrupan eventos. Los requisitos obligatorios se configuran por evento individual.
                         </div>
                         <button type="submit">Guardar Categoría</button>
                     </div>
@@ -79,8 +67,6 @@ $apellido = getUserLastname();
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
-                                    <th>Req. Nota</th>
-                                    <th>Req. Asistencia</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -262,16 +248,6 @@ $apellido = getUserLastname();
             e.preventDefault();
             const formData = new FormData(e.target);
             
-            // --- Validación frontend: Al menos un checkbox debe estar marcado ---
-            const requiereNota = document.getElementById("cat-requiere-nota").checked;
-            const requiereAsistencia = document.getElementById("cat-requiere-asistencia").checked;
-            
-            if (!requiereNota && !requiereAsistencia) {
-                showToast("Debe seleccionar al menos una opción: Requiere calificación o Requiere control de asistencia.");
-                return;
-            }
-            // --- Fin validación frontend ---
-            
             const action = formData.get("id") ? "editar" : "crear"; // Aunque 'editar' se manejará diferente
             const url = "../service/categoria_evento.php?action=" + action;
 
@@ -381,10 +357,8 @@ $apellido = getUserLastname();
                     <tr id="categoria-row-${c.id}">
                         <td>${c.id}</td>
                         <td id="categoria-nombre-${c.id}">${c.nombre}</td>
-                        <td id="categoria-nota-${c.id}">${c.requiere_nota == 1 ? 'Sí' : 'No'}</td>
-                        <td id="categoria-asistencia-${c.id}">${c.requiere_asistencia == 1 ? 'Sí' : 'No'}</td>
                         <td>
-                            <button class="btn btn-sm btn-info edit-categoria-inline" data-id="${c.id}" data-nombre="${c.nombre}" data-nota="${c.requiere_nota}" data-asistencia="${c.requiere_asistencia}"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn-sm btn-info edit-categoria-inline" data-id="${c.id}" data-nombre="${c.nombre}"><i class="fas fa-edit"></i> Editar</button>
                             <button class="btn btn-sm btn-success save-categoria-inline d-none" data-id="${c.id}"><i class="fas fa-save"></i> Guardar</button>
                         </td>
                     </tr>
@@ -434,20 +408,14 @@ $apellido = getUserLastname();
          */
         function habilitarEdicionCategoria(id) {
             const nombreCell = document.getElementById(`categoria-nombre-${id}`);
-            const notaCell = document.getElementById(`categoria-nota-${id}`);
-            const asistenciaCell = document.getElementById(`categoria-asistencia-${id}`);
             const editButton = document.querySelector(`#categoria-row-${id} .edit-categoria-inline`);
             const saveButton = document.querySelector(`#categoria-row-${id} .save-categoria-inline`);
 
-            if (nombreCell && notaCell && asistenciaCell && editButton && saveButton) {
+            if (nombreCell && editButton && saveButton) {
                 const currentName = nombreCell.textContent;
-                const currentNota = editButton.dataset.nota == '1';
-                const currentAsistencia = editButton.dataset.asistencia == '1';
                 
                 // Reemplaza el texto con campos de entrada
                 nombreCell.innerHTML = `<input type="text" class="form-control" value="${currentName}" id="input-categoria-nombre-${id}">`;
-                notaCell.innerHTML = `<input type="checkbox" class="form-check-input" ${currentNota ? 'checked' : ''} id="input-categoria-nota-${id}">`;
-                asistenciaCell.innerHTML = `<input type="checkbox" class="form-check-input" ${currentAsistencia ? 'checked' : ''} id="input-categoria-asistencia-${id}">`;
 
                 // Oculta el botón 'Editar' y muestra el botón 'Guardar'
                 editButton.classList.add('d-none');
@@ -463,8 +431,6 @@ $apellido = getUserLastname();
          */
         async function guardarEdicionCategoria(id) {
             const inputField = document.getElementById(`input-categoria-nombre-${id}`);
-            const notaField = document.getElementById(`input-categoria-nota-${id}`);
-            const asistenciaField = document.getElementById(`input-categoria-asistencia-${id}`);
             
             const newName = inputField ? inputField.value.trim() : '';
 
@@ -473,21 +439,9 @@ $apellido = getUserLastname();
                 return;
             }
 
-            // --- Validación: Al menos una opción debe estar marcada ---
-            const requiereNota = notaField && notaField.checked;
-            const requiereAsistencia = asistenciaField && asistenciaField.checked;
-            
-            if (!requiereNota && !requiereAsistencia) {
-                alert("Debe seleccionar al menos una opción: Requiere calificación o Requiere control de asistencia.");
-                return;
-            }
-            // --- Fin validación ---
-
             const formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', newName);
-            formData.append('requiere_nota', requiereNota ? '1' : '0');
-            formData.append('requiere_asistencia', requiereAsistencia ? '1' : '0');
 
             try {
                 const res = await fetch("../service/categoria_evento.php?action=editar", {

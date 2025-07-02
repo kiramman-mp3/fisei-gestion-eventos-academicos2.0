@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexion->beginTransaction();
 
         $stmt = $conexion->prepare("INSERT INTO eventos
-            (nombre_evento, tipo_evento_id, categoria_id, ponentes, descripcion, fecha_inicio, fecha_fin, fecha_inicio_inscripciones, fecha_fin_inscripciones, horas, cupos, ruta_imagen, estado)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (nombre_evento, tipo_evento_id, categoria_id, ponentes, descripcion, fecha_inicio, fecha_fin, fecha_inicio_inscripciones, fecha_fin_inscripciones, horas, cupos, ruta_imagen, estado, requiere_nota, requiere_asistencia, nota_minima, asistencia_minima)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $stmt->execute([
             $curso['nombre_evento'],
@@ -54,7 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $curso['horas'],
             $curso['cupos'],
             $curso['ruta_imagen'] ?? null,
-            'abierto'
+            'abierto',
+            $curso['requiere_nota'] ?? false,
+            $curso['requiere_asistencia'] ?? false,
+            $curso['nota_minima'] ?? null,
+            $curso['asistencia_minima'] ?? null
         ]);
 
         $evento_id = $conexion->lastInsertId();
@@ -373,6 +377,29 @@ $apellidoUsuario = getUserLastname();
         <p><strong>Horas:</strong> <?= $curso['horas'] ?></p>
         <p><strong>Ponente(s):</strong> <?= htmlspecialchars($curso['ponentes']) ?></p>
         <p><strong>Descripción:</strong> <?= htmlspecialchars($curso['descripcion']) ?></p>
+
+        <!-- Mostrar los nuevos campos de requisitos obligatorios -->
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid var(--primary-color);">
+            <h5 style="color: var(--primary-color); margin-bottom: 10px;">
+                <i class="fa-solid fa-check-circle"></i> Requisitos Obligatorios
+            </h5>
+            <p><strong>Calificación:</strong> 
+                <?php if (isset($curso['requiere_nota']) && $curso['requiere_nota']): ?>
+                    <span style="color: #28a745;">✓ Obligatoria</span> 
+                    (Nota mínima: <?= $curso['nota_minima'] ?? 7.0 ?>)
+                <?php else: ?>
+                    <span style="color: #6c757d;">✗ Opcional</span>
+                <?php endif; ?>
+            </p>
+            <p><strong>Asistencia:</strong> 
+                <?php if (isset($curso['requiere_asistencia']) && $curso['requiere_asistencia']): ?>
+                    <span style="color: #28a745;">✓ Obligatoria</span> 
+                    (Mínimo: <?= $curso['asistencia_minima'] ?? 70.0 ?>%)
+                <?php else: ?>
+                    <span style="color: #6c757d;">✗ Opcional</span>
+                <?php endif; ?>
+            </p>
+        </div>
 
         <?php if (!empty($curso['ruta_imagen'])): ?>
             <p><strong>Imagen:</strong></p>

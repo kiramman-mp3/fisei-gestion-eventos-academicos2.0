@@ -17,7 +17,8 @@ $conexion = $cris->conectar();
 
 $stmt = $conexion->prepare("
     SELECT e.id AS evento_id, e.nombre_evento, e.fecha_inicio, e.fecha_fin, e.ponentes,
-           e.horas, i.estado, i.nota, i.asistencia, i.comprobante_pago
+           e.horas, e.requiere_nota, e.requiere_asistencia, e.nota_minima, e.asistencia_minima,
+           i.estado, i.nota, i.asistencia, i.comprobante_pago
     FROM inscripciones i
     JOIN eventos e ON i.evento_id = e.id
     WHERE i.usuario_id = ?
@@ -87,10 +88,17 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <td><?= htmlspecialchars($curso['estado']) ?></td>
                   <td class="text-center">
                     <?php
+                    // Verificación dinámica basada en los requisitos del evento
+                    $nota_minima = $curso['nota_minima'] ?? 7.0;
+                    $asistencia_minima = $curso['asistencia_minima'] ?? 70.0;
+                    
+                    $cumple_nota = !$curso['requiere_nota'] || ($curso['nota'] !== null && $curso['nota'] >= $nota_minima);
+                    $cumple_asistencia = !$curso['requiere_asistencia'] || ($curso['asistencia'] !== null && $curso['asistencia'] >= $asistencia_minima);
+                    
                     $aptoCertificado = (
                       $curso['estado'] === 'Pagado' &&
-                      $curso['nota'] >= 7 &&
-                      $curso['asistencia'] >= 70
+                      $cumple_nota &&
+                      $cumple_asistencia
                     );
                     ?>
                     <?php if ($aptoCertificado): ?>
