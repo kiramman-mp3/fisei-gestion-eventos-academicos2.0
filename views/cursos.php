@@ -153,28 +153,37 @@ $apellido = getUserLastname();
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
                 const cursos = await res.json();
-                tabla.innerHTML = cursos.map(c => `
-                <tr id="curso-row-${c.id}">
-                    <td>${c.id}</td>
-                    <td id="curso-nombre-${c.id}">${c.nombre_evento}</td>
-                    <td>${c.tipo_nombre}</td>
-                    <td>${c.categoria_nombre}</td>
-                    <td>${c.ponentes}</td>
-                    <td>${c.fecha_inicio}</td>
-                    <td>${c.fecha_fin}</td>
-                    <td>${c.fecha_inicio_inscripciones}</td>
-                    <td>${c.fecha_fin_inscripciones}</td>
-                    <td>${c.horas}</td>
-                    <td>${c.cupos}</td>
-                    <td>${c.estado}</td>
-                    <td><img src="${c.ruta_imagen}" alt="imagen"></td>
-                    <td>
-                        <button class="btn btn-sm btn-info edit-curso-inline" data-id="${c.id}"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn btn-sm btn-success save-curso-inline d-none" data-id="${c.id}"><i class="fas fa-save"></i> Guardar</button>
-                        <button class="btn btn-sm btn-danger delete-curso" data-id="${c.id}"><i class="fas fa-trash-alt"></i> Eliminar</button>
-                    </td>
-                </tr>
-                `).join("");
+                tabla.innerHTML = cursos.map(c => {
+                    const fechaActual = new Date();
+                    const fechaInicio = new Date(c.fecha_inicio);
+                    const enEjecucion = fechaActual >= fechaInicio;
+                    const estadoClass = enEjecucion ? 'table-warning' : '';
+                    const editButtonDisabled = enEjecucion ? 'disabled' : '';
+                    const editButtonTitle = enEjecucion ? 'No se puede editar un curso en ejecución' : 'Editar curso';
+                    
+                    return `
+                    <tr id="curso-row-${c.id}" class="${estadoClass}">
+                        <td>${c.id}</td>
+                        <td id="curso-nombre-${c.id}">${c.nombre_evento}</td>
+                        <td>${c.tipo_nombre}</td>
+                        <td>${c.categoria_nombre}</td>
+                        <td>${c.ponentes}</td>
+                        <td>${c.fecha_inicio}</td>
+                        <td>${c.fecha_fin}</td>
+                        <td>${c.fecha_inicio_inscripciones}</td>
+                        <td>${c.fecha_fin_inscripciones}</td>
+                        <td>${c.horas}</td>
+                        <td>${c.cupos}</td>
+                        <td>${c.estado}${enEjecucion ? ' (En ejecución)' : ''}</td>
+                        <td><img src="${c.ruta_imagen}" alt="imagen"></td>
+                        <td>
+                            <button class="btn btn-sm btn-info edit-curso-inline" data-id="${c.id}" ${editButtonDisabled} title="${editButtonTitle}"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn-sm btn-success save-curso-inline d-none" data-id="${c.id}"><i class="fas fa-save"></i> Guardar</button>
+                            <button class="btn btn-sm btn-danger delete-curso" data-id="${c.id}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                        </td>
+                    </tr>
+                    `;
+                }).join("");
 
                 // Añadir event listeners para la edición en línea de cursos
                 document.querySelectorAll('.edit-curso-inline').forEach(button => {
@@ -476,10 +485,17 @@ $apellido = getUserLastname();
          * Habilita la edición en línea del nombre de un curso.
          */
         function habilitarEdicionCurso(id) {
-            const nombreCell = document.getElementById(`curso-nombre-${id}`);
             const editButton = document.querySelector(`#curso-row-${id} .edit-curso-inline`);
+            
+            // Verificar si el botón está deshabilitado (curso en ejecución)
+            if (editButton && editButton.disabled) {
+                alert("No se puede editar un curso que ya está en ejecución.");
+                return;
+            }
+            
+            const nombreCell = document.getElementById(`curso-nombre-${id}`);
             const saveButton = document.querySelector(`#curso-row-${id} .save-curso-inline`);
-            const deleteButton = document.querySelector(`#curso-row-${id} .delete-curso`); // También ocultar/mostrar este
+            const deleteButton = document.querySelector(`#curso-row-${id} .delete-curso`);
 
             if (nombreCell && editButton && saveButton) {
                 const currentName = nombreCell.textContent;
@@ -487,7 +503,7 @@ $apellido = getUserLastname();
 
                 editButton.classList.add('d-none');
                 saveButton.classList.remove('d-none');
-                if (deleteButton) deleteButton.classList.add('d-none'); // Ocultar el botón de eliminar durante la edición
+                if (deleteButton) deleteButton.classList.add('d-none');
 
                 document.getElementById(`input-curso-nombre-${id}`).focus();
             }
