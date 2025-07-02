@@ -22,6 +22,11 @@ foreach ($tipos as $tipo) {
     }
   }
 }
+
+// Cargar imagen del logo
+$logoPath = '../uploads/logo.png';
+$currentLogo = file_exists($logoPath) ? $logoPath : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +45,7 @@ foreach ($tipos as $tipo) {
 
   <header class="ctt-header">
     <div class="top-bar">
-      <div class="logo"><img src="../uploads/logo.png" alt="Logo FISEI"></div>
+      <div class="logo"><img src="<?= $currentLogo ?>" alt="Logo FISEI"></div>
       <div class="top-links">
         <div class="link-box">
           <i class="fa-solid fa-arrow-left"></i>
@@ -56,18 +61,17 @@ foreach ($tipos as $tipo) {
   <main class="admin-panel">
     <h1 class="titulo-formulario"><i class="fas fa-sliders-h"></i> Panel de Administración</h1>
 
-    <!-- PESTAÑAS -->
     <ul class="pestanas">
       <li><button class="active" data-tab="carrusel"><i class="fas fa-images"></i> Carrusel</button></li>
       <li><button data-tab="nosotros"><i class="fas fa-users"></i> Nosotros</button></li>
       <li><button data-tab="autoridades"><i class="fas fa-user-tie"></i> Autoridades</button></li>
       <li><button data-tab="resenas"><i class="fas fa-comment-dots"></i> Reseñas</button></li>
       <li><button data-tab="mision-vision"><i class="fas fa-bullseye"></i> Misión y Visión</button></li>
+      <li><button data-tab="logo-section"><i class="fas fa-image"></i> Logo</button></li>
     </ul>
 
     <div class="contenedor-secciones">
 
-      <!-- CARRUSEL -->
       <section id="carrusel" class="tab-content active">
         <div class="admin-section">
           <h2>Carrusel</h2>
@@ -108,12 +112,11 @@ foreach ($tipos as $tipo) {
         </div>
       </section>
 
-      <!-- NOSOTROS -->
       <section id="nosotros" class="tab-content">
         <div class="admin-section">
           <h2>Nosotros</h2>
           <?php foreach ($datos['nosotros'] ?? [] as $n): ?>
-            <form action="=" api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
               <input type="hidden" name="id" value="<?= $n['id'] ?>">
               <input type="hidden" name="tipo" value="nosotros">
               <input type="hidden" name="imagen_actual" value="<?= $n['img'] ?>">
@@ -132,7 +135,6 @@ foreach ($tipos as $tipo) {
         </div>
       </section>
 
-      <!-- AUTORIDADES -->
       <section id="autoridades" class="tab-content">
         <div class="admin-section">
           <h2>Autoridades</h2>
@@ -158,7 +160,6 @@ foreach ($tipos as $tipo) {
         </div>
       </section>
 
-      <!-- RESEÑAS -->
       <section id="resenas" class="tab-content">
         <div class="admin-section">
           <h2>Reseñas</h2>
@@ -189,7 +190,6 @@ foreach ($tipos as $tipo) {
         <div class="admin-section">
           <h2>Misión y Visión</h2>
 
-          <!-- Misión -->
           <form action="api_admin.php" method="post" class="admin-form">
             <input type="hidden" name="tipo" value="mision">
             <?php if (!empty($datos['mision']['id'])): ?>
@@ -202,7 +202,6 @@ foreach ($tipos as $tipo) {
             </div>
           </form>
 
-          <!-- Visión -->
           <form action="api_admin.php" method="post" class="admin-form">
             <input type="hidden" name="tipo" value="vision">
             <?php if (!empty($datos['vision']['id'])): ?>
@@ -216,6 +215,29 @@ foreach ($tipos as $tipo) {
           </form>
         </div>
       </section>
+
+      <section id="logo-section" class="tab-content">
+        <div class="admin-section">
+          <h2>Modificar Logo</h2>
+          <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="tipo" value="logo">
+            <div class="imagen-editable">
+              <?php if ($currentLogo): ?>
+                <img src="<?= $currentLogo ?>" alt="Logo actual">
+              <?php else: ?>
+                <img src="" style="display:none;" alt="No hay logo">
+              <?php endif; ?>
+              <label for="imgLogoUpload" class="editar-icono"><i class="fas fa-pen"></i></label>
+              <input type="file" name="nueva_img" id="imgLogoUpload" accept="image/png" required>
+            </div>
+            <p>Solo se aceptan imágenes en formato PNG. El archivo se guardará como "logo.png".</p>
+            <div class="admin-form-fields">
+              <button type="submit">Actualizar Logo</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
     </div>
   </main>
 
@@ -243,6 +265,17 @@ foreach ($tipos as $tipo) {
       document.querySelectorAll('input[type="file"][name="nueva_img"]').forEach(input => {
         input.addEventListener('change', e => {
           const f = e.target.files[0];
+          // Validar tipo de archivo solo para el logo
+          if (e.target.id === 'imgLogoUpload' && f && f.type !== 'image/png') {
+              showToast('Error: Solo se permiten archivos PNG para el logo.');
+              input.value = ''; // Limpiar el input
+              const img = input.closest('.imagen-editable').querySelector('img');
+              if (img) {
+                  img.style.display = 'none'; // Ocultar si no hay imagen válida
+              }
+              return;
+          }
+
           if (f && f.type.startsWith('image/')) {
             const img = input.closest('.imagen-editable').querySelector('img');
             img.src = URL.createObjectURL(f);
@@ -259,6 +292,12 @@ foreach ($tipos as $tipo) {
       if (t) {
         showToast(t === 'creado' ? 'Elemento creado' : t === 'eliminado' ? 'Eliminado con éxito' : 'Actualizado con éxito');
         localStorage.removeItem('toastMsg');
+      }
+
+      // Check for error message from logo upload
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('error') && urlParams.get('error') === 'not_png') {
+          showToast('Error al subir el logo: Solo se permiten archivos PNG.');
       }
     });
   </script>
