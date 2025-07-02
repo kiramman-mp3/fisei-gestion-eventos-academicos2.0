@@ -29,5 +29,10 @@ foreach ($requisitos as $req_id) {
     }
 }
 
-header("Location: ../estudiantes/inscribirse_evento.php?evento_id=$evento_id");
+// Redirigir a una página de confirmación o de vuelta al evento
+if (isset($_POST['redirect_url'])) {
+    header("Location: " . $_POST['redirect_url']);
+} else {
+    header("Location: ../admin/administrar_evento.php?id=$evento_id");
+}
 exit;

@@ -10,6 +10,12 @@ if (!isLoggedIn()) {
 $nombre = getUserName();
 $apellido = getUserLastname();
 
+// Verificar que se proporcione un ID de evento
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header('Location: lista_eventos.php');
+    exit;
+}
+
 $id = (int) $_GET['id'];
 $conexion = (new Conexion())->conectar();
 
@@ -24,7 +30,26 @@ $stmt = $conexion->prepare("
 $stmt->execute([$id]);
 $evento = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$evento) {
-    echo "<h2>Evento no encontrado.</h2>";
+    echo "<!DOCTYPE html>
+    <html lang='es'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Evento no encontrado</title>
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+    </head>
+    <body>
+        <div class='container mt-5'>
+            <div class='alert alert-danger text-center'>
+                <i class='fas fa-exclamation-triangle fa-3x mb-3'></i>
+                <h2>Evento no encontrado</h2>
+                <p>El evento que buscas no existe o ha sido eliminado.</p>
+                <a href='lista_eventos.php' class='btn btn-primary'>
+                    <i class='fas fa-arrow-left me-2'></i>Volver a la lista de eventos
+                </a>
+            </div>
+        </div>
+    </body>
+    </html>";
     exit;
 }
 
@@ -63,8 +88,8 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
         <img src="../uploads/logo.png" alt="Logo FISEI" style="height: 60px;">
       </div>
       <div class="top-links">
-        <a href="javascript:history.back()" class="btn btn-light">
-          <i class="fa-solid fa-arrow-left"></i> Regresar al Dashboard
+        <a href="lista_eventos.php" class="btn btn-light">
+          <i class="fa-solid fa-arrow-left"></i> Volver a Lista de Eventos
         </a>
       </div>
     </div>

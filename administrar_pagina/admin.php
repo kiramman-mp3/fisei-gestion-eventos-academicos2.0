@@ -1,5 +1,13 @@
 <?php
+require_once '../session.php';
 include '../sql/conexion.php';
+
+// Verificar que el usuario sea administrador
+if (!isLoggedIn() || getUserRole() !== 'administrador') {
+    header('Location: ../login.php');
+    exit;
+}
+
 $conn = (new Conexion())->conectar();
 
 // Cargar contenido por tipo
@@ -46,7 +54,14 @@ foreach ($tipos as $tipo) {
           <i class="fa-solid fa-arrow-left"></i>
           <div>
             <span class="title">Regresar</span><br>
-            <a href="javascript:history.back()">Regresa al Dashboard</a>
+            <a href="../admin/panel_admin.php">Panel de Administración</a>
+          </div>
+        </div>
+        <div class="link-box">
+          <i class="fa-solid fa-user"></i>
+          <div>
+            <span class="title"><?= htmlspecialchars(getUserName() . ' ' . getUserLastname()) ?></span><br>
+            <a href="../logout.php">Cerrar Sesión</a>
           </div>
         </div>
       </div>
@@ -54,7 +69,8 @@ foreach ($tipos as $tipo) {
   </header>
 
   <main class="admin-panel">
-    <h1 class="titulo-formulario"><i class="fas fa-sliders-h"></i> Panel de Administración</h1>
+    <h1 class="titulo-formulario"><i class="fas fa-globe"></i> Administración de Contenido Web</h1>
+    <p class="text-muted mb-4">Gestiona el contenido que se muestra en la página principal del sitio web FISEI.</p>
 
     <!-- PESTAÑAS -->
     <ul class="pestanas">
@@ -113,7 +129,7 @@ foreach ($tipos as $tipo) {
         <div class="admin-section">
           <h2>Nosotros</h2>
           <?php foreach ($datos['nosotros'] ?? [] as $n): ?>
-            <form action="=" api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
               <input type="hidden" name="id" value="<?= $n['id'] ?>">
               <input type="hidden" name="tipo" value="nosotros">
               <input type="hidden" name="imagen_actual" value="<?= $n['img'] ?>">
@@ -155,6 +171,21 @@ foreach ($tipos as $tipo) {
               </div>
             </form>
           <?php endforeach; ?>
+          
+          <h3>Nueva Autoridad</h3>
+          <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="tipo" value="autoridad">
+            <div class="imagen-editable">
+              <img src="" style="display:none;">
+              <label for="imgNuevaAutoridad" class="editar-icono"><i class="fas fa-plus"></i></label>
+              <input type="file" name="nueva_img" id="imgNuevaAutoridad" accept="image/*" required>
+            </div>
+            <div class="admin-form-fields">
+              <input type="text" name="nombre" placeholder="Nombre completo" required>
+              <input type="text" name="cargo" placeholder="Cargo" required>
+              <button type="submit" onclick="localStorage.setItem('toastMsg','creado')">Agregar Autoridad</button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -182,6 +213,22 @@ foreach ($tipos as $tipo) {
               </div>
             </form>
           <?php endforeach; ?>
+          
+          <h3>Nueva Reseña</h3>
+          <form action="api_admin.php" method="post" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="tipo" value="resena">
+            <div class="imagen-editable">
+              <img src="" style="display:none;">
+              <label for="imgNuevaResena" class="editar-icono"><i class="fas fa-plus"></i></label>
+              <input type="file" name="nueva_img" id="imgNuevaResena" accept="image/*" required>
+            </div>
+            <div class="admin-form-fields">
+              <input type="text" name="autor" placeholder="Nombre del autor" required>
+              <input type="text" name="rol" placeholder="Cargo o rol" required>
+              <textarea name="texto" placeholder="Texto de la reseña" required></textarea>
+              <button type="submit" onclick="localStorage.setItem('toastMsg','creado')">Agregar Reseña</button>
+            </div>
+          </form>
         </div>
       </section>
 

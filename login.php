@@ -41,7 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['apellido'] = $user['apellido'];
       $_SESSION['rol'] = $user['rol'];
       $_SESSION['carrera'] = $user['carrera'] ?? null;
-      header("Location: ver_cursos.php");
+      
+      // Redirigir según el rol del usuario
+      if ($user['rol'] === 'administrador') {
+        header("Location: admin/panel_admin.php");
+      } else {
+        header("Location: ver_cursos.php");
+      }
       exit;
     } else {
       $error = "Correo o contraseña incorrectos";
