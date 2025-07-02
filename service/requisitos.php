@@ -54,8 +54,16 @@ try {
         }
     }
 
-    // Traer también info del curso
-    $stmt5 = $conn->prepare("SELECT * FROM eventos WHERE id = ?");
+    // Traer también info del curso con cupos disponibles
+    $stmt5 = $conn->prepare("
+        SELECT e.*, 
+               COUNT(i.id) as inscritos_actuales,
+               (e.cupos - COUNT(i.id)) as cupos_disponibles
+        FROM eventos e
+        LEFT JOIN inscripciones i ON e.id = i.evento_id
+        WHERE e.id = ?
+        GROUP BY e.id
+    ");
     $stmt5->execute([$evento_id]);
     $curso = $stmt5->fetch(PDO::FETCH_ASSOC);
 
