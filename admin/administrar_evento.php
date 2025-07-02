@@ -19,9 +19,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $id = (int) $_GET['id'];
 $conexion = (new Conexion())->conectar();
 
-// Datos del evento con requisitos de categoría
+// Datos del evento con requisitos del evento
 $stmt = $conexion->prepare("
-    SELECT e.*, t.nombre AS tipo_evento, c.nombre AS categoria, c.requiere_nota, c.requiere_asistencia
+    SELECT e.*, t.nombre AS tipo_evento, c.nombre AS categoria
     FROM eventos e
     JOIN tipos_evento t ON e.tipo_evento_id = t.id
     JOIN categorias_evento c ON e.categoria_id = c.id
@@ -109,12 +109,16 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
         <p><strong>Cupos disponibles:</strong> <?= $evento['cupos'] ?></p>
         <p><strong>Estado:</strong> <?= $evento['estado'] ?></p>
         
-        <!-- Información de requisitos de categoría -->
+        <!-- Información de requisitos del evento -->
         <div class="alert alert-info mt-3">
-          <h6><i class="fas fa-info-circle"></i> Requisitos de la Categoría:</h6>
+          <h6><i class="fas fa-info-circle"></i> Requisitos del Evento:</h6>
           <ul class="mb-0">
-            <li><strong>Calificación:</strong> <?= $evento['requiere_nota'] ? 'Obligatoria' : 'Opcional' ?></li>
-            <li><strong>Asistencia:</strong> <?= $evento['requiere_asistencia'] ? 'Obligatoria' : 'Opcional' ?></li>
+            <li><strong>Calificación:</strong> 
+              <?= $evento['requiere_nota'] ? 'Obligatoria (mínimo: ' . ($evento['nota_minima'] ?? 7.0) . ')' : 'Opcional' ?>
+            </li>
+            <li><strong>Asistencia:</strong> 
+              <?= $evento['requiere_asistencia'] ? 'Obligatoria (mínimo: ' . ($evento['asistencia_minima'] ?? 70.0) . '%)' : 'Opcional' ?>
+            </li>
           </ul>
         </div>
       </div>

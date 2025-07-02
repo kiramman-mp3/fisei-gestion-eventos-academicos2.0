@@ -21,18 +21,17 @@ if (!$evento_id) {
     exit;
 }
 
-// Obtener los requisitos de la categoría del evento
+// Obtener los requisitos del evento
 $stmt = $conexion->prepare("
-    SELECT c.requiere_nota, c.requiere_asistencia, c.nombre as categoria_nombre
+    SELECT e.requiere_nota, e.requiere_asistencia, e.nota_minima, e.asistencia_minima, e.nombre_evento
     FROM eventos e
-    JOIN categorias_evento c ON e.categoria_id = c.id
     WHERE e.id = ?
 ");
 $stmt->execute([$evento_id]);
-$categoria_requisitos = $stmt->fetch(PDO::FETCH_ASSOC);
+$evento_requisitos = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$categoria_requisitos) {
-    echo "Error: No se pudo obtener información de la categoría.";
+if (!$evento_requisitos) {
+    echo "Error: No se pudo obtener información del evento.";
     exit;
 }
 
@@ -45,8 +44,14 @@ $pagos = $_POST['pagos'] ?? [];
 $errores = [];
 
 foreach ($notas as $inscripcionId => $nota) {
-    if ($categoria_requisitos['requiere_nota'] && ($nota === '' || $nota === null)) {
-        $errores[] = "La nota es obligatoria para la categoría '{$categoria_requisitos['categoria_nombre']}'.";
+    if ($evento_requisitos['requiere_nota'] && ($nota === '' || $nota === null)) {
+        $errores[] = "La nota es obligatoria para el evento '{$evento_requisitos['nombre_evento']}'.";
+    } elseif ($evento_requisitos['requiere_nota'] && $nota !== '' && $nota !== null) {
+        // Validar nota mínima si está configurada
+        $nota_minima = $evento_requisitos['nota_minima'] ?? 0;
+        if ((float)$nota < $nota_minima) {
+            $errores[] = "La nota debe ser al menos {$nota_minima} para el evento '{$evento_requisitos['nombre_evento']}'.";
+        }
     }
     if ($nota !== '' && $nota !== null) {
         $stmt = $conexion->prepare("UPDATE inscripciones SET nota = ? WHERE id = ?");
@@ -55,8 +60,14 @@ foreach ($notas as $inscripcionId => $nota) {
 }
 
 foreach ($asistencias as $inscripcionId => $asistencia) {
-    if ($categoria_requisitos['requiere_asistencia'] && ($asistencia === '' || $asistencia === null)) {
-        $errores[] = "La asistencia es obligatoria para la categoría '{$categoria_requisitos['categoria_nombre']}'.";
+    if ($evento_requisitos['requiere_asistencia'] && ($asistencia === '' || $asistencia === null)) {
+        $errores[] = "La asistencia es obligatoria para el evento '{$evento_requisitos['nombre_evento']}'.";
+    } elseif ($evento_requisitos['requiere_asistencia'] && $asistencia !== '' && $asistencia !== null) {
+        // Validar asistencia mínima si está configurada
+        $asistencia_minima = $evento_requisitos['asistencia_minima'] ?? 0;
+        if ((float)$asistencia < $asistencia_minima) {
+            $errores[] = "La asistencia debe ser al menos {$asistencia_minima}% para el evento '{$evento_requisitos['nombre_evento']}'.";
+        }
     }
     if ($asistencia !== '' && $asistencia !== null) {
         $stmt = $conexion->prepare("UPDATE inscripciones SET asistencia = ? WHERE id = ?");
