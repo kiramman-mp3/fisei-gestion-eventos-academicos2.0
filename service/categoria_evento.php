@@ -23,7 +23,7 @@ $response = ['success' => false, 'mensaje' => 'Operación no reconocida o fallid
 
 try {
     if ($action === 'listar') {
-        $stmt = $conn->query("SELECT id, nombre FROM categorias_evento"); // Seleccionar solo las columnas necesarias
+        $stmt = $conn->query("SELECT id, nombre, requiere_nota, requiere_asistencia FROM categorias_evento"); // Incluir nuevos campos
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit; // Terminar la ejecución después de listar, ya que ya se envió la respuesta
     }
@@ -34,13 +34,21 @@ try {
             $response['mensaje'] = 'El nombre de la categoría no puede estar vacío.';
         } else {
             $nombre = trim($_POST['nombre']);
-            $stmt = $conn->prepare("INSERT INTO categorias_evento (nombre) VALUES (?)");
-            if ($stmt->execute([$nombre])) {
-                $response['success'] = true;
-                $response['mensaje'] = 'Categoría creada exitosamente.';
+            $requiere_nota = isset($_POST['requiere_nota']) && $_POST['requiere_nota'] === '1' ? 1 : 0;
+            $requiere_asistencia = isset($_POST['requiere_asistencia']) && $_POST['requiere_asistencia'] === '1' ? 1 : 0;
+            
+            // --- Validación adicional: Al menos uno debe ser requerido ---
+            if ($requiere_nota == 0 && $requiere_asistencia == 0) {
+                $response['mensaje'] = 'La categoría debe requerir al menos nota o asistencia.';
             } else {
-                // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
-                $response['mensaje'] = 'Error al insertar la categoría en la base de datos.';
+                $stmt = $conn->prepare("INSERT INTO categorias_evento (nombre, requiere_nota, requiere_asistencia) VALUES (?, ?, ?)");
+                if ($stmt->execute([$nombre, $requiere_nota, $requiere_asistencia])) {
+                    $response['success'] = true;
+                    $response['mensaje'] = 'Categoría creada exitosamente.';
+                } else {
+                    // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
+                    $response['mensaje'] = 'Error al insertar la categoría en la base de datos.';
+                }
             }
         }
         // --- Fin Mejora 3 ---
@@ -53,13 +61,21 @@ try {
         } else {
             $id = $_POST['id'];
             $nombre = trim($_POST['nombre']);
-            $stmt = $conn->prepare("UPDATE categorias_evento SET nombre=? WHERE id=?");
-            if ($stmt->execute([$nombre, $id])) {
-                $response['success'] = true;
-                $response['mensaje'] = 'Categoría actualizada correctamente.';
+            $requiere_nota = isset($_POST['requiere_nota']) && $_POST['requiere_nota'] === '1' ? 1 : 0;
+            $requiere_asistencia = isset($_POST['requiere_asistencia']) && $_POST['requiere_asistencia'] === '1' ? 1 : 0;
+            
+            // --- Validación adicional: Al menos uno debe ser requerido ---
+            if ($requiere_nota == 0 && $requiere_asistencia == 0) {
+                $response['mensaje'] = 'La categoría debe requerir al menos nota o asistencia.';
             } else {
-                // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
-                $response['mensaje'] = 'Error al actualizar la categoría en la base de datos.';
+                $stmt = $conn->prepare("UPDATE categorias_evento SET nombre=?, requiere_nota=?, requiere_asistencia=? WHERE id=?");
+                if ($stmt->execute([$nombre, $requiere_nota, $requiere_asistencia, $id])) {
+                    $response['success'] = true;
+                    $response['mensaje'] = 'Categoría actualizada correctamente.';
+                } else {
+                    // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
+                    $response['mensaje'] = 'Error al actualizar la categoría en la base de datos.';
+                }
             }
         }
     }
