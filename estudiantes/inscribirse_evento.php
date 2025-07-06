@@ -215,6 +215,7 @@ if (!$evento_id || !$usuario_id) {
 try {
     $conn = (new Conexion())->conectar();
 
+    // Verificar si ya está inscrito
     $stmt = $conn->prepare("SELECT COUNT(*) FROM inscripciones WHERE usuario_id = ? AND evento_id = ?");
     $stmt->execute([$usuario_id, $evento_id]);
     if ($stmt->fetchColumn() > 0) {
@@ -222,13 +223,13 @@ try {
         exit;
     }
 
+    // Verificar requisitos del evento
     $stmt = $conn->prepare("SELECT id, tipo, campo_estudiante, descripcion FROM requisitos_evento WHERE evento_id = ?");
     $stmt->execute([$evento_id]);
     $requisitos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $reqCumplidos = [];
     if ($requisitos) {
-        // Cambiado a `id` en lugar de `usuario_id`
         $stmt = $conn->prepare("SELECT cedula_path, matricula_path, papeleta_path FROM estudiantes WHERE id = ?");
         $stmt->execute([$usuario_id]);
         $estudiante = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -257,7 +258,8 @@ try {
         }
     }
 
-    $stmt = $conn->prepare("INSERT INTO inscripciones (usuario_id, evento_id, legalizado, pago_confirmado) VALUES (?, ?, 0, 0)");
+    // Intentar insertar la inscripción - el trigger verificará automáticamente los cupos
+    $stmt = $conn->prepare("INSERT INTO inscripciones (usuario_id, evento_id, legalizado, pago_confirmado, estado) VALUES (?, ?, 0, 0, 'activo')");
     $stmt->execute([$usuario_id, $evento_id]);
     $inscripcion_id = $conn->lastInsertId();
 
@@ -269,9 +271,11 @@ try {
         }
     }
 
-    // Responder según el tipo de petición
-    if (isset($_GET['procesar']) || $_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Petición desde formulario - redirigir con mensaje
+    // Ver si fue una solicitud HTML (formulario) o JSON (fetch/AJAX)
+    $esPostConFormulario = isset($_GET['procesar']) || $_SERVER['REQUEST_METHOD'] === 'POST';
+
+    if ($esPostConFormulario) {
+        // Mostrar HTML de éxito
         echo "<!DOCTYPE html>
         <html lang='es'>
         <head>
@@ -304,42 +308,62 @@ try {
         </body>
         </html>";
     } else {
-        // Petición JSON - respuesta JSON
+        // Respuesta para fetch/AJAX
         echo json_encode(['success' => true, 'message' => 'Inscripción realizada con éxito.']);
     }
 } catch (PDOException $e) {
-    if (isset($_GET['procesar']) || $_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Error en formulario - mostrar página de error
-        echo "<!DOCTYPE html>
-        <html lang='es'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Error en Inscripción</title>
-            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
-            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'>
-        </head>
-        <body>
-            <div class='container mt-5'>
-                <div class='row justify-content-center'>
-                    <div class='col-md-6'>
-                        <div class='card'>
-                            <div class='card-body text-center'>
-                                <i class='fas fa-exclamation-triangle fa-4x text-danger mb-3'></i>
-                                <h3 class='text-danger'>Error en la Inscripción</h3>
-                                <p class='mb-4'>Ocurrió un error al procesar tu inscripción: " . htmlspecialchars($e->getMessage()) . "</p>
-                                <a href='../ver_cursos.php' class='btn btn-primary'>
-                                    <i class='fas fa-arrow-left me-2'></i>Volver a Cursos
-                                </a>
+    if ($e->getCode() == '45000') {
+        $errorMessage = $e->getMessage();
+        if (strpos($errorMessage, 'No hay cupos disponibles') !== false) {
+            echo json_encode([
+                'success' => false, 
+                'message' => '🚫 Este curso ha alcanzado el límite máximo de cupos. No hay lugares disponibles en este momento.',
+                'error_type' => 'cupos_llenos'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => $errorMessage,
+                'error_type' => 'trigger_error'
+            ]);
+        }
+    } else {
+        // Detectar si se esperaba HTML o JSON para el error también
+        if ($esPostConFormulario) {
+            echo "<!DOCTYPE html>
+            <html lang='es'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Error en Inscripción</title>
+                <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+                <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'>
+            </head>
+            <body>
+                <div class='container mt-5'>
+                    <div class='row justify-content-center'>
+                        <div class='col-md-6'>
+                            <div class='card'>
+                                <div class='card-body text-center'>
+                                    <i class='fas fa-exclamation-triangle fa-4x text-danger mb-3'></i>
+                                    <h3 class='text-danger'>Error en la Inscripción</h3>
+                                    <p class='mb-4'>Ocurrió un error al procesar tu inscripción: " . htmlspecialchars($e->getMessage()) . "</p>
+                                    <a href='../ver_cursos.php' class='btn btn-primary'>
+                                        <i class='fas fa-arrow-left me-2'></i>Volver a Cursos
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </body>
-        </html>";
-    } else {
-        // Error en JSON - respuesta JSON
-        echo json_encode(['success' => false, 'message' => 'Error al inscribirse: ' . $e->getMessage()]);
+            </body>
+            </html>";
+        } else {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Error al procesar la inscripción: ' . $e->getMessage(),
+                'error_type' => 'database_error'
+            ]);
+        }
     }
 }
