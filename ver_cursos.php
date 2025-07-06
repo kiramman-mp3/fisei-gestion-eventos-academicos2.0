@@ -124,9 +124,26 @@ $apellido = getUserLastname();
           cursos.forEach(curso => {
             const ruta = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
             let btn = '';
+            let cuposInfo = '';
+            let cuposClass = '';
+
+            // Información de cupos
+            if (curso.cupos_disponibles <= 0) {
+              cuposInfo = `<p class="text-danger"><strong>Cupos:</strong> ${curso.cupos} (LLENO)</p>`;
+              cuposClass = 'border-danger';
+            } else if (curso.cupos_disponibles <= 5) {
+              cuposInfo = `<p class="text-warning"><strong>Cupos:</strong> ${curso.cupos_disponibles}/${curso.cupos} disponibles (Pocos cupos)</p>`;
+              cuposClass = 'border-warning';
+            } else {
+              cuposInfo = `<p><strong>Cupos:</strong> ${curso.cupos_disponibles}/${curso.cupos} disponibles</p>`;
+            }
 
             if (rol === 'estudiante' && !curso.inscrito) {
-              btn = `<button class="btn btn-primary inscribirse-btn mt-3" data-id="${curso.id}">Inscribirse</button>`;
+              if (curso.cupos_disponibles > 0) {
+                btn = `<button class="btn btn-primary inscribirse-btn mt-3" data-id="${curso.id}">Inscribirse</button>`;
+              } else {
+                btn = `<button class="btn btn-secondary mt-3" disabled>Curso Lleno</button>`;
+              }
             } else if (rol === 'administrador') {
               btn = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary mt-3">Administrar</a>`;
             }
@@ -134,14 +151,14 @@ $apellido = getUserLastname();
             const tarjeta = document.createElement('div');
             tarjeta.className = 'col-md-4';
             tarjeta.innerHTML = `
-              <div class="card h-100 shadow-sm">
+              <div class="card h-100 shadow-sm ${cuposClass}">
                 <img src="${ruta}" class="card-img-top" alt="Imagen del evento">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">${curso.nombre_evento}</h5>
                   <p><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
                   <p><strong>Ponente:</strong> ${curso.ponentes}</p>
                   <p><strong>Horas:</strong> ${curso.horas}</p>
-                  <p><strong>Cupos:</strong> ${curso.cupos}</p>
+                  ${cuposInfo}
                   <div class="mt-auto">${btn}</div>
                 </div>
               </div>`;
@@ -161,7 +178,17 @@ $apellido = getUserLastname();
             document.getElementById('modalPonente').textContent = curso.ponentes;
             document.getElementById('modalFechas').textContent = `${curso.fecha_inicio} al ${curso.fecha_fin}`;
             document.getElementById('modalHoras').textContent = curso.horas;
-            document.getElementById('modalCupos').textContent = curso.cupos;
+            
+            // Mostrar información de cupos con indicadores visuales
+            const cuposElement = document.getElementById('modalCupos');
+            if (curso.cupos_disponibles <= 0) {
+              cuposElement.innerHTML = `<span class="text-danger">${curso.cupos} (CURSO LLENO)</span>`;
+            } else if (curso.cupos_disponibles <= 5) {
+              cuposElement.innerHTML = `<span class="text-warning">${curso.cupos_disponibles}/${curso.cupos} disponibles (Pocos cupos)</span>`;
+            } else {
+              cuposElement.innerHTML = `${curso.cupos_disponibles}/${curso.cupos} disponibles`;
+            }
+            
             document.getElementById('modalImagenCurso').src = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
 
             let html = '';

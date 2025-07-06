@@ -15,10 +15,23 @@ if (!is_dir($UPLOAD_DIR)) {
 if ($action === 'listar') {
     try {
         $stmt = $conn->prepare("
-            SELECT e.*, t.nombre AS tipo_nombre, c.nombre AS categoria_nombre
+            SELECT 
+                e.*,
+                t.nombre AS tipo_nombre,
+                c.nombre AS categoria_nombre,
+                COUNT(i.id) as inscripciones_actuales,
+                (e.cupos - COUNT(i.id)) as cupos_disponibles,
+                CASE 
+                    WHEN (e.cupos - COUNT(i.id)) <= 0 THEN 'LLENO'
+                    WHEN (e.cupos - COUNT(i.id)) <= 5 THEN 'POCOS_CUPOS'
+                    ELSE 'DISPONIBLE'
+                END as estado_cupos
             FROM eventos e
             JOIN tipos_evento t ON e.tipo_evento_id = t.id
             JOIN categorias_evento c ON e.categoria_id = c.id
+            LEFT JOIN inscripciones i ON e.id = i.evento_id AND i.estado = 'activo'
+            GROUP BY e.id, e.nombre_evento, e.cupos, t.nombre, c.nombre
+            ORDER BY e.fecha_inicio DESC
         ");
         $stmt->execute();
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
