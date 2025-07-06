@@ -23,35 +23,25 @@ $response = ['success' => false, 'mensaje' => 'Operación no reconocida o fallid
 
 try {
     if ($action === 'listar') {
-        $stmt = $conn->query("SELECT id, nombre, requiere_nota, requiere_asistencia FROM categorias_evento"); // Incluir nuevos campos
+        $stmt = $conn->query("SELECT id, nombre FROM categorias_evento"); // Simplificado
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit; // Terminar la ejecución después de listar, ya que ya se envió la respuesta
     }
 
     if ($action === 'crear') {
-        // --- Mejora 3: Validaciones más estrictas para 'crear' ---
         if (!isset($_POST['nombre']) || empty(trim($_POST['nombre']))) {
             $response['mensaje'] = 'El nombre de la categoría no puede estar vacío.';
         } else {
             $nombre = trim($_POST['nombre']);
-            $requiere_nota = isset($_POST['requiere_nota']) && $_POST['requiere_nota'] === '1' ? 1 : 0;
-            $requiere_asistencia = isset($_POST['requiere_asistencia']) && $_POST['requiere_asistencia'] === '1' ? 1 : 0;
             
-            // --- Validación adicional: Al menos uno debe ser requerido ---
-            if ($requiere_nota == 0 && $requiere_asistencia == 0) {
-                $response['mensaje'] = 'La categoría debe requerir al menos nota o asistencia.';
+            $stmt = $conn->prepare("INSERT INTO categorias_evento (nombre) VALUES (?)");
+            if ($stmt->execute([$nombre])) {
+                $response['success'] = true;
+                $response['mensaje'] = 'Categoría creada exitosamente.';
             } else {
-                $stmt = $conn->prepare("INSERT INTO categorias_evento (nombre, requiere_nota, requiere_asistencia) VALUES (?, ?, ?)");
-                if ($stmt->execute([$nombre, $requiere_nota, $requiere_asistencia])) {
-                    $response['success'] = true;
-                    $response['mensaje'] = 'Categoría creada exitosamente.';
-                } else {
-                    // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
-                    $response['mensaje'] = 'Error al insertar la categoría en la base de datos.';
-                }
+                $response['mensaje'] = 'Error al insertar la categoría en la base de datos.';
             }
         }
-        // --- Fin Mejora 3 ---
     }
 
     if ($action === 'editar') {
