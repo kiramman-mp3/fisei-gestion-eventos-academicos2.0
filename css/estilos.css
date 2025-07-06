@@ -1560,3 +1560,438 @@ main.container h1.display-5 {
     text-align: center;
     line-height: 1.2;
 }
+
+/* General container for admin page */
+.admin-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* Main content panel (replaces Bootstrap card) */
+.content-panel {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+}
+
+/* Info box (replaces Bootstrap alert) */
+.info-box {
+    background-color: #e0f7fa; /* Light blue */
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #005f6b;
+}
+.info-box h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color-dark);
+    font-size: 1.1rem;
+}
+.info-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.info-box ul li {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+/* Table styles (replaces Bootstrap tables) */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.custom-table thead {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px 15px;
+    border: 1px solid #eee; /* Lighter border */
+    text-align: left;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr:nth-child(even) {
+    background-color: var(--bg-dark); /* Light background for even rows */
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e8e8e8; /* Slightly darker on hover */
+}
+
+/* Input fields within table */
+.custom-table input[type="number"] {
+    width: 100px; /* Adjust width for number inputs */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.custom-table input[type="number"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(176, 42, 55, 0.25);
+}
+
+.custom-table .text-danger-small { /* Specific class for small danger text within table */
+    color: #dc3545;
+    font-size: 0.85rem;
+    display: block; /* Ensure it takes full width below input */
+    margin-top: 5px;
+}
+
+.table-responsive { /* For responsiveness on small screens */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* General form control adjustments (from modal, but now broader) */
+.form-control-custom { /* Replaces Bootstrap's form-control */
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    min-height: 40px;
+    box-sizing: border-box;
+}
+
+/* For textareas specifically */
+textarea.form-control-custom {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Utility classes for spacing and alignment */
+.mb-4 { margin-bottom: 20px; }
+.mb-0 { margin-bottom: 0; }
+.mt-3 { margin-top: 15px; }
+.mt-5 { margin-top: 30px; }
+.text-right { text-align: right; }
+.text-muted { color: #6c757d; }
+.p-4 { padding: 20px; } /* Reusing for general padding */
+
+/* Responsive Adjustments (affecting admin page elements) */
+@media (max-width: 992px) {
+    .admin-container {
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+    .content-panel {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-table th, .custom-table td {
+        padding: 10px;
+    }
+    .custom-table input[type="number"] {
+        width: 80px;
+    }
+}
+
+:root {
+    /* Mantén tus variables existentes de estilos.css */
+    --primary-color: #B02A37;
+    --primary-color-dark: #8d1f2d;
+    --text-color: #2C3E50;
+    --font-family: 'Segoe UI', sans-serif;
+    --bg-light: #f8f9fa; /* Ajustado para el fondo del main-content */
+    --card-bg: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --secondary-bg: #2c3e50; /* Color para el sidebar */
+    --secondary-bg-dark: #34495e; /* Color oscuro para el sidebar */
+}
+
+/* Base body styles from estilos.css */
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-light);
+    color: var(--text-color); /* Added to ensure text color consistency */
+}
+
+/* Contenedor principal para el panel */
+.panel-container {
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--secondary-bg-dark) 100%);
+    color: white;
+    padding: 1.5rem 0; /* Add some padding */
+    box-shadow: var(--shadow); /* Add shadow for depth */
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem; /* Padding for header content */
+}
+
+.sidebar-header .logo {
+    max-height: 60px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); /* Optional: Add a subtle shadow to the logo */
+}
+
+.sidebar-header h5 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.sidebar-header small {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+.sidebar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.2rem 1rem; /* Horizontal margin for alignment */
+    padding: 0.75rem 1rem; /* Padding inside links */
+    border-radius: var(--border-radius); /* Apply global border-radius */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    transform: translateX(5px); /* Subtle hover effect */
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: var(--primary-color); /* Use primary color for active state */
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add shadow to active link */
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.sidebar-nav hr {
+    border-color: rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+}
+
+/* Main Content Area */
+.main-content {
+    background-color: var(--bg-light);
+    padding: 2rem; /* Consistent padding */
+    flex-grow: 1; /* Allow main content to take remaining space */
+}
+
+/* Header within main content */
+.header-admin {
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    padding: 1.5rem; /* Increased padding */
+    border-radius: var(--border-radius); /* Apply global border-radius */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-admin h2 {
+    color: var(--primary-color-dark); /* Use a darker primary color for headings */
+    margin-bottom: 0.25rem;
+    font-size: 1.8rem;
+}
+
+.header-admin small {
+    color: var(--text-color); /* Use text color for muted text */
+    opacity: 0.8;
+}
+
+/* Badge styling for consistency */
+.badge-admin {
+    background-color: var(--primary-color); /* Use primary color for admin badge */
+    color: white;
+    padding: 0.5em 0.8em;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+/* Statistics Cards */
+.stats-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%); /* Use primary colors */
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    padding: 1.5rem; /* Consistent padding */
+    height: 100%; /* Ensure cards take full height in row */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.stats-card .card-body {
+    text-align: center;
+}
+
+.stats-card .card-icon {
+    font-size: 3rem; /* Slightly larger icon */
+    margin-bottom: 0.75rem; /* Adjusted margin */
+    color: rgba(255, 255, 255, 0.9); /* Lighter icon color */
+}
+
+.stats-number {
+    font-size: 2.5rem; /* Larger number */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Admin Action Cards */
+.admin-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    padding: 1.5rem; /* Consistent padding */
+    height: 100%;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card .card-body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space */
+    align-items: center;
+    height: 100%;
+}
+
+.admin-card .card-icon {
+    font-size: 3rem; /* Slightly larger icon */
+    margin-bottom: 1rem;
+    color: var(--primary-color); /* Use primary color as default for action icons */
+}
+
+/* Specific icon colors for admin cards */
+.admin-card .card-icon.text-primary { color: var(--primary-color); }
+.admin-card .card-icon.text-success { color: #28a745; } /* Bootstrap success */
+.admin-card .card-icon.text-warning { color: #ffc107; } /* Bootstrap warning */
+.admin-card .card-icon.text-info { color: #17a2b8; } /* Bootstrap info */
+.admin-card .card-icon.text-secondary { color: #6c757d; } /* Bootstrap secondary */
+.admin-card .card-icon.text-danger { color: #dc3545; } /* Bootstrap danger */
+.admin-card .card-icon.text-dark { color: var(--text-color); } /* Dark text color */
+
+
+.admin-card .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+
+.admin-card .card-text {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Allow text to grow and push button down */
+}
+
+/* Buttons in admin cards */
+.admin-card .btn {
+    display: inline-flex; /* Use flex for icon and text alignment */
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.8rem; /* Larger padding for buttons */
+    border-radius: 8px; /* More rounded buttons */
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.admin-card .btn i {
+    margin-right: 8px;
+}
+
+.admin-card .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.admin-card .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+}
+
+/* Adjustments for badges within cards */
+.admin-card .badge {
+    margin-left: 10px; /* Space between button and badge */
+    font-size: 0.8em;
+    padding: 0.4em 0.7em;
+    border-radius: 0.5rem;
+}
+
+/* Utility classes (already in estilos.css, ensuring they are present) */
+.mb-4 { margin-bottom: 20px; }
+.mb-0 { margin-bottom: 0; }
+.mt-3 { margin-top: 15px; }
+.mt-5 { margin-top: 30px; }
+.text-right { text-align: right; }
+.text-muted { color: var(--text-color); opacity: 0.7; } /* Use text-color for muted */
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .sidebar {
+        min-height: auto; /* Allow sidebar to collapse vertically */
+        width: 100%;
+        padding-bottom: 1rem;
+    }
+    .sidebar-header {
+        margin-bottom: 1rem;
+    }
+    .sidebar-nav .nav-link {
+        margin: 0.2rem 0.5rem;
+    }
+    .main-content {
+        padding: 1rem; /* Less padding on small screens */
+    }
+    .header-admin {
+        flex-direction: column;
+        text-align: center;
+    }
+    .header-admin > div:first-child {
+        margin-bottom: 1rem;
+    }
+}

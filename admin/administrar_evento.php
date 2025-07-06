@@ -3,8 +3,8 @@ require_once '../session.php';
 include('../sql/conexion.php');
 
 if (!isLoggedIn()) {
-  header('Location: login.php');
-  exit;
+    header('Location: login.php');
+    exit;
 }
 
 $nombre = getUserName();
@@ -35,18 +35,17 @@ if (!$evento) {
     <head>
         <meta charset='UTF-8'>
         <title>Evento no encontrado</title>
-        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+        <link rel='stylesheet' href='../css/estilos.css'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'>
     </head>
     <body>
-        <div class='container mt-5'>
-            <div class='alert alert-danger text-center'>
-                <i class='fas fa-exclamation-triangle fa-3x mb-3'></i>
-                <h2>Evento no encontrado</h2>
-                <p>El evento que buscas no existe o ha sido eliminado.</p>
-                <a href='lista_eventos.php' class='btn btn-primary'>
-                    <i class='fas fa-arrow-left me-2'></i>Volver a la lista de eventos
-                </a>
-            </div>
+        <div class='admin-container content-panel' style='text-align: center;'>
+            <i class='fas fa-exclamation-triangle' style='font-size: 3em; color: var(--primary-color); margin-bottom: 15px;'></i>
+            <h2>Evento no encontrado</h2>
+            <p>El evento que buscas no existe o ha sido eliminado.</p>
+            <a href='lista_eventos.php' class='btn-outline-primary'>
+                <i class='fas fa-arrow-left'></i> Volver a la lista de eventos
+            </a>
         </div>
     </body>
     </html>";
@@ -54,14 +53,14 @@ if (!$evento) {
 }
 
 // Requisitos
-$reqStmt = $conexion->prepare("SELECT descripcion FROM requisitos_evento WHERE evento_id = ?");
+$reqStmt = $conexion->prepare("SELECT descripcion, tipo FROM requisitos_evento WHERE evento_id = ?");
 $reqStmt->execute([$id]);
 $requisitos = $reqStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Inscripciones
 $insStmt = $conexion->prepare("
     SELECT i.id, i.estado, i.nota, i.asistencia,
-           e.nombre, e.apellido, e.cedula, e.correo
+            e.nombre, e.apellido, e.cedula, e.correo
     FROM inscripciones i
     JOIN estudiantes e ON i.usuario_id = e.id
     WHERE i.evento_id = ?
@@ -74,132 +73,133 @@ $inscritos = $insStmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Administrar Evento</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Administrar Evento</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
-  <header class="ctt-header">
-    <div class="top-bar d-flex justify-content-between align-items-center p-3 bg-danger text-white">
-      <div class="logo">
-        <img src="../uploads/logo.png" alt="Logo FISEI" style="height: 60px;">
-      </div>
-      <div class="top-links">
-        <a href="lista_eventos.php" class="btn btn-light">
-          <i class="fa-solid fa-arrow-left"></i> Volver a Lista de Eventos
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <main class="container my-5">
-    <div class="card p-4 shadow-sm">
-      <h2 class="mb-4"><?= htmlspecialchars($evento['nombre_evento']) ?></h2>
-
-      <div class="mb-4">
-        <p><strong>Tipo:</strong> <?= htmlspecialchars($evento['tipo_evento']) ?></p>
-        <p><strong>Categoría:</strong> <?= htmlspecialchars($evento['categoria']) ?></p>
-        <p><strong>Fechas:</strong> <?= $evento['fecha_inicio'] ?> al <?= $evento['fecha_fin'] ?></p>
-        <p><strong>Inscripciones:</strong> <?= $evento['fecha_inicio_inscripciones'] ?> al <?= $evento['fecha_fin_inscripciones'] ?></p>
-        <p><strong>Horas académicas:</strong> <?= $evento['horas'] ?></p>
-        <p><strong>Ponente:</strong> <?= htmlspecialchars($evento['ponentes']) ?></p>
-        <p><strong>Cupos disponibles:</strong> <?= $evento['cupos'] ?></p>
-        <p><strong>Estado:</strong> <?= $evento['estado'] ?></p>
-        
-        <!-- Información de requisitos del evento -->
-        <div class="alert alert-info mt-3">
-          <h6><i class="fas fa-info-circle"></i> Requisitos del Evento:</h6>
-          <ul class="mb-0">
-            <li><strong>Calificación:</strong> 
-              <?= $evento['requiere_nota'] ? 'Obligatoria (mínimo: ' . ($evento['nota_minima'] ?? 7.0) . ')' : 'Opcional' ?>
-            </li>
-            <li><strong>Asistencia:</strong> 
-              <?= $evento['requiere_asistencia'] ? 'Obligatoria (mínimo: ' . ($evento['asistencia_minima'] ?? 70.0) . '%)' : 'Opcional' ?>
-            </li>
-          </ul>
+    <header class="ctt-header">
+        <div class="top-bar">
+            <div class="logo">
+                <img src="../uploads/logo.png" alt="Logo CTT">
+            </div>
+            <div class="top-links">
+                <div class="link-box">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <div>
+                        <span class="title">Regresar</span>
+                        <br>
+                        <a href="javascript:history.back()">Página anterior</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <div class="text-end mb-4">
-        <a href="pdf_evento.php?id=<?= $id ?>" target="_blank" class="btn btn-outline-secondary">
-          <i class="fa fa-file-pdf"></i> Imprimir PDF
-        </a>
-      </div>
+    <main class="admin-container">
+        <div class="content-panel">
+            <h2 class="mb-4"><?= htmlspecialchars($evento['nombre_evento']) ?></h2>
 
-      <h5>Requisitos del Evento</h5>
-      <?php if (count($requisitos) > 0): ?>
-        <ul class="list-group mb-4">
-          <?php foreach ($requisitos as $req): ?>
-            <li class="list-group-item"><?= htmlspecialchars($req['descripcion']) ?></li>
-          <?php endforeach; ?>
-        </ul>
-      <?php else: ?>
-        <p class="text-muted">Este evento no tiene requisitos registrados.</p>
-      <?php endif; ?>
+            <div class="mb-4">
+                <p><strong>Tipo:</strong> <?= htmlspecialchars($evento['tipo_evento']) ?></p>
+                <p><strong>Categoría:</strong> <?= htmlspecialchars($evento['categoria']) ?></p>
+                <p><strong>Fechas:</strong> <?= $evento['fecha_inicio'] ?> al <?= $evento['fecha_fin'] ?></p>
+                <p><strong>Inscripciones:</strong> <?= $evento['fecha_inicio_inscripciones'] ?> al <?= $evento['fecha_fin_inscripciones'] ?></p>
+                <p><strong>Horas académicas:</strong> <?= $evento['horas'] ?></p>
+                <p><strong>Ponente:</strong> <?= htmlspecialchars($evento['ponentes']) ?></p>
+                <p><strong>Cupos disponibles:</strong> <?= $evento['cupos'] ?></p>
+                <p><strong>Estado:</strong> <?= $evento['estado'] ?></p>
+                
+                <div class="info-box mt-3">
+                    <h6><i class="fas fa-info-circle"></i> Requisitos del Evento:</h6>
+                    <ul class="mb-0">
+                        <li><strong>Calificación:</strong> 
+                            <?= $evento['requiere_nota'] ? 'Obligatoria (mínimo: ' . ($evento['nota_minima'] ?? 7.0) . ')' : 'Opcional' ?>
+                        </li>
+                        <li><strong>Asistencia:</strong> 
+                            <?= $evento['requiere_asistencia'] ? 'Obligatoria (mínimo: ' . ($evento['asistencia_minima'] ?? 70.0) . '%)' : 'Opcional' ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-      <h5 class="mt-5">Inscritos (<?= count($inscritos) ?>)</h5>
+            <div class="text-right mb-4">
+                <a href="pdf_evento.php?id=<?= $id ?>" target="_blank" class="btn-outline-primary">
+                    <i class="fa fa-file-pdf"></i> Imprimir PDF
+                </a>
+            </div>
 
-      <?php if (count($inscritos) > 0): ?>
-        <form id="formNotas" method="POST" action="actualizar_notas.php">
-          <input type="hidden" name="evento_id" value="<?= $id ?>">
+            <h5>Requisitos del Evento</h5>
+            <?php if (count($requisitos) > 0): ?>
+                <ul class="requirements-list mb-4">
+                    <?php foreach ($requisitos as $req): ?>
+                        <li class="list-item-custom"><?= htmlspecialchars($req['descripcion']) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p class="text-muted">Este evento no tiene requisitos registrados.</p>
+            <?php endif; ?>
 
-          <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>#</th>
-                  <th>Estudiante</th>
-                  <th>Cédula</th>
-                  <th>Correo</th>
-                  <th>Estado</th>
-                  <th>Nota</th>
-                  <th>Asistencia (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($inscritos as $i => $ins): ?>
-                  <tr>
-                    <td><?= $i + 1 ?></td>
-                    <td><?= htmlspecialchars($ins['nombre'] . ' ' . $ins['apellido']) ?></td>
-                    <td><?= htmlspecialchars($ins['cedula']) ?></td>
-                    <td><?= htmlspecialchars($ins['correo']) ?></td>
-                    <td><?= htmlspecialchars($ins['estado']) ?></td>
-                    <td>
-                      <input type="number" name="notas[<?= $ins['id'] ?>]" class="form-control"
-                             value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10"
-                             <?= $evento['requiere_nota'] ? 'required' : '' ?>
-                             <?= $evento['requiere_nota'] ? 'style="border-color: #dc3545;"' : '' ?>>
-                      <?php if ($evento['requiere_nota']): ?>
-                        <small class="text-danger">* Obligatorio para esta categoría</small>
-                      <?php endif; ?>
-                    </td>
-                    <td>
-                      <input type="number" name="asistencias[<?= $ins['id'] ?>]" class="form-control"
-                             value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100"
-                             <?= $evento['requiere_asistencia'] ? 'required' : '' ?>
-                             <?= $evento['requiere_asistencia'] ? 'style="border-color: #dc3545;"' : '' ?>>
-                      <?php if ($evento['requiere_asistencia']): ?>
-                        <small class="text-danger">* Obligatorio para esta categoría</small>
-                      <?php endif; ?>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
+            <h5 class="mt-5">Inscritos (<?= count($inscritos) ?>)</h5>
 
-          <div class="text-end mt-3">
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-          </div>
-        </form>
-      <?php else: ?>
-        <p class="text-muted">No hay inscritos en este evento.</p>
-      <?php endif; ?>
-    </div>
-  </main>
+            <?php if (count($inscritos) > 0): ?>
+                <form id="formNotas" method="POST" action="actualizar_notas.php">
+                    <input type="hidden" name="evento_id" value="<?= $id ?>">
+
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Estudiante</th>
+                                    <th>Cédula</th>
+                                    <th>Correo</th>
+                                    <th>Estado</th>
+                                    <th>Nota</th>
+                                    <th>Asistencia (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($inscritos as $i => $ins): ?>
+                                    <tr>
+                                        <td><?= $i + 1 ?></td>
+                                        <td><?= htmlspecialchars($ins['nombre'] . ' ' . $ins['apellido']) ?></td>
+                                        <td><?= htmlspecialchars($ins['cedula']) ?></td>
+                                        <td><?= htmlspecialchars($ins['correo']) ?></td>
+                                        <td><?= htmlspecialchars($ins['estado']) ?></td>
+                                        <td>
+                                            <input type="number" name="notas[<?= $ins['id'] ?>]" class="form-control-custom"
+                                                    value="<?= is_null($ins['nota']) ? '' : $ins['nota'] ?>" step="0.01" min="0" max="10"
+                                                    <?= $evento['requiere_nota'] ? 'required' : '' ?>>
+                                            <?php if ($evento['requiere_nota']): ?>
+                                                <small class="text-danger-small">* Obligatorio para esta categoría</small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="asistencias[<?= $ins['id'] ?>]" class="form-control-custom"
+                                                    value="<?= is_null($ins['asistencia']) ? '' : $ins['asistencia'] ?>" step="0.01" min="0" max="100"
+                                                    <?= $evento['requiere_asistencia'] ? 'required' : '' ?>>
+                                            <?php if ($evento['requiere_asistencia']): ?>
+                                                <small class="text-danger-small">* Obligatorio para esta categoría</small>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-right mt-3">
+                        <button type="submit" class="btn-primary-custom">Guardar Cambios</button>
+                    </div>
+                </form>
+            <?php else: ?>
+                <p class="text-muted">No hay inscritos en este evento.</p>
+            <?php endif; ?>
+        </div>
+    </main>
 </body>
 
 </html>
