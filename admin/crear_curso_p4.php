@@ -31,9 +31,9 @@ if ($accion === 'agregar') {
             $errores[] = "Debe seleccionar un documento del perfil.";
         } else {
             $_SESSION['nuevo_curso']['requisitos'][] = [
-                'tipo' => 'documento',
-                'descripcion' => ucfirst($requisito_campo),
-                'campo' => $requisito_campo
+                'tipo' => 'archivo',
+                'descripcion' => ucfirst(str_replace('ruta_', 'Ruta_', $requisito_campo)),
+                'campo_estudiante' => $requisito_campo
             ];
         }
     } elseif ($requisito_tipo === 'texto') {
@@ -43,7 +43,7 @@ if ($accion === 'agregar') {
             $_SESSION['nuevo_curso']['requisitos'][] = [
                 'tipo' => 'texto',
                 'descripcion' => $requisito_descripcion,
-                'campo' => null
+                'campo_estudiante' => null
             ];
         }
     } else {
@@ -347,11 +347,11 @@ $apellidoUsuario = getUserLastname();
                     <label for="campo">Documento requerido:</label>
                     <select name="campo" id="campo">
                         <option value="">Seleccione</option>
-                        <option value="ruta_cedula" <?= $requisito_campo === 'ruta_cedula' ? 'selected' : '' ?>>Cédula
+                        <option value="cedula_path" <?= $requisito_campo === 'cedula_path' ? 'selected' : '' ?>>Cédula
                         </option>
-                        <option value="ruta_matricula" <?= $requisito_campo === 'ruta_matricula' ? 'selected' : '' ?>>
+                        <option value="matricula_path" <?= $requisito_campo === 'matricula_path' ? 'selected' : '' ?>>
                             Matrícula</option>
-                        <option value="ruta_papeleta" <?= $requisito_campo === 'ruta_papeleta' ? 'selected' : '' ?>>
+                        <option value="papeleta_path" <?= $requisito_campo === 'papeleta_path' ? 'selected' : '' ?>>
                             Papeleta de votación</option>
                     </select>
                 </div>
@@ -375,7 +375,12 @@ $apellidoUsuario = getUserLastname();
                 <ul class="requirements-list">
                     <?php foreach ($_SESSION['nuevo_curso']['requisitos'] as $i => $req): ?>
                         <li>
-                            <p><?= htmlspecialchars($req['descripcion']) ?></p>
+                            <p>
+                                <?= htmlspecialchars($req['descripcion']) ?>
+                                <small style="color: gray;">
+                                    (<?= $req['tipo'] === 'archivo' ? 'Documento: ' . htmlspecialchars($req['campo_estudiante']) : 'Texto libre' ?>)
+                                </small>
+                            </p>
                             <form method="POST">
                                 <input type="hidden" name="indice" value="<?= $i ?>">
                                 <input type="hidden" name="accion" value="eliminar">
@@ -384,6 +389,7 @@ $apellidoUsuario = getUserLastname();
                         </li>
                     <?php endforeach; ?>
                 </ul>
+
             <?php endif; ?>
 
             <div class="form-actions">

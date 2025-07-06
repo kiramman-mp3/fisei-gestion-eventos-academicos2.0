@@ -75,18 +75,6 @@ foreach ($asistencias as $inscripcionId => $asistencia) {
     }
 }
 
-// Si hay errores, mostrarlos y no continuar
-if (!empty($errores)) {
-    echo "<h3>Errores de validación:</h3>";
-    echo "<ul>";
-    foreach ($errores as $error) {
-        echo "<li style='color: red;'>$error</li>";
-    }
-    echo "</ul>";
-    echo "<br><a href='administrar_evento.php?id=$evento_id' class='btn btn-secondary'>Volver</a>";
-    exit;
-}
-
 // Marcar como legalizado (si está presente en el POST)
 $stmtLegalizado = $conexion->prepare("UPDATE inscripciones SET legalizado = ? WHERE id = ?");
 foreach ($notas as $inscripcionId => $_) {
