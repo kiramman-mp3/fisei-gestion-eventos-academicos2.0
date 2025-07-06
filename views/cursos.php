@@ -157,9 +157,29 @@ $apellido = getUserLastname();
                     const fechaActual = new Date();
                     const fechaInicio = new Date(c.fecha_inicio);
                     const enEjecucion = fechaActual >= fechaInicio;
-                    const estadoClass = enEjecucion ? 'table-warning' : '';
+                    
+                    // Determinar clases CSS basadas en estado de cupos y ejecución
+                    let estadoClass = '';
+                    if (enEjecucion) {
+                        estadoClass = 'table-warning';
+                    } else if (c.estado_cupos === 'LLENO') {
+                        estadoClass = 'table-danger';
+                    } else if (c.estado_cupos === 'POCOS_CUPOS') {
+                        estadoClass = 'table-warning';
+                    }
+                    
                     const editButtonDisabled = enEjecucion ? 'disabled' : '';
                     const editButtonTitle = enEjecucion ? 'No se puede editar un curso en ejecución' : 'Editar curso';
+                    
+                    // Información de cupos con iconos
+                    let cuposInfo = `${c.cupos_disponibles}/${c.cupos}`;
+                    if (c.estado_cupos === 'LLENO') {
+                        cuposInfo += ' <i class="fas fa-exclamation-triangle text-danger" title="Curso lleno"></i>';
+                    } else if (c.estado_cupos === 'POCOS_CUPOS') {
+                        cuposInfo += ' <i class="fas fa-exclamation-circle text-warning" title="Pocos cupos disponibles"></i>';
+                    } else {
+                        cuposInfo += ' <i class="fas fa-check-circle text-success" title="Cupos disponibles"></i>';
+                    }
                     
                     return `
                     <tr id="curso-row-${c.id}" class="${estadoClass}">
@@ -173,9 +193,9 @@ $apellido = getUserLastname();
                         <td>${c.fecha_inicio_inscripciones}</td>
                         <td>${c.fecha_fin_inscripciones}</td>
                         <td>${c.horas}</td>
-                        <td>${c.cupos}</td>
+                        <td>${cuposInfo}</td>
                         <td>${c.estado}${enEjecucion ? ' (En ejecución)' : ''}</td>
-                        <td><img src="${c.ruta_imagen}" alt="imagen"></td>
+                        <td><img src="${c.ruta_imagen}" alt="imagen" style="width: 50px; height: 50px; object-fit: cover;"></td>
                         <td>
                             <button class="btn btn-sm btn-info edit-curso-inline" data-id="${c.id}" ${editButtonDisabled} title="${editButtonTitle}"><i class="fas fa-edit"></i> Editar</button>
                             <button class="btn btn-sm btn-success save-curso-inline d-none" data-id="${c.id}"><i class="fas fa-save"></i> Guardar</button>

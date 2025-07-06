@@ -115,152 +115,161 @@ $apellido = getUserLastname();
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const contenedor = document.getElementById('lista-cursos');
-            const modalInscripcion = document.getElementById('modalInscripcion');
-            const modalImagenCurso = document.getElementById('modalImagenCurso');
-            const modalImagePlaceholder = document.getElementById('modalImagePlaceholder'); // New placeholder element
-            const modalTituloCurso = document.getElementById('modalTituloCurso');
-            const modalPonente = document.getElementById('modalPonente');
-            const modalFechas = document.getElementById('modalFechas');
-            const modalHoras = document.getElementById('modalHoras');
-            const modalCupos = document.getElementById('modalCupos');
-            const listaRequisitos = document.getElementById('lista-requisitos');
-            const campoMotivacion = document.getElementById('campoMotivacion');
-            const motivacionTextArea = document.getElementById('motivacion');
-            const btnConfirmarInscripcion = document.getElementById('btnConfirmarInscripcion');
+<footer class="footer-expandido mt-5">
+    <div class="footer-container"></div>
+    <div class="footer-bottom">
+        © <?= date('Y') ?> FISEI - Universidad Técnica de Ambato. Todos los derechos reservados.
+    </div>
+</footer>
 
-            // Fetch courses and populate the grid
-            fetch('service/CursosPorCarrera.php')
-                .then(res => res.json())
-                .then(data => {
-                    const { rol, cursos } = data;
-                    contenedor.innerHTML = '';
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const contenedor = document.getElementById('lista-cursos');
+        const modalInscripcion = document.getElementById('modalInscripcion');
+        const modalImagenCurso = document.getElementById('modalImagenCurso');
+        const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
+        const modalTituloCurso = document.getElementById('modalTituloCurso');
+        const modalPonente = document.getElementById('modalPonente');
+        const modalFechas = document.getElementById('modalFechas');
+        const modalHoras = document.getElementById('modalHoras');
+        const modalCupos = document.getElementById('modalCupos');
+        const listaRequisitos = document.getElementById('lista-requisitos');
+        const campoMotivacion = document.getElementById('campoMotivacion');
+        const motivacionTextArea = document.getElementById('motivacion');
+        const btnConfirmarInscripcion = document.getElementById('btnConfirmarInscripcion');
 
-                    cursos.forEach(curso => {
-                        // Correctly handle image path (remove leading ../)
-                        const ruta = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
-                        let btn = '';
+        fetch('service/CursosPorCarrera.php')
+            .then(res => res.json())
+            .then(data => {
+                const { rol, cursos } = data;
+                contenedor.innerHTML = '';
 
-                        if (rol === 'estudiante' && !curso.inscrito) {
-                            btn = `<button class="boton-inscribirse" data-id="${curso.id}">Inscribirse</button>`;
-                        } else if (rol === 'administrador') {
-                            btn = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn-outline-primary">Administrar</a>`;
-                        }
+                cursos.forEach(curso => {
+                    const ruta = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
+                    let btn = '';
+                    let cuposInfo = '';
+                    let cuposClass = '';
 
-                        const tarjeta = document.createElement('div');
-                        tarjeta.className = 'card-curso';
-                        tarjeta.innerHTML = `
-                            <img src="${ruta}" alt="Imagen del evento">
-                            <div class="card-body">
-                                <h5>${curso.nombre_evento}</h5>
-                                <p><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
-                                <p><strong>Ponente:</strong> ${curso.ponentes}</p>
-                                <p><strong>Horas:</strong> ${curso.horas}</p>
-                                <p><strong>Cupos:</strong> ${curso.cupos}</p>
-                                <div class="card-button-wrapper">${btn}</div>
-                            </div>`;
-                        contenedor.appendChild(tarjeta);
-                    });
-                })
-                .catch(error => console.error('Error al cargar cursos:', error));
-
-            // Event listener for clicks on the document to handle modal open/close
-            document.addEventListener('click', async e => {
-                // Open modal when "Inscribirse" button is clicked
-                if (e.target.classList.contains('boton-inscribirse')) {
-                    const id = e.target.getAttribute('data-id');
-                    try {
-                        const res = await fetch('service/requisitos.php?evento_id=' + id);
-                        const data = await res.json();
-
-                        if (data.success) {
-                            const { curso, requisitos } = data;
-                            modalTituloCurso.textContent = curso.nombre_evento;
-                            modalPonente.textContent = curso.ponentes;
-                            modalFechas.textContent = `${curso.fecha_inicio} al ${curso.fecha_fin}`;
-                            modalHoras.textContent = curso.horas;
-                            modalCupos.textContent = curso.cupos;
-
-                            // Handle image and placeholder
-                            const imageUrl = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
-                            if (imageUrl && imageUrl !== 'resource/placeholder.svg') {
-                                modalImagenCurso.src = imageUrl;
-                                modalImagenCurso.style.display = 'block';
-                                modalImagePlaceholder.style.display = 'none';
-                            } else {
-                                modalImagenCurso.src = ''; // Clear src to avoid broken image icon
-                                modalImagenCurso.style.display = 'none'; // Hide the img element
-                                modalImagePlaceholder.style.display = 'flex'; // Show the custom placeholder
-                            }
-
-                            let html = '';
-                            let requiereTexto = false;
-                            requisitos.forEach(r => {
-                                if (r.tipo === 'texto') requiereTexto = true;
-                                html += `<li class="list-item-custom">${r.cumplido ? '✅' : '❌'} ${r.descripcion}</li>`;
-                            });
-
-                            listaRequisitos.innerHTML = html || '<li class="list-item-custom text-muted">Sin requisitos</li>';
-                            campoMotivacion.style.display = requiereTexto ? 'block' : 'none';
-                            motivacionTextArea.value = '';
-                            btnConfirmarInscripcion.setAttribute('data-id', id);
-
-                            modalInscripcion.classList.add('show-modal'); // Show the modal
-                        } else {
-                            alert(data.message || 'Error al cargar requisitos del curso.');
-                        }
-                    } catch (error) {
-                        console.error('Error al obtener requisitos:', error);
-                        alert('No se pudo cargar la información del curso.');
+                    if (curso.cupos_disponibles <= 0) {
+                        cuposInfo = `<p class="text-danger"><strong>Cupos:</strong> ${curso.cupos} (LLENO)</p>`;
+                        cuposClass = 'border-danger';
+                    } else if (curso.cupos_disponibles <= 5) {
+                        cuposInfo = `<p class="text-warning"><strong>Cupos:</strong> ${curso.cupos_disponibles}/${curso.cupos} (Pocos cupos)</p>`;
+                        cuposClass = 'border-warning';
+                    } else {
+                        cuposInfo = `<p><strong>Cupos:</strong> ${curso.cupos_disponibles}/${curso.cupos}</p>`;
                     }
-                }
 
-                // Close modal when "Cerrar" button (x) or "Cancelar" button is clicked
-                if (e.target.classList.contains('close-button') || e.target.classList.contains('btn-cancel')) {
-                    modalInscripcion.classList.remove('show-modal');
-                }
+                    if (rol === 'estudiante' && !curso.inscrito) {
+                        if (curso.cupos_disponibles > 0) {
+                            btn = `<button class="boton-inscribirse btn btn-primary mt-3" data-id="${curso.id}">Inscribirse</button>`;
+                        } else {
+                            btn = `<button class="btn btn-secondary mt-3" disabled>Curso Lleno</button>`;
+                        }
+                    } else if (rol === 'administrador') {
+                        btn = `<a href="admin/administrar_evento.php?id=${curso.id}" class="btn btn-outline-secondary mt-3">Administrar</a>`;
+                    }
 
-                // Close modal when clicking outside the modal content (on the overlay)
-                if (e.target === modalInscripcion) {
-                    modalInscripcion.classList.remove('show-modal');
-                }
-            });
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'card-curso';
+                    tarjeta.innerHTML = `
+                        <img src="${ruta}" alt="Imagen del evento">
+                        <div class="card-body">
+                            <h5>${curso.nombre_evento}</h5>
+                            <p><strong>Fechas:</strong> ${curso.fecha_inicio} al ${curso.fecha_fin}</p>
+                            <p><strong>Ponente:</strong> ${curso.ponentes}</p>
+                            <p><strong>Horas:</strong> ${curso.horas}</p>
+                            ${cuposInfo}
+                            <div class="card-button-wrapper">${btn}</div>
+                        </div>`;
+                    contenedor.appendChild(tarjeta);
+                });
+            })
+            .catch(error => console.error('Error al cargar cursos:', error));
 
-            // Event listener for "Confirmar inscripción" button
-            btnConfirmarInscripcion.addEventListener('click', async () => {
-                const eventoId = btnConfirmarInscripcion.getAttribute('data-id');
-                const motivacion = motivacionTextArea.value;
+        document.addEventListener('click', async e => {
+            if (e.target.classList.contains('boton-inscribirse')) {
+                const id = e.target.getAttribute('data-id');
                 try {
-                    const res = await fetch('estudiantes/inscribirse_evento.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ evento_id: eventoId, texto_adicional: motivacion })
-                    });
-                    const result = await res.json();
-                    alert(result.message);
-                    if (result.success) {
-                        location.reload(); // Reload page to update enrollment status
+                    const res = await fetch('service/requisitos.php?evento_id=' + id);
+                    const data = await res.json();
+
+                    if (data.success) {
+                        const { curso, requisitos } = data;
+                        modalTituloCurso.textContent = curso.nombre_evento;
+                        modalPonente.textContent = curso.ponentes;
+                        modalFechas.textContent = `${curso.fecha_inicio} al ${curso.fecha_fin}`;
+                        modalHoras.textContent = curso.horas;
+
+                        if (curso.cupos_disponibles <= 0) {
+                            modalCupos.innerHTML = `<span class="text-danger">${curso.cupos} (CURSO LLENO)</span>`;
+                        } else if (curso.cupos_disponibles <= 5) {
+                            modalCupos.innerHTML = `<span class="text-warning">${curso.cupos_disponibles}/${curso.cupos} (Pocos cupos)</span>`;
+                        } else {
+                            modalCupos.textContent = `${curso.cupos_disponibles}/${curso.cupos}`;
+                        }
+
+                        const imageUrl = curso.ruta_imagen?.replace(/^(\.\.\/)+/, '') || 'resource/placeholder.svg';
+                        if (imageUrl !== 'resource/placeholder.svg') {
+                            modalImagenCurso.src = imageUrl;
+                            modalImagenCurso.style.display = 'block';
+                            modalImagePlaceholder.style.display = 'none';
+                        } else {
+                            modalImagenCurso.src = '';
+                            modalImagenCurso.style.display = 'none';
+                            modalImagePlaceholder.style.display = 'flex';
+                        }
+
+                        let html = '';
+                        let requiereTexto = false;
+                        requisitos.forEach(r => {
+                            if (r.tipo === 'texto') requiereTexto = true;
+                            html += `<li class="list-item-custom">${r.cumplido ? '✅' : '❌'} ${r.descripcion}</li>`;
+                        });
+
+                        listaRequisitos.innerHTML = html || '<li class="list-item-custom text-muted">Sin requisitos</li>';
+                        campoMotivacion.style.display = requiereTexto ? 'block' : 'none';
+                        motivacionTextArea.value = '';
+                        btnConfirmarInscripcion.setAttribute('data-id', id);
+
+                        modalInscripcion.classList.add('show-modal');
+                    } else {
+                        alert(data.message || 'Error al cargar requisitos del curso.');
                     }
                 } catch (error) {
-                    console.error('Error al confirmar inscripción:', error);
-                    alert('Error al procesar la inscripción.');
-                } finally {
-                    modalInscripcion.classList.remove('show-modal'); // Always hide modal after attempt
+                    console.error('Error al obtener requisitos:', error);
+                    alert('No se pudo cargar la información del curso.');
                 }
-            });
+            }
 
-            // Existing sidebar toggle logic (if applicable)
-            const toggleBtn = document.getElementById('toggleSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const closeBtn = document.getElementById('closeSidebar');
-            if (toggleBtn && sidebar && closeBtn) {
-                toggleBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
-                closeBtn.addEventListener('click', () => sidebar.classList.add('hidden'));
+            if (e.target.classList.contains('close-button') || e.target.classList.contains('btn-cancel') || e.target === modalInscripcion) {
+                modalInscripcion.classList.remove('show-modal');
             }
         });
-    </script>
+
+        btnConfirmarInscripcion.addEventListener('click', async () => {
+            const eventoId = btnConfirmarInscripcion.getAttribute('data-id');
+            const motivacion = motivacionTextArea.value;
+            try {
+                const res = await fetch('estudiantes/inscribirse_evento.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ evento_id: eventoId, texto_adicional: motivacion })
+                });
+                const result = await res.json();
+                alert(result.message);
+                if (result.success) location.reload();
+            } catch (error) {
+                console.error('Error al confirmar inscripción:', error);
+                alert('Error al procesar la inscripción.');
+            } finally {
+                modalInscripcion.classList.remove('show-modal');
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

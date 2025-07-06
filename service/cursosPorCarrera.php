@@ -13,18 +13,22 @@ try {
     $usuario_id = isLoggedIn() ? getUserId() : null;
 
     $sqlBase = "
-        SELECT e.*, c.nombre AS categoria_nombre, t.nombre AS tipo_nombre
+        SELECT e.*, c.nombre AS categoria_nombre, t.nombre AS tipo_nombre,
+               COUNT(i.id) as inscritos_actuales,
+               (e.cupos - COUNT(i.id)) as cupos_disponibles
         FROM eventos e
         JOIN categorias_evento c ON e.categoria_id = c.id
         JOIN tipos_evento t ON e.tipo_evento_id = t.id
+        LEFT JOIN inscripciones i ON e.id = i.evento_id
         WHERE e.estado = 'abierto'
     ";
 
     if ($rol === 'estudiante' && !empty($carrera)) {
-        $sqlBase .= " AND c.nombre = ?";
+        $sqlBase .= " AND c.nombre = ? GROUP BY e.id, c.nombre, t.nombre";
         $stmt = $conn->prepare($sqlBase);
         $stmt->execute([$carrera]);
     } else {
+        $sqlBase .= " GROUP BY e.id, c.nombre, t.nombre";
         $stmt = $conn->prepare($sqlBase);
         $stmt->execute();
     }
