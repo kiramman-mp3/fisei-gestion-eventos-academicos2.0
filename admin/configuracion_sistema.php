@@ -17,14 +17,14 @@ $tipo_mensaje = '';
 // Manejar actualización de configuraciones
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
-    
+
     try {
         switch ($accion) {
             case 'actualizar_info_general':
                 $nombre_institucion = $_POST['nombre_institucion'] ?? '';
                 $email_contacto = $_POST['email_contacto'] ?? '';
                 $telefono_contacto = $_POST['telefono_contacto'] ?? '';
-                
+
                 // Actualizar o insertar configuración general
                 $stmt = $conn->prepare("
                     INSERT INTO configuracion (clave, valor) VALUES 
@@ -39,15 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':email' => $email_contacto,
                     ':telefono' => $telefono_contacto
                 ]);
-                
+
                 $mensaje = "Información general actualizada correctamente.";
                 $tipo_mensaje = "success";
                 break;
-                
+
             case 'actualizar_limites':
-                $max_inscripciones = (int)($_POST['max_inscripciones'] ?? 0);
-                $dias_limite_cancelacion = (int)($_POST['dias_limite_cancelacion'] ?? 0);
-                
+                $max_inscripciones = (int) ($_POST['max_inscripciones'] ?? 0);
+                $dias_limite_cancelacion = (int) ($_POST['dias_limite_cancelacion'] ?? 0);
+
                 $stmt = $conn->prepare("
                     INSERT INTO configuracion (clave, valor) VALUES 
                     ('max_inscripciones_estudiante', :max_insc),
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':max_insc' => $max_inscripciones,
                     ':dias_limit' => $dias_limite_cancelacion
                 ]);
-                
+
                 $mensaje = "Límites del sistema actualizados correctamente.";
                 $tipo_mensaje = "success";
                 break;
@@ -103,7 +103,7 @@ try {
         'total_inscripciones_mes' => "SELECT COUNT(*) as count FROM inscripciones",
         'espacio_uploads' => "SELECT ROUND(SUM(LENGTH(contenido))/1024/1024, 2) as size_mb FROM info_fisei WHERE contenido IS NOT NULL"
     ];
-    
+
     foreach ($queries as $key => $query) {
         $stmt = $conn->query($query);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,222 +121,174 @@ try {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración del Sistema - Admin FISEI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/panel-estilos.css">
+    <link rel="stylesheet" href="../css/estilos.css">
 </head>
+
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Header -->
-            <div class="col-12">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="panel_admin.php">
-                            <i class="fas fa-arrow-left me-2"></i>Panel Admin
-                        </a>
-                        <span class="navbar-text">
-                            Configuración del Sistema
-                        </span>
-                    </div>
-                </nav>
+      <header class="ctt-header">
+    <div class="top-bar">
+      <div class="logo">
+        <img src="../uploads/logo.png" alt="Logo FISEI">
+      </div>
+      <div class="top-links">
+        <div class="link-box">
+          <i class="fa-solid fa-arrow-left"></i>
+          <div>
+            <span class="title">Regresar</span><br>
+            <a href="javascript:history.back()">Regresa al Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+    <div class="admin-container">
+        <!-- Header personalizado -->
+        <div class="header-admin mb-4">
+            <div>
+                <h2>Configuración del Sistema</h2>
+                <small>Panel del Administrador</small>
             </div>
         </div>
-        
-        <div class="container-fluid mt-4">
-            <?php if ($mensaje): ?>
-                <div class="alert alert-<?= $tipo_mensaje ?> alert-dismissible fade show" role="alert">
-                    <?= htmlspecialchars($mensaje) ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-            
-            <div class="row">
-                <!-- Estadísticas del sistema -->
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-chart-bar me-2"></i>Estadísticas del Sistema
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row text-center">
-                                <div class="col-12 mb-3">
-                                    <div class="border rounded p-3">
-                                        <h4 class="text-primary mb-0"><?= $estadisticas['total_eventos_activos'] ?? 0 ?></h4>
-                                        <small class="text-muted">Eventos Activos</small>
-                                    </div>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <div class="border rounded p-3">
-                                        <h4 class="text-success mb-0"><?= $estadisticas['total_inscripciones_mes'] ?? 0 ?></h4>
-                                        <small class="text-muted">Total de inscripciones</small>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="border rounded p-3">
-                                        <h4 class="text-info mb-0"><?= $estadisticas['espacio_uploads'] ?? 0 ?> MB</h4>
-                                        <small class="text-muted">Espacio de archivos</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+        <!-- Mensaje -->
+        <?php if ($mensaje): ?>
+            <div class="alert alert-<?= $tipo_mensaje ?> alert-dismissible fade show" role="alert">
+                <?= htmlspecialchars($mensaje) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+
+        <!-- Estadísticas -->
+        <div class="content-panel mb-4">
+            <h4><i class="fas fa-chart-bar me-2"></i>Estadísticas del Sistema</h4>
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <div class="info-box">
+                        <h3><?= $estadisticas['total_eventos_activos'] ?? 0 ?></h3>
+                        <p>Eventos Activos</p>
                     </div>
                 </div>
-                
-                <!-- Información General -->
-                <div class="col-lg-8 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-building me-2"></i>Información General
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST">
-                                <input type="hidden" name="accion" value="actualizar_info_general">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="nombre_institucion" class="form-label">Nombre de la Institución</label>
-                                        <input type="text" class="form-control" id="nombre_institucion" name="nombre_institucion" 
-                                               value="<?= htmlspecialchars($configuraciones['nombre_institucion'] ?? 'FISEI - UTA') ?>">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email_contacto" class="form-label">Email de Contacto</label>
-                                        <input type="email" class="form-control" id="email_contacto" name="email_contacto" 
-                                               value="<?= htmlspecialchars($configuraciones['email_contacto'] ?? '') ?>">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="telefono_contacto" class="form-label">Teléfono de Contacto</label>
-                                        <input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto" 
-                                               value="<?= htmlspecialchars($configuraciones['telefono_contacto'] ?? '') ?>">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Guardar Información
-                                </button>
-                            </form>
-                        </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-box">
+                        <h3><?= $estadisticas['total_inscripciones_mes'] ?? 0 ?></h3>
+                        <p>Total de Inscripciones</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="info-box">
+                        <h3><?= $estadisticas['espacio_uploads'] ?? 0 ?> MB</h3>
+                        <p>Espacio de Archivos</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="row">
-                <!-- Límites del Sistema -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-sliders-h me-2"></i>Límites del Sistema
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST">
-                                <input type="hidden" name="accion" value="actualizar_limites">
-                                <div class="mb-3">
-                                    <label for="max_inscripciones" class="form-label">Máximo de inscripciones por estudiante</label>
-                                    <input type="number" class="form-control" id="max_inscripciones" name="max_inscripciones" 
-                                           value="<?= htmlspecialchars($configuraciones['max_inscripciones_estudiante'] ?? '5') ?>" min="1" max="20">
-                                    <div class="form-text">Número máximo de cursos a los que se puede inscribir un estudiante simultáneamente.</div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="dias_limite_cancelacion" class="form-label">Días límite para cancelar inscripción</label>
-                                    <input type="number" class="form-control" id="dias_limite_cancelacion" name="dias_limite_cancelacion" 
-                                           value="<?= htmlspecialchars($configuraciones['dias_limite_cancelacion'] ?? '3') ?>" min="0" max="30">
-                                    <div class="form-text">Días antes del inicio del curso en que se puede cancelar la inscripción.</div>
-                                </div>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save me-2"></i>Actualizar Límites
-                                </button>
-                            </form>
-                        </div>
+        </div>
+
+        <!-- Información General -->
+        <div class="content-panel mb-4">
+            <h4><i class="fas fa-building me-2"></i>Información General</h4>
+            <form method="POST" class="admin-form">
+                <input type="hidden" name="accion" value="actualizar_info_general">
+                <div class="form-row">
+                    <div>
+                        <label for="nombre_institucion">Institución</label>
+                        <input type="text" class="form-control-custom" name="nombre_institucion" id="nombre_institucion"
+                            value="<?= htmlspecialchars($configuraciones['nombre_institucion'] ?? '') ?>">
+                    </div>
+                    <div>
+                        <label for="email_contacto">Email</label>
+                        <input type="email" class="form-control-custom" name="email_contacto" id="email_contacto"
+                            value="<?= htmlspecialchars($configuraciones['email_contacto'] ?? '') ?>">
+                    </div>
+                    <div>
+                        <label for="telefono_contacto">Teléfono</label>
+                        <input type="text" class="form-control-custom" name="telefono_contacto" id="telefono_contacto"
+                            value="<?= htmlspecialchars($configuraciones['telefono_contacto'] ?? '') ?>">
                     </div>
                 </div>
-                
-                <!-- Herramientas de Mantenimiento -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-tools me-2"></i>Herramientas de Mantenimiento
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
-                                <button type="button" class="btn btn-warning" onclick="limpiarCacheSistema()">
-                                    <i class="fas fa-broom me-2"></i>Limpiar Caché del Sistema
-                                </button>
-                                <button type="button" class="btn btn-info" onclick="exportarConfiguracion()">
-                                    <i class="fas fa-download me-2"></i>Exportar Configuración
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="verLogsActividad()">
-                                    <i class="fas fa-list me-2"></i>Ver Logs de Actividad
-                                </button>
-                                <hr>
-                                <div class="alert alert-warning mb-0">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>
-                                    <strong>Zona de Peligro:</strong> Las siguientes acciones pueden afectar el funcionamiento del sistema.
-                                </div>
-                                <button type="button" class="btn btn-danger" onclick="confirmarReinicioSistema()">
-                                    <i class="fas fa-sync-alt me-2"></i>Reiniciar Sistema
-                                </button>
-                            </div>
-                        </div>
+                <div class="form-submit mt-3">
+                    <button type="submit" class="btn enviar"><i class="fas fa-save me-2"></i>Guardar
+                        Información</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Límites del Sistema -->
+        <div class="content-panel mb-4">
+            <h4><i class="fas fa-sliders-h me-2"></i>Límites del Sistema</h4>
+            <form method="POST" class="admin-form">
+                <input type="hidden" name="accion" value="actualizar_limites">
+                <div class="form-row">
+                    <div>
+                        <label for="max_inscripciones">Máx. inscripciones</label>
+                        <input type="number" class="form-control-custom" name="max_inscripciones" id="max_inscripciones"
+                            min="1" max="20"
+                            value="<?= htmlspecialchars($configuraciones['max_inscripciones_estudiante'] ?? '5') ?>">
+                    </div>
+                    <div>
+                        <label for="dias_limite_cancelacion">Días límite cancelación</label>
+                        <input type="number" class="form-control-custom" name="dias_limite_cancelacion"
+                            id="dias_limite_cancelacion" min="0" max="30"
+                            value="<?= htmlspecialchars($configuraciones['dias_limite_cancelacion'] ?? '3') ?>">
                     </div>
                 </div>
+                <div class="form-submit mt-3">
+                    <button type="submit" class="btn enviar"><i class="fas fa-save me-2"></i>Actualizar Límites</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Herramientas -->
+        <div class="content-panel mb-4">
+            <h4><i class="fas fa-tools me-2"></i>Herramientas de Mantenimiento</h4>
+            <div class="d-grid gap-3">
+                <button type="button" class="btn btn-outline-warning" onclick="limpiarCacheSistema()">
+                    <i class="fas fa-broom me-2"></i>Limpiar Caché
+                </button>
+                <button type="button" class="btn btn-outline-info" onclick="exportarConfiguracion()">
+                    <i class="fas fa-download me-2"></i>Exportar Configuración
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="verLogsActividad()">
+                    <i class="fas fa-list me-2"></i>Ver Logs
+                </button>
+                <hr>
+                <div class="alert alert-warning small">
+                    <strong>Zona de Peligro:</strong> Estas acciones pueden afectar el sistema.
+                </div>
+                <button type="button" class="btn btn-danger" onclick="confirmarReinicioSistema()">
+                    <i class="fas fa-sync-alt me-2"></i>Reiniciar Sistema
+                </button>
             </div>
-            
-            <!-- Información de Versión -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row text-center">
-                                <div class="col-md-3">
-                                    <strong>Versión del Sistema:</strong><br>
-                                    <span class="badge bg-primary">v2.0.0</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>Última Actualización:</strong><br>
-                                    <small class="text-muted"><?= date('d/m/Y') ?></small>
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>Base de Datos:</strong><br>
-                                    <span class="badge bg-success">MySQL <?= $conn->getAttribute(PDO::ATTR_SERVER_VERSION) ?></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>PHP:</strong><br>
-                                    <span class="badge bg-info">v<?= PHP_VERSION ?></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
+
+        <!-- Información de Versión -->
+        <div class="content-panel text-center">
+            <p><strong>Versión del Sistema:</strong> <span class="badge bg-primary">v2.0.0</span></p>
+            <p><strong>Última Actualización:</strong> <?= date('d/m/Y') ?></p>
+            <p><strong>Base de Datos:</strong> <span class="badge bg-success">MySQL
+                    <?= $conn->getAttribute(PDO::ATTR_SERVER_VERSION) ?></span></p>
+            <p><strong>PHP:</strong> <span class="badge bg-info">v<?= PHP_VERSION ?></span></p>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         function limpiarCacheSistema() {
             if (confirm('¿Está seguro de que desea limpiar el caché del sistema?')) {
                 alert('Función de limpieza de caché ejecutada (simulado)');
             }
         }
-        
         function exportarConfiguracion() {
             alert('Exportando configuración... (función por implementar)');
         }
-        
         function verLogsActividad() {
             alert('Mostrando logs de actividad... (función por implementar)');
         }
-        
         function confirmarReinicioSistema() {
             if (confirm('¿ESTÁ SEGURO de que desea reiniciar el sistema? Esto afectará a todos los usuarios conectados.')) {
                 if (confirm('Esta acción es irreversible. ¿Continuar?')) {
@@ -346,4 +298,5 @@ try {
         }
     </script>
 </body>
+
 </html>
