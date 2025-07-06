@@ -28,7 +28,7 @@ $apellido = getUserLastname();
                         <i class="fa-solid fa-arrow-left"></i>
                         <div>
                             <span class="title">Dashboard</span><br>
-                            <a href="admin.php">Ir al Dashboard</a>
+                            <a href="admin/panel_admin.php">Ir al Dashboard</a>
                         </div>
                     </div>
                 <?php endif; ?>
