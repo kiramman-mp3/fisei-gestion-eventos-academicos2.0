@@ -26,7 +26,6 @@ if (!$usuario) {
 
 $catStmt = $conexion->query("SELECT id, nombre FROM categorias_evento ORDER BY nombre ASC");
 $carrerasDisponibles = $catStmt->fetchAll(PDO::FETCH_ASSOC);
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $carrera = $usuario['tipo'] === 'institucional' && empty($usuario['carrera']) ? ($_POST['carrera'] ?? null) : $usuario['carrera'];
   $correo = $usuario['correo'];
@@ -116,29 +115,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <form method="POST" enctype="multipart/form-data" style="margin-top: 2rem;">
-        <?php if ($usuario['tipo'] === 'institucional' && empty($usuario['carrera'])): ?>
-          <div class="mb-3">
-            <label for="carrera"><i class="fas fa-graduation-cap"></i><strong>Carrera:</strong></label>
-            <select name="carrera" id="carrera" required>
-              <option value="">--Seleccione--</option>
-              <?php foreach ($carrerasDisponibles as $carrera): ?>
-                <option value="<?= htmlspecialchars($carrera['nombre']) ?>">
-                  <?= htmlspecialchars($carrera['nombre']) ?>
-                </option>
-              <?php endforeach; ?>
-
-            </select>
-          </div>
-        <?php elseif ($usuario['tipo'] === 'publico'): ?>
-          <p class="alert alert-warning" style="color: var(--gray-600); margin-top: 12px;">
-            Tu correo es público. No puedes seleccionar una carrera.
-          </p>
-          <input type="hidden" name="carrera" value="">
-        <?php else: ?>
-          <p><strong><i class="fas fa-graduation-cap"></i> Carrera:</strong>
-            <?= htmlspecialchars($usuario['carrera']) ?: 'No asignada' ?></p>
-          <input type="hidden" name="carrera" value="<?= htmlspecialchars($usuario['carrera']) ?>">
-        <?php endif; ?>
+        <p>
+          <strong><i class="fas fa-graduation-cap"></i> Carrera:</strong>
+          <?php
+          $nombreCarrera = 'No asignada';
+          foreach ($carrerasDisponibles as $c) {
+            if ($c['id'] == $usuario['carrera']) {
+              $nombreCarrera = $c['nombre'];
+              break;
+            }
+          }
+          ?>
+          <?= htmlspecialchars($nombreCarrera) ?>
+        </p>
 
         <fieldset style="margin-top: 2rem;">
           <legend><i class="fas fa-folder-open"></i> Documentación</legend>

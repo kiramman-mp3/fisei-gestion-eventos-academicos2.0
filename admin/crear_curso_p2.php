@@ -20,27 +20,28 @@ $categoriasEvento = $conexion->query("SELECT id, nombre FROM categorias_evento")
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_evento_id = $_POST['tipo_evento_id'] ?? '';
-    $categoria_id = $_POST['categoria_id'] ?? '';
+    $categoria_id = $_POST['categoria_id'] ?? [];
     $modalidad = $_POST['modalidad'] ?? null;
     $descripcion = $_POST['descripcion'] ?? null;
-    
+
     // Nuevos campos para requisitos obligatorios
     $requiere_nota = isset($_POST['requiere_nota']) && $_POST['requiere_nota'] === '1';
     $requiere_asistencia = isset($_POST['requiere_asistencia']) && $_POST['requiere_asistencia'] === '1';
     $nota_minima = $_POST['nota_minima'] ?? null;
     $asistencia_minima = $_POST['asistencia_minima'] ?? null;
 
-    if (!$tipo_evento_id || !$categoria_id) {
-        $errores[] = "Debe seleccionar tipo y categoría del evento.";
+    if (!$tipo_evento_id || empty($categoria_id) || !is_array($categoria_id)) {
+        $errores[] = "Debe seleccionar tipo y al menos una categoría del evento.";
     }
-    
+
+
     // Validar nota mínima si es requerida
     if ($requiere_nota) {
         if (empty($nota_minima) || !is_numeric($nota_minima) || $nota_minima < 0 || $nota_minima > 10) {
             $errores[] = "Debe especificar una nota mínima válida (0-10) cuando la calificación es obligatoria.";
         }
     }
-    
+
     // Validar asistencia mínima si es requerida
     if ($requiere_asistencia) {
         if (empty($asistencia_minima) || !is_numeric($asistencia_minima) || $asistencia_minima < 0 || $asistencia_minima > 100) {
@@ -53,9 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['nuevo_curso']['categoria_id'] = $categoria_id;
         $_SESSION['nuevo_curso']['requiere_nota'] = $requiere_nota;
         $_SESSION['nuevo_curso']['requiere_asistencia'] = $requiere_asistencia;
-        $_SESSION['nuevo_curso']['nota_minima'] = $requiere_nota ? (float)$nota_minima : null;
-        $_SESSION['nuevo_curso']['asistencia_minima'] = $requiere_asistencia ? (float)$asistencia_minima : null;
-        
+        $_SESSION['nuevo_curso']['nota_minima'] = $requiere_nota ? (float) $nota_minima : null;
+        $_SESSION['nuevo_curso']['asistencia_minima'] = $requiere_asistencia ? (float) $asistencia_minima : null;
+
         if ($modalidad)
             $_SESSION['nuevo_curso']['modalidad'] = $modalidad;
         if ($descripcion)
@@ -212,13 +213,19 @@ $apellidoUsuario = getUserLastname();
                     </div>
 
                     <div>
-                        <label for="categoria_id"><span class="rojo">*</span> Categoría:</label>
-                        <select name="categoria_id" id="categoria_id" required>
-                            <option value="">Seleccione una categoría</option>
+                        <label><span class="rojo">*</span> Categorías:</label>
+                        <div class="checkbox-list"
+                            style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
                             <?php foreach ($categoriasEvento as $cat): ?>
-                                <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['nombre']) ?></option>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categoria_id[]"
+                                        id="categoria_<?= $cat['id'] ?>" value="<?= $cat['id'] ?>" <?= (!empty($categoria_id) && is_array($categoria_id) && in_array($cat['id'], $categoria_id)) ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="categoria_<?= $cat['id'] ?>">
+                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    </label>
+                                </div>
                             <?php endforeach; ?>
-                        </select>
+                        </div>
                     </div>
 
                     <div>
@@ -239,36 +246,43 @@ $apellidoUsuario = getUserLastname();
 
                     <!-- Campos para requisitos obligatorios del evento -->
                     <div class="admin-form-section">
-                        <h5 style="color: var(--primary-color); margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+                        <h5
+                            style="color: var(--primary-color); margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">
                             <i class="fa-solid fa-check-circle"></i> Requisitos Obligatorios del Evento
                         </h5>
-                        
+
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div>
                                 <label for="requiere_nota">
-                                    <input type="checkbox" name="requiere_nota" id="requiere_nota" value="1" onchange="toggleNotaMinima()">
+                                    <input type="checkbox" name="requiere_nota" id="requiere_nota" value="1"
+                                        onchange="toggleNotaMinima()">
                                     Calificación obligatoria
                                 </label>
                                 <div id="nota_minima_container" style="display: none; margin-top: 10px;">
                                     <label for="nota_minima">Nota mínima (0-10):</label>
-                                    <input type="number" name="nota_minima" id="nota_minima" min="0" max="10" step="0.1" value="7.0" placeholder="7.0">
+                                    <input type="number" name="nota_minima" id="nota_minima" min="0" max="10" step="0.1"
+                                        value="7.0" placeholder="7.0">
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <label for="requiere_asistencia">
-                                    <input type="checkbox" name="requiere_asistencia" id="requiere_asistencia" value="1" onchange="toggleAsistenciaMinima()">
+                                    <input type="checkbox" name="requiere_asistencia" id="requiere_asistencia" value="1"
+                                        onchange="toggleAsistenciaMinima()">
                                     Asistencia obligatoria
                                 </label>
                                 <div id="asistencia_minima_container" style="display: none; margin-top: 10px;">
                                     <label for="asistencia_minima">Asistencia mínima (%):</label>
-                                    <input type="number" name="asistencia_minima" id="asistencia_minima" min="0" max="100" step="0.1" value="70.0" placeholder="70.0">
+                                    <input type="number" name="asistencia_minima" id="asistencia_minima" min="0"
+                                        max="100" step="0.1" value="70.0" placeholder="70.0">
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="text-muted small mt-2">
-                            <i class="fas fa-info-circle"></i> Configure si este evento requiere nota y/o asistencia obligatorias para obtener el certificado. Los eventos informativos pueden no requerir ninguno.
+                            <i class="fas fa-info-circle"></i> Configure si este evento requiere nota y/o asistencia
+                            obligatorias para obtener el certificado. Los eventos informativos pueden no requerir
+                            ninguno.
                         </div>
                     </div>
                 </div>
@@ -286,7 +300,7 @@ $apellidoUsuario = getUserLastname();
             const checkbox = document.getElementById('requiere_nota');
             const container = document.getElementById('nota_minima_container');
             const input = document.getElementById('nota_minima');
-            
+
             if (checkbox.checked) {
                 container.style.display = 'block';
                 input.setAttribute('required', 'required');
@@ -296,12 +310,12 @@ $apellidoUsuario = getUserLastname();
                 input.value = '';
             }
         }
-        
+
         function toggleAsistenciaMinima() {
             const checkbox = document.getElementById('requiere_asistencia');
             const container = document.getElementById('asistencia_minima_container');
             const input = document.getElementById('asistencia_minima');
-            
+
             if (checkbox.checked) {
                 container.style.display = 'block';
                 input.setAttribute('required', 'required');

@@ -25,37 +25,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($nombre === '')
         $errores[] = "El nombre del evento es obligatorio.";
-    
-    // Validar que las fechas no sean en el pasado
-    $fechaHoy = date('Y-m-d');
-    if ($fecha_inicio_insc && $fecha_inicio_insc < $fechaHoy) {
-        $errores[] = "La fecha de inicio de inscripciones no puede ser en el pasado.";
-    }
-    
+
     // Validación de fechas del curso
     if (!$fecha_inicio || !$fecha_fin) {
         $errores[] = "Las fechas de inicio y fin del curso son obligatorias.";
     } elseif ($fecha_inicio > $fecha_fin) {
         $errores[] = "La fecha de inicio del curso debe ser anterior a la fecha de fin.";
     }
-    
+
     // Validación de fechas de inscripción
     if (!$fecha_inicio_insc || !$fecha_fin_insc) {
         $errores[] = "Las fechas de inicio y fin de inscripciones son obligatorias.";
     } elseif ($fecha_inicio_insc > $fecha_fin_insc) {
         $errores[] = "La fecha de inicio de inscripciones debe ser anterior a la fecha de fin de inscripciones.";
     }
-    
+
     // Validación de que las inscripciones terminen antes del inicio del curso
     if ($fecha_inicio && $fecha_fin_insc && $fecha_fin_insc >= $fecha_inicio) {
         $errores[] = "Las inscripciones deben terminar antes de que inicie el curso.";
     }
-    
+
     // Validación de que el inicio de inscripciones no sea posterior al inicio del curso
     if ($fecha_inicio && $fecha_inicio_insc && $fecha_inicio_insc >= $fecha_inicio) {
         $errores[] = "Las inscripciones deben comenzar antes de que inicie el curso.";
     }
-    
+
     if ($cupos <= 0)
         $errores[] = "Debe haber al menos 1 cupo.";
     if ($horas <= 0)
@@ -117,7 +111,7 @@ $apellidoUsuario = getUserLastname();
         .alert-danger li {
             list-style-type: disc;
         }
-        
+
         /* Estilos para mensajes de advertencia de JavaScript */
         .alert-warning {
             background-color: #fff3cd;
@@ -155,62 +149,90 @@ $apellidoUsuario = getUserLastname();
         }
     </style>
     <script>
-        // Función para validar fechas en el cliente
         function validarFechas() {
-            const fechaInicio = document.getElementById('fecha_inicio').value;
-            const fechaFin = document.getElementById('fecha_fin').value;
-            const fechaInicioInsc = document.getElementById('fecha_inicio_inscripciones').value;
-            const fechaFinInsc = document.getElementById('fecha_fin_inscripciones').value;
-            const hoy = new Date().toISOString().split('T')[0];
-            
+            const fInicio = document.getElementById('fecha_inicio').value;
+            const fFin = document.getElementById('fecha_fin').value;
+            const fInicioIns = document.getElementById('fecha_inicio_inscripciones').value;
+            const fFinIns = document.getElementById('fecha_fin_inscripciones').value;
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+
             let errores = [];
-            
-            // Validar que las fechas no sean en el pasado
-            if (fechaInicioInsc && fechaInicioInsc < hoy) {
-                errores.push("La fecha de inicio de inscripciones no puede ser en el pasado.");
+
+            const fechaInicio = fInicio ? new Date(fInicio) : null;
+            const fechaFin = fFin ? new Date(fFin) : null;
+            const fechaInicioIns = fInicioIns ? new Date(fInicioIns) : null;
+            const fechaFinIns = fFinIns ? new Date(fFinIns) : null;
+
+            // Solo permitimos que la fecha de inicio de inscripciones esté en el pasado
+            if (fechaInicio && fechaInicio < hoy) {
+                errores.push("La fecha de inicio del curso no puede estar en el pasado.");
             }
-            
-            // Validar que la fecha de inicio sea menor que la de fin del curso
+
+            if (fechaFin && fechaFin < hoy) {
+                errores.push("La fecha de fin del curso no puede estar en el pasado.");
+            }
+
+            if (fechaFinIns && fechaFinIns < hoy) {
+                errores.push("La fecha de fin de inscripciones no puede estar en el pasado.");
+            }
+
             if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
-                errores.push("La fecha de inicio del curso debe ser anterior a la fecha de fin.");
+                errores.push("La fecha de inicio del curso debe ser anterior a la de fin.");
             }
-            
-            // Validar que la fecha de inicio de inscripciones sea menor que la de fin
-            if (fechaInicioInsc && fechaFinInsc && fechaInicioInsc > fechaFinInsc) {
-                errores.push("La fecha de inicio de inscripciones debe ser anterior a la fecha de fin de inscripciones.");
+
+            if (fechaInicioIns && fechaFinIns && fechaInicioIns > fechaFinIns) {
+                errores.push("La fecha de inicio de inscripciones debe ser anterior a la de fin.");
             }
-            
-            // Validar que las inscripciones terminen antes del inicio del curso
-            if (fechaInicio && fechaFinInsc && fechaFinInsc >= fechaInicio) {
-                errores.push("Las inscripciones deben terminar antes de que inicie el curso.");
+
+            if (fechaFinIns && fechaInicio && fechaFinIns >= fechaInicio) {
+                errores.push("La fecha de fin de inscripciones debe ser anterior a la de inicio del curso.");
             }
-            
-            // Validar que el inicio de inscripciones no sea posterior al inicio del curso
-            if (fechaInicio && fechaInicioInsc && fechaInicioInsc >= fechaInicio) {
-                errores.push("Las inscripciones deben comenzar antes de que inicie el curso.");
+
+            if (fechaInicioIns && fechaInicio && fechaInicioIns >= fechaInicio) {
+                errores.push("La fecha de inicio de inscripciones debe ser anterior a la de inicio del curso.");
             }
-            
+
             return errores;
         }
-        
-        // Event listeners para validación en tiempo real
-        document.addEventListener('DOMContentLoaded', function() {
+
+        function mostrarErrores(errores) {
+            const alertaAnterior = document.querySelector('.alert-warning');
+            if (alertaAnterior) {
+                alertaAnterior.remove();
+            }
+
+            if (errores.length > 0) {
+                const alerta = document.createElement('div');
+                alerta.className = 'alert alert-warning';
+                alerta.innerHTML = '<ul>' + errores.map(error => `<li>${error}</li>`).join('') + '</ul>';
+
+                const formulario = document.querySelector('.admin-section');
+                formulario.insertBefore(alerta, formulario.querySelector('form'));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
             const campos = ['fecha_inicio', 'fecha_fin', 'fecha_inicio_inscripciones', 'fecha_fin_inscripciones'];
-            
-            // Establecer fecha mínima como hoy
             const hoy = new Date().toISOString().split('T')[0];
-            document.getElementById('fecha_inicio_inscripciones').min = hoy;
-            
+
+            // Solo restringimos las fechas futuras excepto para fecha_inicio_inscripciones
+            document.getElementById('fecha_inicio').min = hoy;
+            document.getElementById('fecha_fin').min = hoy;
+            document.getElementById('fecha_fin_inscripciones').min = hoy;
+
             campos.forEach(campo => {
-                document.getElementById(campo).addEventListener('change', function() {
-                    actualizarFechasMinimas();
+                const input = document.getElementById(campo);
+                input.addEventListener('change', function () {
                     const errores = validarFechas();
                     mostrarErrores(errores);
                 });
+
+                input.setAttribute('oninvalid', `this.setCustomValidity('Por favor selecciona una fecha válida')`);
+                input.setAttribute('oninput', `this.setCustomValidity('')`);
             });
-            
-            // Validar antes de enviar el formulario
-            document.querySelector('form').addEventListener('submit', function(e) {
+
+            document.querySelector('form').addEventListener('submit', function (e) {
                 const errores = validarFechas();
                 if (errores.length > 0) {
                     e.preventDefault();
@@ -218,47 +240,10 @@ $apellidoUsuario = getUserLastname();
                 }
             });
         });
-        
-        function actualizarFechasMinimas() {
-            const fechaInicioInsc = document.getElementById('fecha_inicio_inscripciones').value;
-            const fechaFinInsc = document.getElementById('fecha_fin_inscripciones').value;
-            const fechaInicio = document.getElementById('fecha_inicio').value;
-            
-            // La fecha fin de inscripciones debe ser posterior al inicio
-            if (fechaInicioInsc) {
-                document.getElementById('fecha_fin_inscripciones').min = fechaInicioInsc;
-            }
-            
-            // La fecha de inicio del curso debe ser posterior al fin de inscripciones
-            if (fechaFinInsc) {
-                const fechaMinInicioCurso = new Date(fechaFinInsc);
-                fechaMinInicioCurso.setDate(fechaMinInicioCurso.getDate() + 1);
-                document.getElementById('fecha_inicio').min = fechaMinInicioCurso.toISOString().split('T')[0];
-            }
-            
-            // La fecha fin debe ser posterior al inicio del curso
-            if (fechaInicio) {
-                document.getElementById('fecha_fin').min = fechaInicio;
-            }
-        }
-        
-        function mostrarErrores(errores) {
-            // Remover alertas anteriores
-            const alertaAnterior = document.querySelector('.alert-warning');
-            if (alertaAnterior) {
-                alertaAnterior.remove();
-            }
-            
-            if (errores.length > 0) {
-                const alerta = document.createElement('div');
-                alerta.className = 'alert alert-warning';
-                alerta.innerHTML = '<ul>' + errores.map(error => '<li>' + error + '</li>').join('') + '</ul>';
-                
-                const formulario = document.querySelector('.admin-section');
-                formulario.insertBefore(alerta, formulario.querySelector('form'));
-            }
-        }
     </script>
+
+
+
 </head>
 
 <body>
@@ -307,13 +292,17 @@ $apellidoUsuario = getUserLastname();
                         <label for="fecha_inicio"><span class="rojo">*</span> Fechas del curso:</label>
                         <div>
                             <label for="fecha_inicio">Inicio:</label>
-                            <input type="date" name="fecha_inicio" id="fecha_inicio" 
-                                value="<?= htmlspecialchars($fecha_inicio ?? '') ?>" required>
+                            <input type="date" name="fecha_inicio" id="fecha_inicio"
+                                value="<?= htmlspecialchars($fecha_inicio ?? '') ?>" required
+                                oninvalid="this.setCustomValidity('Por favor selecciona una fecha de inicio válida')"
+                                oninput="this.setCustomValidity('')">
                         </div>
                         <div>
                             <label for="fecha_fin">Fin:</label>
-                            <input type="date" name="fecha_fin" id="fecha_fin" 
-                                value="<?= htmlspecialchars($fecha_fin ?? '') ?>" required>
+                            <input type="date" name="fecha_fin" id="fecha_fin"
+                                value="<?= htmlspecialchars($fecha_fin ?? '') ?>" required
+                                oninvalid="this.setCustomValidity('Por favor selecciona una fecha de fin válida')"
+                                oninput="this.setCustomValidity('')">
                         </div>
                     </div>
 
@@ -323,28 +312,32 @@ $apellidoUsuario = getUserLastname();
                         <div>
                             <label for="fecha_inicio_inscripciones">Inicio:</label>
                             <input type="date" name="fecha_inicio_inscripciones" id="fecha_inicio_inscripciones"
-                                value="<?= htmlspecialchars($fecha_inicio_insc ?? '') ?>" required>
+                                value="<?= htmlspecialchars($fecha_inicio_insc ?? '') ?>" required
+                                oninvalid="this.setCustomValidity('Selecciona una fecha válida para el inicio de inscripciones')"
+                                oninput="this.setCustomValidity('')">
                         </div>
                         <div>
                             <label for="fecha_fin_inscripciones">Fin:</label>
-                            <input type="date" name="fecha_fin_inscripciones" id="fecha_fin_inscripciones" 
-                                value="<?= htmlspecialchars($fecha_fin_insc ?? '') ?>" required>
+                            <input type="date" name="fecha_fin_inscripciones" id="fecha_fin_inscripciones"
+                                value="<?= htmlspecialchars($fecha_fin_insc ?? '') ?>" required
+                                oninvalid="this.setCustomValidity('Selecciona una fecha válida para el fin de inscripciones')"
+                                oninput="this.setCustomValidity('')">
                         </div>
                     </div>
 
                     <div>
                         <label for="cupos"><span class="rojo">*</span> Cupos disponibles:</label>
-                        <input type="number" name="cupos" id="cupos" min="1" placeholder="Ej: 30" 
+                        <input type="number" name="cupos" id="cupos" min="1" placeholder="Ej: 30"
                             value="<?= htmlspecialchars($cupos ?? '') ?>" required>
                     </div>
                     <div>
                         <label for="horas"><span class="rojo">*</span> Horas académicas:</label>
-                        <input type="number" name="horas" id="horas" min="1" placeholder="Ej: 40" 
+                        <input type="number" name="horas" id="horas" min="1" placeholder="Ej: 40"
                             value="<?= htmlspecialchars($horas ?? '') ?>" required>
                     </div>
                     <div>
                         <label for="ponentes"><span class="rojo">*</span> Ponente(s):</label>
-                        <input type="text" name="ponentes" id="ponentes" placeholder="Nombres de los ponentes" 
+                        <input type="text" name="ponentes" id="ponentes" placeholder="Nombres de los ponentes"
                             value="<?= htmlspecialchars($ponentes ?? '') ?>" required>
                     </div>
                 </div>
@@ -354,6 +347,7 @@ $apellidoUsuario = getUserLastname();
                 </div>
             </form>
         </div>
+
     </div>
 
 </body>
