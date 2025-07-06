@@ -5,6 +5,9 @@
     --text-color: #2C3E50;
     --font-family: 'Segoe UI', sans-serif;
     --bg-light: #fff;
+    --card-bg: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
 }
 
 /* RESET */
@@ -469,135 +472,6 @@ body {
     overflow: hidden;
     border: 2px solid #ddd;
     transition: 0.3s ease all;
-}
-
-.imagen-editable img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: 0.3s ease all;
-    display: block;
-    border-radius: 12px;
-}
-
-.imagen-editable::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0);
-    transition: 0.3s ease;
-}
-
-.imagen-editable:hover::after {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.editar-icono {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.8rem;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
-    padding: 12px;
-    opacity: 0;
-    transition: 0.3s ease;
-    pointer-events: none;
-}
-
-.imagen-editable:hover .editar-icono {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.imagen-editable input[type="file"] {
-    display: none;
-}
-
-/* Campos del formulario */
-.admin-form-fields {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.admin-form-fields input[type="text"],
-.admin-form-fields textarea {
-    padding: 0.7rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: #fdfdfd;
-    width: 100%;
-    resize: vertical;
-    transition: border 0.2s ease;
-}
-
-.admin-form-fields input[type="text"]:focus,
-.admin-form-fields textarea:focus {
-    border-color: var(--primary-color);
-    outline: none;
-}
-
-/* Botones */
-/* Panel de Administración */
-.admin-panel {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.admin-panel h1 {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 0.5rem;
-}
-
-.admin-section {
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 3rem;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    border-left: 5px solid var(--primary-color);
-}
-
-.admin-section h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.6rem;
-    color: var(--primary-color-dark);
-    font-weight: 800;
-}
-
-/* Formulario tipo card */
-.admin-form {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    background-color: #fff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    transition: all 0.3s ease;
-    border: 1px solid #eee;
-}
-
-/* Imagen editable */
-.imagen-editable {
-    position: relative;
-    width: 300px;
-    height: 200px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #ddd;
-    transition: 0.3s ease all;
     cursor: pointer;
 }
 
@@ -605,9 +479,9 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 12px;
-    display: block;
     transition: 0.3s ease all;
+    display: block;
+    border-radius: 12px;
 }
 
 .imagen-editable::after {
@@ -637,14 +511,15 @@ body {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    pointer-events: none;
     transition: 0.3s ease;
+    pointer-events: none;
     z-index: 1;
     border: 2px dashed red;
 }
 
 .imagen-editable:hover .editar-icono {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .imagen-editable input[type="file"] {
@@ -654,8 +529,6 @@ body {
     cursor: pointer;
     z-index: 2;
 }
-
-
 
 /* Campos del formulario */
 .admin-form-fields {
@@ -694,30 +567,6 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-}
-
-.admin-form-fields button:hover {
-    background-color: var(--primary-color-dark);
-    transform: scale(1.05);
-}
-
-.admin-form-fields a {
-    color: #b20000;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 0.95rem;
-}
-
-.admin-form-fields a:hover {
-    text-decoration: underline;
-}
-
-/* Nuevo contenido */
-.admin-section h3 {
-    font-size: 1.2rem;
-    margin: 2rem 0 1rem;
-    color: var(--text-color);
-    font-weight: 600;
 }
 
 .admin-form-fields button:hover {
@@ -887,85 +736,109 @@ body {
 /* GRID DE TARJETAS */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 0 10px;
+    /* Esto crea 3 columnas con un tamaño mínimo de 300px y se expanden equitativamente */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; /* Espacio entre las tarjetas de los cursos */
+    max-width: 1200px; /* Ancho máximo del contenedor de la cuadrícula */
+    margin: 40px auto; /* Centrar la cuadrícula en la página con espacio superior e inferior */
+    padding: 0 20px; /* Espaciado lateral */
 }
 
 /* TARJETA DE CURSO */
 .card-curso {
-    background-color: var(--card-bg);
-    border-radius: 16px;
-    box-shadow: 0 4px 12px var(--shadow);
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura en la fila */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-curso:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card-curso img {
     width: 100%;
-    height: 180px;
-    object-fit: cover;
+    height: 200px; /* Altura fija para las imágenes */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+    border-bottom: 1px solid #eee;
 }
 
-.card-body {
+.card-curso .card-body {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Permite que el cuerpo de la tarjeta ocupe el espacio restante */
 }
 
-.card-body h5 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-color);
+.card-curso h5 {
+    font-size: 1.4rem;
+    color: var(--primary-color-dark);
     margin-bottom: 10px;
 }
 
-.card-body p {
+.card-curso p {
     font-size: 0.95rem;
     color: #555;
-    line-height: 1.5;
+    margin-bottom: 5px;
 }
 
-/* BOTÓN PERSONALIZADO */
-.boton-inscribirse {
-    margin-top: 15px;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 24px;
-    font-weight: bold;
-    border: none;
-    border-radius: 999px;
-    font-size: 0.95rem;
+.card-button-wrapper {
+    margin-top: auto; /* Empuja el botón al final del card-body */
+    padding-top: 15px;
+    border-top: 1px solid #eee;
     text-align: center;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
+}
+
+.boton-inscribirse, .btn-outline-primary {
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.boton-inscribirse {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: 1px solid var(--primary-color);
 }
 
 .boton-inscribirse:hover {
     background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
 }
 
-/* MAIN CARD */
+.btn-outline-primary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* MAIN (general card for forms/sections) */
 main {
-    display: flex;
-    justify-content: center;
     padding: 3rem 1rem;
 }
 
-.card {
+.card { /* Estilos genéricos para tarjetas (formularios, info, etc.) */
     background-color: #fff;
     padding: 2.5rem;
     border-radius: var(--border-radius);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 800px;
+    margin: 0 auto;
 }
 
 .card h1 {
@@ -1025,7 +898,7 @@ legend {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* BOTÓN DE CURSOS */
+/* BOTÓN DE CURSOS (Administrar) */
 .btn-outline-primary {
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
@@ -1078,18 +951,15 @@ legend {
     background-color: var(--primary-color-dark);
 }
 
-/* Contenedor principal */
-main.card {
+/* Contenedor principal para formularios específicos (like admin forms) */
+main.card { /* Este estilo parece ser para formularios específicos o cards de contenido */
     background: #fff;
     padding: 2.5rem 3rem;
     border-radius: var(--border-radius);
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
     width: fit-content;
-    /* Ajuste al contenido real */
     max-width: 100%;
-    /* Evita desbordes */
     margin: 2rem auto;
-    /* Margen vertical y centrado horizontal */
 }
 
 /* Título alineado correctamente */
@@ -1298,7 +1168,7 @@ label span.rojo {
     }
 }
 
-main.container {
+main.container { /* Estilo específico para páginas que usen 'main.container' */
     padding: 3rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -1319,27 +1189,13 @@ main.container h1.display-5 {
     gap: 2rem;
 }
 
-.card {
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-4px);
-}
-
 .card-img-top {
     width: 100%;
     height: 280px;
     object-fit: cover;
 }
 
-.card-body {
+.card-body { /* Este es el card-body genérico, no el específico de card-curso */
     padding: 1.5rem;
     flex-grow: 1;
     display: flex;
@@ -1444,4 +1300,263 @@ main.container h1.display-5 {
   color: var(--text-color);
   line-height: 1.6;
   text-align: justify;
+}
+
+/* NUEVOS ESTILOS: Sección Hero (ahora de ancho completo) */
+.hero-section-full-width {
+    text-align: center; /* Alineación centrada para ancho completo */
+    margin: 50px auto; /* Margen para espaciado y centrado */
+    padding: 0 20px; /* Relleno para evitar que el contenido toque los bordes */
+    max-width: 900px; /* Ancho máximo para legibilidad */
+}
+
+.hero-section-full-width h1 {
+    font-size: 2.8rem;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.hero-section-full-width p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* NUEVOS ESTILOS: Sección para la cuadrícula de cursos de ancho completo */
+.section-courses-grid {
+    padding: 30px 20px; /* Relleno para la sección que contiene la cuadrícula */
+    max-width: 1200px; /* Ancho máximo para la sección de cursos */
+    margin: 0 auto; /* Centra la sección */
+}
+
+/* Basic Modal Overlay and Content Styling (if not already present) */
+/* Modal Base Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+}
+
+/* Class to show the modal */
+.modal.show-modal {
+    opacity: 1; /* Fade in */
+    visibility: visible; /* Make visible */
+}
+
+/* Modal Dialog and Content */
+.modal-dialog {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 700px; /* Adjust as needed for better layout */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transform: translateY(20px); /* Start slightly off-screen for animation */
+    transition: transform 0.3s ease; /* Smooth transition for content */
+}
+
+/* Animation for modal content when shown */
+.modal.show-modal .modal-dialog {
+    transform: translateY(0); /* Slide into place */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+.modal-header .modal-title {
+    font-size: 1.8rem; /* Larger title */
+    color: var(--primary-color-dark);
+    margin: 0;
+}
+
+.modal-header .close-button {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.modal-header .close-button:hover {
+    color: #333;
+}
+
+.modal-body-custom {
+    display: flex;
+    flex-direction: column; /* Default to column for small screens */
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) { /* Adjust for larger screens */
+    .modal-body-custom {
+        flex-direction: row; /* Side-by-side for larger screens */
+    }
+}
+
+.modal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .modal-row {
+        flex-direction: row;
+    }
+}
+
+
+.modal-image-col {
+    flex: 0 0 100%; /* Full width on small screens */
+    max-width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .modal-image-col {
+        flex: 0 0 40%; /* 40% width on larger screens */
+        max-width: 40%;
+    }
+}
+
+.modal-image-col img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+.modal-details-col {
+    flex: 1; /* Takes remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-details-col p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0;
+}
+
+.modal-subtitle {
+    font-size: 1.2rem;
+    color: var(--primary-color-dark);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requirements-list .list-item-custom {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.3rem;
+}
+
+.motivation-field {
+    margin-top: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-control-custom {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    min-height: 80px;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.modal-footer-custom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
+}
+
+.btn-cancel {
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+}
+
+.btn-cancel:hover {
+    background-color: #bbb;
+}
+
+.btn-primary-custom {
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Custom placeholder for missing images */
+.missing-image-placeholder {
+    width: 100%;
+    height: 200px; /* Or desired height */
+    background-color: #e0e0e0;
+    border: 1px dashed #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1.2;
 }
