@@ -8,10 +8,10 @@ $conn = (new Conexion())->conectar();
 
 try {
     $rol = isLoggedIn() ? getUserRole() : null;
-    $carrera = isLoggedIn() ? getUserCarrera() : null;
+    $carrera = isLoggedIn() ? getUserCarrera() : null; // Este es el ID de la carrera
     $usuario_id = isLoggedIn() ? getUserId() : null;
 
-    // Base con JOIN a evento_categoria para obtener categorías múltiples (concatenadas)
+    // Base con JOIN a evento_categoria y tipos_evento
     $sqlBase = "
         SELECT e.*, 
                GROUP_CONCAT(DISTINCT c.nombre ORDER BY c.nombre SEPARATOR ', ') AS categoria_nombres,
@@ -26,17 +26,14 @@ try {
         WHERE e.estado = 'abierto'
     ";
 
-    // Parámetros para preparar la consulta
     $params = [];
 
     if ($rol === 'estudiante') {
-        if (!empty($carrera)) {
-            // Filtrar eventos que tengan al menos una categoría igual a la carrera del estudiante
-            $sqlBase .= " AND c.nombre = ?";
+        if (!empty($carrera) && $carrera != '0') {
+            $sqlBase .= " AND ec.categoria_id = ?";
             $params[] = $carrera;
         } else {
-            // Si no tiene carrera, filtra por categoría con id = 2 (por ejemplo)
-            $sqlBase .= " AND c.id = 2";
+            $sqlBase .= " AND ec.categoria_id = 0";
         }
     }
 
@@ -47,7 +44,7 @@ try {
 
     $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Obtener eventos a los que está inscrito el usuario
+    // Marcar cursos en los que el estudiante ya está inscrito
     $idsInscritos = [];
     if ($rol === 'estudiante' && $usuario_id) {
         $stmt2 = $conn->prepare("SELECT evento_id FROM inscripciones WHERE usuario_id = ?");
