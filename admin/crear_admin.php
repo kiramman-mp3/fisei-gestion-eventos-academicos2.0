@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (!isset($error)) {
     try {
       $stmt = $conexion->prepare("INSERT INTO estudiantes 
-        (nombre, apellido, correo, password, cedula, genero, fecha_nacimiento, tipo, rol)
-        VALUES (:nombre, :apellido, :correo, :password, :cedula, :genero, :fecha_nacimiento, :tipo, :rol)");
+        (nombre, apellido, correo, password, cedula, genero, fecha_nacimiento, tipo, rol, verificado)
+        VALUES (:nombre, :apellido, :correo, :password, :cedula, :genero, :fecha_nacimiento, :tipo, :rol, :verificado)");
 
       $stmt->bindValue(':nombre', $nombre);
       $stmt->bindValue(':apellido', $apellido);
@@ -38,9 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $stmt->bindValue(':fecha_nacimiento', $fecha_nacimiento);
       $stmt->bindValue(':tipo', $tipo);
       $stmt->bindValue(':rol', $rol);
+      $stmt->bindValue(':verificado', 1, PDO::PARAM_INT);
 
       if ($stmt->execute()) {
-        header("Location: ../dashboard.html?mensaje=Admin creado con éxito");
+        header("Location: panel_admin.php?mensaje=Admin creado con éxito");
         exit;
       } else {
         $error = "Este correo ya está registrado.";
@@ -62,6 +63,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../css/registro-estilos.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    
+    .crear-admin-wrapper { 
+        position: static !important; 
+        top: auto !important;
+        left: auto !important;
+        transform: none !important; 
+        margin: auto; 
+        z-index: 10;
+        width: 100%;
+        max-width: 650px;
+        padding: 20px;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex; 
+        flex-direction: column; 
+    }
+    .d-flex.justify-content-center.align-items-center {
+        flex-grow: 1; 
+    }
+
+    .ctt-header {
+      
+    }
+  </style>
+
 </head>
 
 <body>
@@ -82,9 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </header>
 
-  <!-- Contenedor centrado -->
   <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 130px);">
-    <main class="registro-wrapper">
+    <main class="registro-wrapper crear-admin-wrapper"> 
       <div class="card-custom">
         <h1 class="text-center mb-4">Agregar nuevo administrador</h1>
 
