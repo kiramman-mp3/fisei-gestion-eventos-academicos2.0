@@ -19,6 +19,7 @@ $conexion = (new Conexion())->conectar();
 // Validar inscripción
 $stmt = $conexion->prepare("
     SELECT e.nombre_evento, e.fecha_inicio, e.fecha_fin, e.ponentes, e.horas,
+           e.requiere_nota, e.requiere_asistencia, e.nota_minima, e.asistencia_minima,
            i.nota, i.asistencia, i.estado,
            est.nombre, est.apellido, est.cedula
     FROM inscripciones i
@@ -33,8 +34,18 @@ if (!$data) {
     exit("No inscrito en este evento.");
 }
 
-if ($data['estado'] !== 'Pagado' || $data['nota'] < 7 || $data['asistencia'] < 70) {
-    exit("No cumple los requisitos para obtener el certificado.");
+// Validar requisitos dinámicos del evento
+$nota_minima = $data['nota_minima'] ?? 7.0;
+$asistencia_minima = $data['asistencia_minima'] ?? 70.0;
+
+$cumple_requisitos = ($data['estado'] === 'Pagado');
+
+if ($data['requiere_nota'] && ($data['nota'] === null || $data['nota'] < $nota_minima)) {
+    exit("No cumple el requisito de nota mínima ({$nota_minima}) para obtener el certificado.");
+}
+
+if ($data['requiere_asistencia'] && ($data['asistencia'] === null || $data['asistencia'] < $asistencia_minima)) {
+    exit("No cumple el requisito de asistencia mínima ({$asistencia_minima}%) para obtener el certificado.");
 }
 
 // Generar PDF

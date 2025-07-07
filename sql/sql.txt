@@ -23,7 +23,9 @@ CREATE TABLE tipos_evento (
 
 CREATE TABLE categorias_evento (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100) NOT NULL UNIQUE -- ejemplo: 'Sistemas', 'Civil', 'Público'
+  nombre VARCHAR(100) NOT NULL UNIQUE, -- ejemplo: 'Sistemas', 'Civil', 'Público'
+  requiere_nota BOOLEAN DEFAULT FALSE, -- indica si la categoría requiere calificación
+  requiere_asistencia BOOLEAN DEFAULT FALSE -- indica si la categoría requiere control de asistencia
 );
 
 CREATE TABLE eventos (

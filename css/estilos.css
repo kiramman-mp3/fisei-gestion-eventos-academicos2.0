@@ -1,0 +1,1997 @@
+/* VARIABLES */
+:root {
+    --primary-color: #B02A37;
+    --primary-color-dark: #8d1f2d;
+    --text-color: #2C3E50;
+    --font-family: 'Segoe UI', sans-serif;
+    --bg-light: #fff;
+    --card-bg: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-light);
+}
+
+/* UTILIDADES */
+.etiqueta {
+    color: var(--primary-color);
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.seccion {
+    padding: 80px 20px;
+    background-color: var(--bg-light);
+    text-align: center;
+}
+
+.boton {
+    display: inline-block;
+    padding: 12px 40px;
+    background-color: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.boton:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.indicador-circular {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicador-circular.active {
+    background-color: var(--primary-color);
+}
+
+/* HEADER */
+.ctt-header {
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 15px 30px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    height: 130px;
+    max-width: 100%;
+    padding-left: 30px;
+    object-fit: contain;
+}
+
+.top-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.link-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+}
+
+.link-box i {
+    font-size: 32px;
+    color: var(--primary-color);
+}
+
+.link-box .title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+.link-box a {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.link-box a:hover {
+    text-decoration: underline;
+}
+
+/* MENÚ */
+.main-nav {
+    margin-top: 10px;
+    display: none;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* CARRUSEL */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 550px;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: none;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    background-color: rgba(0, 0, 0, 0.55);
+    padding: 40px 50px;
+    border-radius: 15px;
+    max-width: 700px;
+    color: #fff;
+    z-index: 5;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+}
+
+.overlay h1 {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.overlay p {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.overlay .boton {
+    margin-top: 10px;
+}
+
+/* CARRUSEL CONTROLES */
+.carousel-controls {
+    position: absolute;
+    width: 96%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 50px;
+    z-index: 100;
+}
+
+.carousel-controls button {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(70, 1, 1, 0.4);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-controls button:hover {
+    background-color: rgba(255, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+/* NOSOTROS */
+.nosotros {
+    display: flex;
+    justify-content: center;
+}
+
+.nosotros-container {
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.nosotros-img img {
+    width: 100%;
+    max-width: 550px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.nosotros-texto {
+    max-width: 600px;
+    text-align: left;
+}
+
+.nosotros-texto h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-color);
+    margin: 15px 0;
+}
+
+.nosotros-texto p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #444;
+    text-align: justify;
+}
+
+/* AUTORIDADES */
+.autoridades-header h2 {
+    font-size: 32px;
+    color: var(--text-color);
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+.autoridades-grid {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.autoridad-card {
+    background-color: #f9f9fc;
+    border-radius: 15px;
+    max-width: 250px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.autoridad-card:hover {
+    transform: translateY(-5px);
+}
+
+.autoridad-card img {
+    width: 100%;
+    display: block;
+}
+
+.autoridad-info {
+    padding: 20px;
+}
+
+.autoridad-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.autoridad-info p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* RESEÑAS */
+.resenas-header h2 {
+    font-size: 32px;
+    color: var(--text-color);
+    font-weight: 800;
+    margin: 10px 0 40px;
+}
+
+.resena-slider {
+    max-width: 900px;
+    margin: auto;
+}
+
+.resena-slide {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.resena-slide.active {
+    display: block;
+}
+
+.quote-icon {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.resena-texto {
+    font-size: 30px;
+    color: var(--text-color);
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+.resena-persona {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.resena-persona img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.resena-persona strong {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.resena-persona span {
+    font-size: 14px;
+    color: #666;
+}
+
+.resena-indicadores {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Panel de Administración */
+.admin-panel {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-panel h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+.admin-section {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--primary-color);
+}
+
+.admin-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--primary-color-dark);
+    font-weight: 800;
+}
+
+/* Formulario tipo card */
+.admin-form {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+/* Imagen editable */
+.imagen-editable {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    transition: 0.3s ease all;
+    cursor: pointer;
+}
+
+.imagen-editable img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.3s ease all;
+    display: block;
+    border-radius: 12px;
+}
+
+.imagen-editable::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease;
+}
+
+.imagen-editable:hover::after {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.editar-icono {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+    border: 2px dashed red;
+}
+
+.imagen-editable:hover .editar-icono {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.imagen-editable input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Campos del formulario */
+.admin-form-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.admin-form-fields input[type="text"],
+.admin-form-fields textarea {
+    padding: 0.7rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    width: 100%;
+    resize: vertical;
+    transition: border 0.2s ease;
+}
+
+.admin-form-fields input[type="text"]:focus,
+.admin-form-fields textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Botones */
+.admin-form-fields button {
+    align-self: flex-start;
+    padding: 0.5rem 1.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-form-fields button:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.admin-form-fields a {
+    color: #b20000;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.admin-form-fields a:hover {
+    text-decoration: underline;
+}
+
+/* Nuevo contenido */
+.admin-section h3 {
+    font-size: 1.2rem;
+    margin: 2rem 0 1rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-greeting {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+    padding-left: 50px;
+}
+
+.user-greeting i {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.main-menu ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.main-menu a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #2e2e3a;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+.main-menu a:hover {
+    color: var(--primary-color-dark);
+}
+
+.main-menu a.active {
+    color: var(--primary-color-dark);
+    font-weight: bold;
+}
+
+
+/* CARRUSEL DE FONDO */
+.carousel-fondo {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.carousel-fondo .carousel-item img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* LOGIN CENTRADO SOBRE EL CARRUSEL */
+.login-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.97);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-card h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.login-card p {
+    font-size: 15px;
+    color: var(--text-color);
+}
+
+.login-card .form-control {
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.login-card .btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.login-card .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.form-register a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.form-register a:hover {
+    text-decoration: underline;
+}
+
+/* GRID DE TARJETAS */
+.cards-grid {
+    display: grid;
+    /* Esto crea 3 columnas con un tamaño mínimo de 300px y se expanden equitativamente */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; /* Espacio entre las tarjetas de los cursos */
+    max-width: 1200px; /* Ancho máximo del contenedor de la cuadrícula */
+    margin: 40px auto; /* Centrar la cuadrícula en la página con espacio superior e inferior */
+    padding: 0 20px; /* Espaciado lateral */
+}
+
+/* TARJETA DE CURSO */
+.card-curso {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Asegura que todas las tarjetas tengan la misma altura en la fila */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-curso:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-curso img {
+    width: 100%;
+    height: 200px; /* Altura fija para las imágenes */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+    border-bottom: 1px solid #eee;
+}
+
+.card-curso .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Permite que el cuerpo de la tarjeta ocupe el espacio restante */
+}
+
+.card-curso h5 {
+    font-size: 1.4rem;
+    color: var(--primary-color-dark);
+    margin-bottom: 10px;
+}
+
+.card-curso p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.card-button-wrapper {
+    margin-top: auto; /* Empuja el botón al final del card-body */
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.boton-inscribirse, .btn-outline-primary {
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.boton-inscribirse {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: 1px solid var(--primary-color);
+}
+
+.boton-inscribirse:hover {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* MAIN (general card for forms/sections) */
+main {
+    padding: 3rem 1rem;
+}
+
+.card { /* Estilos genéricos para tarjetas (formularios, info, etc.) */
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card h1 {
+    font-size: 2rem;
+    color: var(--primary-color-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+/* FORMULARIOS */
+form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+form select,
+form input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 0.3rem;
+    font-size: 0.95rem;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+/* MINIATURAS DE DOCUMENTOS */
+.thumbnail {
+    display: block;
+    margin-top: 10px;
+    max-width: 300px;
+    max-height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* BOTÓN DE CURSOS (Administrar) */
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* ALERTAS */
+.alert {
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.form-submit.align-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Contenedor principal para formularios específicos (like admin forms) */
+main.card { /* Este estilo parece ser para formularios específicos o cards de contenido */
+    background: #fff;
+    padding: 2.5rem 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    width: fit-content;
+    max-width: 100%;
+    margin: 2rem auto;
+}
+
+/* Título alineado correctamente */
+main.card h1.titulo-formulario {
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    padding-bottom: 0.7rem;
+    font-size: 2.2rem;
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color-dark);
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Distribución del grid principal */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+}
+
+/* Grid de fecha y título */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* Inputs y selects */
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 0.5rem;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+textarea::placeholder,
+input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    margin-top: 24px;
+}
+
+label span.rojo {
+    color: var(--primary-color-dark);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Botones */
+.btn {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn.cancelar {
+    background-color: #ccc;
+    color: #333;
+    margin-right: 12px;
+}
+
+.btn.cancelar:hover {
+    background-color: #bbb;
+}
+
+.btn.enviar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn.enviar:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Área de envío de formulario */
+.form-submit.align-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2.5rem;
+    gap: 12px;
+}
+
+/* Botones de captura */
+.btn-capture {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    margin-top: 12px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.btn-capture.tomar {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-capture.tomar:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.btn-capture.eliminar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-capture.eliminar:hover {
+    background-color: #a91e2a;
+}
+
+/* Barra de archivo cargado */
+.capture-bar {
+    background-color: #f1f1f1;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.capture-bar .file-name {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+/* Información del usuario */
+.user-info {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.02);
+    font-size: 0.95rem;
+}
+
+.user-info input {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #111;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.user-info input:read-only {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.user-info legend {
+    font-weight: 700;
+    color: var(--primary-color-dark);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-submit.align-right {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+main.container { /* Estilo específico para páginas que usen 'main.container' */
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+main.container h1.display-5 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--primary-color-dark);
+    margin-bottom: 2.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.credits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.card-body { /* Este es el card-body genérico, no el específico de card-curso */
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #555;
+    flex-grow: 1;
+}
+
+.social-links {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a[title="Facebook"] {
+    color: #1877f2;
+    border: 2px solid #1877f2;
+}
+
+.social-links a[title="Facebook"]:hover {
+    background-color: #1877f2;
+    color: #fff;
+}
+
+.social-links a[title="Instagram"] {
+    color: #e4405f;
+    border: 2px solid #e4405f;
+}
+
+.social-links a[title="Instagram"]:hover {
+    background-color: #e4405f;
+    color: #fff;
+}
+
+/* Misión y Visión */
+.mv-contenedor {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 40px;
+  align-items: stretch;
+}
+
+.mv-card {
+  background-color: white;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  border-top: 5px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.3s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-4px);
+}
+
+.mv-icon {
+  font-size: 40px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.mv-titulo {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary-color-dark);
+  margin-bottom: 15px;
+}
+
+.mv-texto {
+  font-size: 16px;
+  color: var(--text-color);
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* NUEVOS ESTILOS: Sección Hero (ahora de ancho completo) */
+.hero-section-full-width {
+    text-align: center; /* Alineación centrada para ancho completo */
+    margin: 50px auto; /* Margen para espaciado y centrado */
+    padding: 0 20px; /* Relleno para evitar que el contenido toque los bordes */
+    max-width: 900px; /* Ancho máximo para legibilidad */
+}
+
+.hero-section-full-width h1 {
+    font-size: 2.8rem;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.hero-section-full-width p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* NUEVOS ESTILOS: Sección para la cuadrícula de cursos de ancho completo */
+.section-courses-grid {
+    padding: 30px 20px; /* Relleno para la sección que contiene la cuadrícula */
+    max-width: 1200px; /* Ancho máximo para la sección de cursos */
+    margin: 0 auto; /* Centra la sección */
+}
+
+/* Basic Modal Overlay and Content Styling (if not already present) */
+/* Modal Base Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+}
+
+/* Class to show the modal */
+.modal.show-modal {
+    opacity: 1; /* Fade in */
+    visibility: visible; /* Make visible */
+}
+
+/* Modal Dialog and Content */
+.modal-dialog {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 700px; /* Adjust as needed for better layout */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transform: translateY(20px); /* Start slightly off-screen for animation */
+    transition: transform 0.3s ease; /* Smooth transition for content */
+}
+
+/* Animation for modal content when shown */
+.modal.show-modal .modal-dialog {
+    transform: translateY(0); /* Slide into place */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+.modal-header .modal-title {
+    font-size: 1.8rem; /* Larger title */
+    color: var(--primary-color-dark);
+    margin: 0;
+}
+
+.modal-header .close-button {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.modal-header .close-button:hover {
+    color: #333;
+}
+
+.modal-body-custom {
+    display: flex;
+    flex-direction: column; /* Default to column for small screens */
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) { /* Adjust for larger screens */
+    .modal-body-custom {
+        flex-direction: row; /* Side-by-side for larger screens */
+    }
+}
+
+.modal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .modal-row {
+        flex-direction: row;
+    }
+}
+
+
+.modal-image-col {
+    flex: 0 0 100%; /* Full width on small screens */
+    max-width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .modal-image-col {
+        flex: 0 0 40%; /* 40% width on larger screens */
+        max-width: 40%;
+    }
+}
+
+.modal-image-col img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+.modal-details-col {
+    flex: 1; /* Takes remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-details-col p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0;
+}
+
+.modal-subtitle {
+    font-size: 1.2rem;
+    color: var(--primary-color-dark);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requirements-list .list-item-custom {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.3rem;
+}
+
+.motivation-field {
+    margin-top: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-control-custom {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    min-height: 80px;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.modal-footer-custom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
+}
+
+.btn-cancel {
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+}
+
+.btn-cancel:hover {
+    background-color: #bbb;
+}
+
+.btn-primary-custom {
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Custom placeholder for missing images */
+.missing-image-placeholder {
+    width: 100%;
+    height: 200px; /* Or desired height */
+    background-color: #e0e0e0;
+    border: 1px dashed #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* General container for admin page */
+.admin-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* Main content panel (replaces Bootstrap card) */
+.content-panel {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+}
+
+/* Info box (replaces Bootstrap alert) */
+.info-box {
+    background-color: #e0f7fa; /* Light blue */
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #005f6b;
+}
+.info-box h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color-dark);
+    font-size: 1.1rem;
+}
+.info-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.info-box ul li {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+/* Table styles (replaces Bootstrap tables) */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.custom-table thead {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px 15px;
+    border: 1px solid #eee; /* Lighter border */
+    text-align: left;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr:nth-child(even) {
+    background-color: var(--bg-dark); /* Light background for even rows */
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e8e8e8; /* Slightly darker on hover */
+}
+
+/* Input fields within table */
+.custom-table input[type="number"] {
+    width: 100px; /* Adjust width for number inputs */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.custom-table input[type="number"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(176, 42, 55, 0.25);
+}
+
+.custom-table .text-danger-small { /* Specific class for small danger text within table */
+    color: #dc3545;
+    font-size: 0.85rem;
+    display: block; /* Ensure it takes full width below input */
+    margin-top: 5px;
+}
+
+.table-responsive { /* For responsiveness on small screens */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* General form control adjustments (from modal, but now broader) */
+.form-control-custom { /* Replaces Bootstrap's form-control */
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    min-height: 40px;
+    box-sizing: border-box;
+}
+
+/* For textareas specifically */
+textarea.form-control-custom {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Utility classes for spacing and alignment */
+.mb-4 { margin-bottom: 20px; }
+.mb-0 { margin-bottom: 0; }
+.mt-3 { margin-top: 15px; }
+.mt-5 { margin-top: 30px; }
+.text-right { text-align: right; }
+.text-muted { color: #6c757d; }
+.p-4 { padding: 20px; } /* Reusing for general padding */
+
+/* Responsive Adjustments (affecting admin page elements) */
+@media (max-width: 992px) {
+    .admin-container {
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+    .content-panel {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-table th, .custom-table td {
+        padding: 10px;
+    }
+    .custom-table input[type="number"] {
+        width: 80px;
+    }
+}
+
+:root {
+    /* Mantén tus variables existentes de estilos.css */
+    --primary-color: #B02A37;
+    --primary-color-dark: #8d1f2d;
+    --text-color: #2C3E50;
+    --font-family: 'Segoe UI', sans-serif;
+    --bg-light: #f8f9fa; /* Ajustado para el fondo del main-content */
+    --card-bg: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --secondary-bg: #2c3e50; /* Color para el sidebar */
+    --secondary-bg-dark: #34495e; /* Color oscuro para el sidebar */
+}
+
+/* Base body styles from estilos.css */
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-light);
+    color: var(--text-color); /* Added to ensure text color consistency */
+}
+
+/* Contenedor principal para el panel */
+.panel-container {
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--secondary-bg-dark) 100%);
+    color: white;
+    padding: 1.5rem 0; /* Add some padding */
+    box-shadow: var(--shadow); /* Add shadow for depth */
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem; /* Padding for header content */
+}
+
+.sidebar-header .logo {
+    max-height: 60px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); /* Optional: Add a subtle shadow to the logo */
+}
+
+.sidebar-header h5 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.sidebar-header small {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+.sidebar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.2rem 1rem; /* Horizontal margin for alignment */
+    padding: 0.75rem 1rem; /* Padding inside links */
+    border-radius: var(--border-radius); /* Apply global border-radius */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    transform: translateX(5px); /* Subtle hover effect */
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: var(--primary-color); /* Use primary color for active state */
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add shadow to active link */
+}
+
+.sidebar-nav .nav-link i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.sidebar-nav hr {
+    border-color: rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+}
+
+/* Main Content Area */
+.main-content {
+    background-color: var(--bg-light);
+    padding: 2rem; /* Consistent padding */
+    flex-grow: 1; /* Allow main content to take remaining space */
+}
+
+/* Header within main content */
+.header-admin {
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    padding: 1.5rem; /* Increased padding */
+    border-radius: var(--border-radius); /* Apply global border-radius */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-admin h2 {
+    color: var(--primary-color-dark); /* Use a darker primary color for headings */
+    margin-bottom: 0.25rem;
+    font-size: 1.8rem;
+}
+
+.header-admin small {
+    color: var(--text-color); /* Use text color for muted text */
+    opacity: 0.8;
+}
+
+/* Badge styling for consistency */
+.badge-admin {
+    background-color: var(--primary-color); /* Use primary color for admin badge */
+    color: white;
+    padding: 0.5em 0.8em;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+/* Statistics Cards */
+.stats-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%); /* Use primary colors */
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    padding: 1.5rem; /* Consistent padding */
+    height: 100%; /* Ensure cards take full height in row */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.stats-card .card-body {
+    text-align: center;
+}
+
+.stats-card .card-icon {
+    font-size: 3rem; /* Slightly larger icon */
+    margin-bottom: 0.75rem; /* Adjusted margin */
+    color: rgba(255, 255, 255, 0.9); /* Lighter icon color */
+}
+
+.stats-number {
+    font-size: 2.5rem; /* Larger number */
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Admin Action Cards */
+.admin-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    padding: 1.5rem; /* Consistent padding */
+    height: 100%;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card .card-body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space */
+    align-items: center;
+    height: 100%;
+}
+
+.admin-card .card-icon {
+    font-size: 3rem; /* Slightly larger icon */
+    margin-bottom: 1rem;
+    color: var(--primary-color); /* Use primary color as default for action icons */
+}
+
+/* Specific icon colors for admin cards */
+.admin-card .card-icon.text-primary { color: var(--primary-color); }
+.admin-card .card-icon.text-success { color: #28a745; } /* Bootstrap success */
+.admin-card .card-icon.text-warning { color: #ffc107; } /* Bootstrap warning */
+.admin-card .card-icon.text-info { color: #17a2b8; } /* Bootstrap info */
+.admin-card .card-icon.text-secondary { color: #6c757d; } /* Bootstrap secondary */
+.admin-card .card-icon.text-danger { color: #dc3545; } /* Bootstrap danger */
+.admin-card .card-icon.text-dark { color: var(--text-color); } /* Dark text color */
+
+
+.admin-card .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+
+.admin-card .card-text {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Allow text to grow and push button down */
+}
+
+/* Buttons in admin cards */
+.admin-card .btn {
+    display: inline-flex; /* Use flex for icon and text alignment */
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.8rem; /* Larger padding for buttons */
+    border-radius: 8px; /* More rounded buttons */
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.admin-card .btn i {
+    margin-right: 8px;
+}
+
+.admin-card .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.admin-card .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+}
+
+/* Adjustments for badges within cards */
+.admin-card .badge {
+    margin-left: 10px; /* Space between button and badge */
+    font-size: 0.8em;
+    padding: 0.4em 0.7em;
+    border-radius: 0.5rem;
+}
+
+/* Utility classes (already in estilos.css, ensuring they are present) */
+.mb-4 { margin-bottom: 20px; }
+.mb-0 { margin-bottom: 0; }
+.mt-3 { margin-top: 15px; }
+.mt-5 { margin-top: 30px; }
+.text-right { text-align: right; }
+.text-muted { color: var(--text-color); opacity: 0.7; } /* Use text-color for muted */
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .sidebar {
+        min-height: auto; /* Allow sidebar to collapse vertically */
+        width: 100%;
+        padding-bottom: 1rem;
+    }
+    .sidebar-header {
+        margin-bottom: 1rem;
+    }
+    .sidebar-nav .nav-link {
+        margin: 0.2rem 0.5rem;
+    }
+    .main-content {
+        padding: 1rem; /* Less padding on small screens */
+    }
+    .header-admin {
+        flex-direction: column;
+        text-align: center;
+    }
+    .header-admin > div:first-child {
+        margin-bottom: 1rem;
+    }
+}
