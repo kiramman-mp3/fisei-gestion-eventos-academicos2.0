@@ -1,7 +1,9 @@
 <?php
+error_reporting(E_ALL & ~E_DEPRECATED); // Ocultar mensajes obsoletos (utf8_decode)
+
 require_once '../session.php';
 require '../sql/conexion.php';
-require '../libs/fpdf/fpdf.php'; // Asegúrate de que la ruta sea correcta
+require '../libs/fpdf/fpdf.php';
 
 if (!isLoggedIn()) {
     exit("Acceso no autorizado");
@@ -14,13 +16,17 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = (int)$_GET['id'];
 $conexion = (new Conexion())->conectar();
 
-// Obtener datos del evento
+// Obtener datos del evento (con JOIN corregido)
 $stmt = $conexion->prepare("
-    SELECT e.*, t.nombre AS tipo_evento, c.nombre AS categoria 
+    SELECT e.id AS evento_id, e.*, 
+           t.nombre AS tipo_evento, 
+           GROUP_CONCAT(DISTINCT c.nombre ORDER BY c.nombre SEPARATOR ', ') AS categoria
     FROM eventos e
     JOIN tipos_evento t ON e.tipo_evento_id = t.id
-    JOIN categorias_evento c ON e.categoria_id = c.id
+    LEFT JOIN evento_categoria ec ON ec.evento_id = e.id
+    LEFT JOIN categorias_evento c ON c.id = ec.categoria_id
     WHERE e.id = ?
+    GROUP BY e.id, t.nombre
 ");
 $stmt->execute([$id]);
 $evento = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -51,7 +57,7 @@ class PDF extends FPDF {
     function Footer() {
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
-        $this->Cell(0,10,utf8_decode('Página ') . $this->PageNo(),0,0,'C');
+        $this->Cell(0,10,mb_convert_encoding('Página ', 'ISO-8859-1') . $this->PageNo(),0,0,'C');
     }
 }
 
@@ -60,11 +66,11 @@ $pdf->AddPage();
 $pdf->SetFont('Arial','',12);
 
 // ====== Datos del Evento ======
-$pdf->Cell(0,10,'Nombre: ' . utf8_decode($evento['nombre_evento']),0,1);
-$pdf->Cell(0,10,'Tipo: ' . utf8_decode($evento['tipo_evento']),0,1);
-$pdf->Cell(0,10,'Categoria: ' . utf8_decode($evento['categoria']),0,1);
+$pdf->Cell(0,10,'Nombre: ' . mb_convert_encoding($evento['nombre_evento'], 'ISO-8859-1'),0,1);
+$pdf->Cell(0,10,'Tipo: ' . mb_convert_encoding($evento['tipo_evento'], 'ISO-8859-1'),0,1);
+$pdf->Cell(0,10,'Categorias: ' . mb_convert_encoding($evento['categoria'], 'ISO-8859-1'),0,1);
 $pdf->Cell(0,10,'Fechas: ' . $evento['fecha_inicio'] . ' al ' . $evento['fecha_fin'],0,1);
-$pdf->Cell(0,10,'Ponente(s): ' . utf8_decode($evento['ponentes']),0,1);
+$pdf->Cell(0,10,'Ponente(s): ' . mb_convert_encoding($evento['ponentes'], 'ISO-8859-1'),0,1);
 $pdf->Cell(0,10,'Horas: ' . $evento['horas'] . ' | Cupos: ' . $evento['cupos'],0,1);
 $pdf->Ln(5);
 
@@ -85,11 +91,12 @@ $pdf->SetTextColor(0);
 foreach ($inscritos as $i => $row) {
     $pdf->Cell(10,10,$i+1,1);
     $pdf->Cell(40,10,$row['cedula'],1);
-    $pdf->Cell(60,10,utf8_decode($row['nombre'] . ' ' . $row['apellido']),1);
+    $pdf->Cell(60,10,mb_convert_encoding($row['nombre'] . ' ' . $row['apellido'], 'ISO-8859-1'),1);
     $pdf->Cell(25,10,is_null($row['nota']) ? '-' : $row['nota'],1);
     $pdf->Cell(25,10,is_null($row['asistencia']) ? '-' : $row['asistencia'].'%',1);
-    $pdf->Cell(30,10,utf8_decode($row['estado']),1,1);
+    $pdf->Cell(30,10,mb_convert_encoding($row['estado'], 'ISO-8859-1'),1,1);
 }
 
+// ====== Salida del PDF ======
 $pdf->Output('I', 'evento_' . $evento['id'] . '.pdf');
 exit;

@@ -33,7 +33,7 @@ try {
             $response['mensaje'] = 'El nombre de la categoría no puede estar vacío.';
         } else {
             $nombre = trim($_POST['nombre']);
-            
+
             $stmt = $conn->prepare("INSERT INTO categorias_evento (nombre) VALUES (?)");
             if ($stmt->execute([$nombre])) {
                 $response['success'] = true;
@@ -45,30 +45,23 @@ try {
     }
 
     if ($action === 'editar') {
-        // La lógica de validación ya estaba bien.
-        if (empty($_POST['id']) || empty(trim($_POST['nombre']))) { // Usar trim para nombre
+        $id = $_POST['id'] ?? null;
+        $nombre = trim($_POST['nombre'] ?? '');
+
+        if (!$id || $nombre === '') {
             $response['mensaje'] = 'ID y nombre de categoría son obligatorios para editar.';
         } else {
-            $id = $_POST['id'];
-            $nombre = trim($_POST['nombre']);
-            $requiere_nota = isset($_POST['requiere_nota']) && $_POST['requiere_nota'] === '1' ? 1 : 0;
-            $requiere_asistencia = isset($_POST['requiere_asistencia']) && $_POST['requiere_asistencia'] === '1' ? 1 : 0;
-            
-            // --- Validación adicional: Al menos uno debe ser requerido ---
-            if ($requiere_nota == 0 && $requiere_asistencia == 0) {
-                $response['mensaje'] = 'La categoría debe requerir al menos nota o asistencia.';
+            $stmt = $conn->prepare("UPDATE categorias_evento SET nombre=? WHERE id=?");
+            if ($stmt->execute([$nombre, $id])) {
+                $response['success'] = true;
+                $response['mensaje'] = 'Categoría actualizada correctamente.';
             } else {
-                $stmt = $conn->prepare("UPDATE categorias_evento SET nombre=?, requiere_nota=?, requiere_asistencia=? WHERE id=?");
-                if ($stmt->execute([$nombre, $requiere_nota, $requiere_asistencia, $id])) {
-                    $response['success'] = true;
-                    $response['mensaje'] = 'Categoría actualizada correctamente.';
-                } else {
-                    // Esto es poco probable si PDO::ERRMODE_EXCEPTION está activado, pero como respaldo.
-                    $response['mensaje'] = 'Error al actualizar la categoría en la base de datos.';
-                }
+                $response['mensaje'] = 'Error al actualizar la categoría en la base de datos.';
             }
         }
     }
+
+
 
     // --- Mejora 4: Agregar lógica para 'eliminar' (opcional, pero buena práctica) ---
     // Si tienes un botón de eliminar, tu frontend lo buscará.
